@@ -1,12 +1,12 @@
-import {createInfoTemplate} from "./view/info.js";
-import {createPriceTemplate} from "./view/price.js";
-import {createMenuTemplate} from "./view/menu.js";
-import {createFiltersTemplate} from "./view/filters.js";
-import {createSortTemplate} from "./view/sort.js";
-import {createNewPointTemplate} from "./view/new-point.js";
-import {createEditPointTemplate} from "./view/edit-point";
-import {createPointTemplate} from "./view/point.js";
-import {createTripListTemplate} from "./view/trip-list.js";
+import {createInfoTemplate} from './view/info.js';
+import {createPriceTemplate} from './view/price.js';
+import {createMenuTemplate} from './view/menu.js';
+import {createFiltersTemplate} from './view/filters.js';
+import {createSortTemplate} from './view/sort.js';
+import {createNewPointTemplate} from './view/new-point.js';
+import {createEditPointTemplate} from './view/edit-point';
+import {createPointTemplate} from './view/point.js';
+import {createTripListTemplate} from './view/trip-list.js';
 
 const COUNT_POINT = 3;
 
