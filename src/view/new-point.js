@@ -160,5 +160,5 @@ export const createNewPointTemplate = () => {
       </div>
     </section>
   </section>
-</form>`;
+  </form>`;
 };

@@ -31,5 +31,3 @@ render(tripList, createEditPointTemplate(), `beforeend`);
 for (let i = 0; i < COUNT_POINT; i++) {
   render(tripList, createPointTemplate(), `beforeend`);
 }
-
-
