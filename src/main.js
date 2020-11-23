@@ -11,6 +11,17 @@ import {generateEvent} from './mock/trip-event.js';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(generateEvent);
+events.sort((a, b) => {
+  if (a.date.start.isAfter(b.date.start)) {
+    return 1;
+  }
+  if (!(a.date.start.isAfter(b.date.start))) {
+    return -1;
+  }
+  return 0;
+});
+
+
 console.log(events);
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);

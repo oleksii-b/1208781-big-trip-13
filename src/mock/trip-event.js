@@ -69,22 +69,21 @@ const generatePhoto = () => {
   return photos;
 };
 
+
+let startEvent = dayjs();
 const generateDate = () => {
   const MAX_MINUTES = 59;
   const MAX_HOURS = 23;
-  const MAX_DAYS = 1;
-  const dateStart = dayjs().add(getRandomInteger(-MAX_DAYS, 0), `day`)
-  .add(getRandomInteger(-MAX_HOURS, 0), `h`)
-  .add(getRandomInteger(-MAX_MINUTES, 0), `m`).format(`DD:HH:mm`);
-  const dateFinish = dayjs().add(getRandomInteger(0, MAX_DAYS), `day`)
-  .add(getRandomInteger(0, MAX_HOURS), `h`)
-  .add(getRandomInteger(0, MAX_MINUTES), `m`).format(`DD:HH:mm`);
-  // const shift = dateStart.diff(dateFinish).format(`DD:HH:mm`);
-  console.log(dateStart);
-  console.log(dateFinish);
-  console.log(shift);
+  const start = startEvent;
+  const finish = startEvent.add(getRandomInteger(0, MAX_HOURS), `h`)
+    .add(getRandomInteger(0, MAX_MINUTES), `m`);
+  startEvent = finish;
+  return {
+    start,
+    finish,
+  };
 };
-generateDate();
+
 
 export const generateEvent = () => {
   const eventType = generateEventType();
@@ -96,7 +95,8 @@ export const generateEvent = () => {
     destination: {description: generateDescription(),
       photos: generatePhoto()},
     price: getRandomInteger(20, 200),
-    isFavorite: Boolean(getRandomInteger(0, 1))
+    isFavorite: Boolean(getRandomInteger(0, 1)),
+    date: generateDate(),
   };
 };
 
