@@ -60,6 +60,14 @@ const generateDescription = () => {
   return description;
 };
 
+const generatePhoto = () => {
+  let photos = [];
+  for (let i = 1; i <= getRandomInteger(1, 6); i++) {
+    photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
+  }
+  return photos;
+};
+
 const generateEvent = () => {
   const eventType = generateEventType();
   const offers = generateOffers(eventType);
@@ -68,5 +76,7 @@ const generateEvent = () => {
     city: generateCity(),
     offers,
     description: generateDescription(),
+    photos: generatePhoto()
   };
 };
+
