@@ -1,3 +1,6 @@
+import {getEventDuration} from '../mock/utils.js';
+
+
 const createOffersTemplate = (offers) => {
   return offers.map((offer) =>
     `<li class="event__offer">
@@ -13,7 +16,7 @@ export const createPointTemplate = (event) => {
   const {eventType, city, offers, price, isFavorite, date} = event;
   const offerTemplate = createOffersTemplate(offers);
   const {start, finish} = date;
-
+  const durationTime = getEventDuration(start, finish);
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
   return `<li class="trip-events__item">
     <div class="event">
@@ -28,7 +31,7 @@ export const createPointTemplate = (event) => {
           &mdash;
           <time class="event__end-time" datetime="${finish.format(`YYYY-MM-DDTHH:mm`)}">${finish.format(`HH:mm`)}</time>
         </p>
-        <p class="event__duration">30M</p>
+        <p class="event__duration">${durationTime}</p>
       </div>
       <p class="event__price">
         &euro;&nbsp;<span class="event__price-value">${price}</span>
