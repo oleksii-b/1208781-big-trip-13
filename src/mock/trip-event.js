@@ -68,15 +68,17 @@ const generatePhoto = () => {
   return photos;
 };
 
-const generateEvent = () => {
+export const generateEvent = () => {
   const eventType = generateEventType();
   const offers = generateOffers(eventType);
   return {
     eventType,
     city: generateCity(),
     offers,
-    description: generateDescription(),
-    photos: generatePhoto()
+    destination: {description: generateDescription(),
+      photos: generatePhoto()},
+    price: getRandomInteger(20, 200),
+    isFavorite: Boolean(getRandomInteger(0, 1))
   };
 };
 
