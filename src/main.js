@@ -9,7 +9,7 @@ import {createPointTemplate} from './view/point.js';
 import {createTripListTemplate} from './view/trip-list.js';
 import {generateEvent} from './mock/trip-event.js';
 
-const COUNT_POINT = 3;
+const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(generateEvent);
 console.log(events);
 const render = (container, template, place) => {

@@ -1,3 +1,4 @@
+import dayjs from 'dayjs';
 const getRandomInteger = (a = 0, b = 1) => {
   const min = Math.ceil(Math.min(a, b));
   const max = Math.floor(Math.max(a, b));
@@ -67,6 +68,23 @@ const generatePhoto = () => {
   }
   return photos;
 };
+
+const generateDate = () => {
+  const MAX_MINUTES = 59;
+  const MAX_HOURS = 23;
+  const MAX_DAYS = 1;
+  const dateStart = dayjs().add(getRandomInteger(-MAX_DAYS, 0), `day`)
+  .add(getRandomInteger(-MAX_HOURS, 0), `h`)
+  .add(getRandomInteger(-MAX_MINUTES, 0), `m`).format(`DD:HH:mm`);
+  const dateFinish = dayjs().add(getRandomInteger(0, MAX_DAYS), `day`)
+  .add(getRandomInteger(0, MAX_HOURS), `h`)
+  .add(getRandomInteger(0, MAX_MINUTES), `m`).format(`DD:HH:mm`);
+  // const shift = dateStart.diff(dateFinish).format(`DD:HH:mm`);
+  console.log(dateStart);
+  console.log(dateFinish);
+  console.log(shift);
+};
+generateDate();
 
 export const generateEvent = () => {
   const eventType = generateEventType();
