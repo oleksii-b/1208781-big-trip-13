@@ -4,7 +4,7 @@ import {createOfferTemplate} from './new-point';
 export const createEditPointTemplate = (event) => {
   const {eventType, city, offers, destination: {description, cities}, date: {start, finish}} = event;
   const destinationCities = createCityTemplate(cities);
-  const offerForThisType = offers.find((offer) => offer.id === eventType).offers;
+  const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
 
   return `<form class="event event--edit" action="#" method="post">

@@ -24,10 +24,11 @@ export const createCityTemplate = (cities) => {
 };
 
 export const createNewPointTemplate = (event) => {
-  const {offers, destination: {description, photos, cities}} = event;
+  const {eventType, offers, destination: {description, photos, cities}} = event;
   const destinationCities = createCityTemplate(cities);
   const defaultCity = cities[0];
-  const offerTemplate = createOfferTemplate(offers[0].offers);
+  const offerForThisType = offers.filter((offer) => offer.id === eventType);
+  const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
   const photoTemplate = createPhotoTemplate(photos);
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
