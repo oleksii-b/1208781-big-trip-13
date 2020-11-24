@@ -1,5 +1,5 @@
 import {getEventDuration} from '../mock/utils.js';
-import {getRandomInteger} from '../mock/utils';
+// import {getRandomInteger} from '../mock/utils';
 
 const createOffersTemplate = (offers) => {
   return offers.map((offer) =>
@@ -12,12 +12,12 @@ const createOffersTemplate = (offers) => {
 
 
 export const createPointTemplate = (event) => {
-  const {eventType, city, offers, price, isFavorite, date} = event;
-  const randomLength = getRandomInteger(0, offers.length);
-  const selectedOffers = offers.find((offer) => offer.id === eventType).offers;
-  selectedOffers.length = randomLength;
+  const {eventType, city, selectedOffers, price, isFavorite, date: {start, finish}} = event;
+  // // const randomLength = getRandomInteger(0, offers.length);
+  // const selectedOffers = offers.find((offer) => offer.id === eventType).offers;
+  // // selectedOffers.length = randomLength;
   const offerTemplate = createOffersTemplate(selectedOffers);
-  const {start, finish} = date;
+
   const durationTime = getEventDuration(start, finish);
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
   return `<li class="trip-events__item">

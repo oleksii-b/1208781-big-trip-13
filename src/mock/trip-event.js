@@ -6,7 +6,7 @@ const generateEventType = () => {
   const randomIndex = getRandomInteger(0, eventTypes.length - 1);
   return eventTypes[randomIndex];
 };
-const cities = [`Amsterdam`, `Chamonix`, `Geneva`, `London`, `Moscow`];
+const cities = [`Amsterdam`, `Chamonix`, `Geneva`, `London`, `Moscow`, `Brussels`, `Budapest`, `Madrid`, `Helsinki`, `Paris`, `Prague`];
 const generateCity = () => {
   const randomIndex = getRandomInteger(0, cities.length - 1);
   return cities[randomIndex];
@@ -30,6 +30,9 @@ const generateOffers = () => {
     {id: `Restaurant`, offers: []},
   ];
   return offerTypes;
+};
+const getSelectedOffers = (offers, type) => {
+  return offers.find((offer) => offer.id === type).offers;
 };
 
 const generateDescription = () => {
@@ -84,6 +87,7 @@ export const generateEvent = () => {
     eventType,
     city: generateCity(),
     offers,
+    selectedOffers: getSelectedOffers(offers, eventType),
     destination: {description: generateDescription(),
       photos: generatePhoto(),
       cities},

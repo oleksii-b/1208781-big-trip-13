@@ -21,8 +21,6 @@ events.sort((a, b) => {
   return 0;
 });
 
-
-console.log(events);
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -32,7 +30,7 @@ const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
 render(tripMainElement, createInfoTemplate(events), `afterbegin`);
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
-render(tripInfoElement, createPriceTemplate(), `beforeend`);
+render(tripInfoElement, createPriceTemplate(events), `beforeend`);
 render(tripControlsElement, createFiltersTemplate(), `beforeend`);
 render(tripControlsElement, createMenuTemplate(), `afterbegin`);
 render(tripContentElement, createNewPointTemplate(events[0]), `afterbegin`);
