@@ -30,7 +30,7 @@ const render = (container, template, place) => {
 const tripMainElement = document.querySelector(`.trip-main`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
-render(tripMainElement, createInfoTemplate(), `afterbegin`);
+render(tripMainElement, createInfoTemplate(events), `afterbegin`);
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 render(tripInfoElement, createPriceTemplate(), `beforeend`);
 render(tripControlsElement, createFiltersTemplate(), `beforeend`);
