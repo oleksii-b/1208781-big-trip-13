@@ -39,8 +39,8 @@ render(tripContentElement, createNewPointTemplate(events[0]), `afterbegin`);
 render(tripContentElement, createSortTemplate(), `afterbegin`);
 render(tripContentElement, createTripListTemplate(), `beforeend`);
 const tripList = tripContentElement.querySelector(`.trip-events__list`);
-render(tripList, createEditPointTemplate(), `beforeend`);
+render(tripList, createEditPointTemplate(events[0]), `beforeend`);
 
-for (let i = 0; i < COUNT_POINT; i++) {
+for (let i = 1; i < COUNT_POINT; i++) {
   render(tripList, createPointTemplate(events[i]), `beforeend`);
 }

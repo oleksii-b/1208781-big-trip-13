@@ -1,10 +1,12 @@
+import dayjs from 'dayjs';
 import {getRandomInteger} from '../mock/utils';
-const createCityTemplate = (cities) => {
-  return cities.map((city) =>
-    `<option value=${city}></option>`).join(``);
+
+const createPhotoTemplate = (photos) => {
+  return photos.map((photo) =>
+    `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
 };
 
-const createOfferTemplate = (offers) => {
+export const createOfferTemplate = (offers) => {
   return offers.map((offer) =>
     `<div class="event__offer-selector">
       <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" ${getRandomInteger(0, 1) ? `checked` : ``}>
@@ -16,9 +18,9 @@ const createOfferTemplate = (offers) => {
     </div>`).join(``);
 };
 
-const createPhotoTemplate = (photos) => {
-  return photos.map((photo) =>
-    `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
+export const createCityTemplate = (cities) => {
+  return cities.map((city) =>
+    `<option value=${city}></option>`).join(``);
 };
 
 export const createNewPointTemplate = (event) => {
@@ -102,10 +104,10 @@ export const createNewPointTemplate = (event) => {
 
       <div class="event__field-group  event__field-group--time">
         <label class="visually-hidden" for="event-start-time-1">From</label>
-        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dayjs().format(`DD/MM/YY HH:mm`)}">
         &mdash;
         <label class="visually-hidden" for="event-end-time-1">To</label>
-        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+        <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dayjs().format(`DD/MM/YY HH:mm`)}">
       </div>
 
       <div class="event__field-group  event__field-group--price">
