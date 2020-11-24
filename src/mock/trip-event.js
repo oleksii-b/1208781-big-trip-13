@@ -1,43 +1,35 @@
 import dayjs from 'dayjs';
-const getRandomInteger = (a = 0, b = 1) => {
-  const min = Math.ceil(Math.min(a, b));
-  const max = Math.floor(Math.max(a, b));
-  return Math.floor(min + Math.random() * (max - min + 1));
-};
+import {getRandomInteger} from './utils';
 
 const generateEventType = () => {
   const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
   const randomIndex = getRandomInteger(0, eventTypes.length - 1);
   return eventTypes[randomIndex];
 };
-
+const cities = [`Amsterdam`, `Chamonix`, `Geneva`, `London`, `Moscow`];
 const generateCity = () => {
-  const cities = [`Amsterdam`, `Chamonix`, `Geneva`];
   const randomIndex = getRandomInteger(0, cities.length - 1);
   return cities[randomIndex];
 };
 
-const generateOffers = (eventType) => {
+const generateOffers = () => {
   const offerTypes = [
-    {id: `Taxi`, offers: [{name: `Order Uber`, price: `20`}]},
     {id: `Flight`, offers: [{name: `Add luggage`, price: `50`},
       {name: `Switch to comfort`, price: `80`},
       {name: `Add meal`, price: `15`},
       {name: `Choose seats`, price: `5`},
       {name: `Travel by train`, price: `40`}]},
-    {id: `Bus`, offers: [{name: ``, price: ``}]},
-    {id: `Train`, offers: [{name: ``, price: ``}]},
-    {id: `Ship`, offers: [{name: ``, price: ``}]},
-    {id: `Transport`, offers: [{name: ``, price: ``}]},
+    {id: `Taxi`, offers: [{name: `Order Uber`, price: `20`}]},
+    {id: `Bus`, offers: []},
+    {id: `Train`, offers: []},
+    {id: `Ship`, offers: []},
+    {id: `Transport`, offers: []},
     {id: `Drive`, offers: [{name: `Rent a car`, price: `200`}]},
     {id: `Check-in`, offers: [{name: `Add breakfast`, price: `50`}]},
     {id: `Sightseeing`, offers: [{name: `Book tickets`, price: `40`}, {name: `Lunch in city`, price: `30`}]},
-    {id: `Restaurant`, offers: [{name: ``, price: ``}]},
+    {id: `Restaurant`, offers: []},
   ];
-  const offers = offerTypes.find((offer) => offer.id === eventType).offers;
-  const randomLength = getRandomInteger(0, offers.length);
-  offers.length = randomLength;
-  return offers;
+  return offerTypes;
 };
 
 const generateDescription = () => {
@@ -93,7 +85,8 @@ export const generateEvent = () => {
     city: generateCity(),
     offers,
     destination: {description: generateDescription(),
-      photos: generatePhoto()},
+      photos: generatePhoto(),
+      cities},
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     date: generateDate(),

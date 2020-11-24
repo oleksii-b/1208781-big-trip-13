@@ -35,7 +35,7 @@ const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 render(tripInfoElement, createPriceTemplate(), `beforeend`);
 render(tripControlsElement, createFiltersTemplate(), `beforeend`);
 render(tripControlsElement, createMenuTemplate(), `afterbegin`);
-render(tripContentElement, createNewPointTemplate(), `afterbegin`);
+render(tripContentElement, createNewPointTemplate(events[0]), `afterbegin`);
 render(tripContentElement, createSortTemplate(), `afterbegin`);
 render(tripContentElement, createTripListTemplate(), `beforeend`);
 const tripList = tripContentElement.querySelector(`.trip-events__list`);
