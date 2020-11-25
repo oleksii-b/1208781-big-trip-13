@@ -1,10 +1,9 @@
 export const createPriceTemplate = (events) => {
-  const priceSum = events.reduce((acc, event) => acc + event.price, 0);
+  const totalPrice = events.reduce((acc, event) => acc + event.price, 0);
 
-  // const selectedOffers = events.forEach(elem => elem.find((offer) => offers.offers.id === eventType).offers;
-  // // const offersSum = selectedOffers.reduce((acc, offer) => acc + )
-  // console.log(selectedOffers);
+  const totalPriceOffers = events.reduce((acc1, elem) => acc1 + elem.selectedOffers.reduce((acc, offer) => acc + +offer.price, 0), 0);
+  const totalCoast = totalPrice + totalPriceOffers;
   return `<p class="trip-info__cost">
-    Total: &euro;&nbsp;<span class="trip-info__cost-value">${priceSum}</span>
+    Total: &euro;&nbsp;<span class="trip-info__cost-value">${totalCoast}</span>
   </p>`;
 };

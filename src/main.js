@@ -11,7 +11,7 @@ import {getEvent} from './mock/trip-event';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
-console.log(events);
+
 events.sort((a, b) => {
   if (a.date.start.isAfter(b.date.start)) {
     return 1;
@@ -31,7 +31,7 @@ const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
 render(tripMainElement, createInfoTemplate(events), `afterbegin`);
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
-render(tripInfoElement, createPriceTemplate(events), `beforeend`);
+
 render(tripControlsElement, createFiltersTemplate(), `beforeend`);
 render(tripControlsElement, createMenuTemplate(), `afterbegin`);
 render(tripContentElement, createNewPointTemplate(events[0]), `afterbegin`);
@@ -39,6 +39,7 @@ render(tripContentElement, createSortTemplate(), `afterbegin`);
 render(tripContentElement, createTripListTemplate(), `beforeend`);
 const tripList = tripContentElement.querySelector(`.trip-events__list`);
 render(tripList, createEditPointTemplate(events[0]), `beforeend`);
+render(tripInfoElement, createPriceTemplate(events), `beforeend`);
 
 for (let i = 1; i < COUNT_POINT; i++) {
   render(tripList, createPointTemplate(events[i]), `beforeend`);
