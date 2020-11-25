@@ -7,6 +7,7 @@ export const createEditPointTemplate = (event) => {
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
 
+
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">

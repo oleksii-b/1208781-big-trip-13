@@ -1,5 +1,7 @@
 const createRouteInfoTemplate = (events) => {
-  return events.map((event) => `${event.city} &mdash;`).join(` `);
+  return events.length > 3
+    ? `${events[0].city} &mdash; ... &mdash; ${events[events.length - 1].city}`
+    : events.map((event) => `${event.city} &mdash;`).join(` `);
 };
 
 export const createInfoTemplate = (events) => {
