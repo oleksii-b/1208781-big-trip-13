@@ -1,18 +1,18 @@
 import dayjs from 'dayjs';
 import {getRandomInteger} from './utils';
 
-const generateEventType = () => {
+const getEventType = () => {
   const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
   const randomIndex = getRandomInteger(0, eventTypes.length - 1);
   return eventTypes[randomIndex];
 };
 const cities = [`Amsterdam`, `Chamonix`, `Geneva`, `London`, `Moscow`, `Brussels`, `Budapest`, `Madrid`, `Helsinki`, `Paris`, `Prague`];
-const generateCity = () => {
+const getCity = () => {
   const randomIndex = getRandomInteger(0, cities.length - 1);
   return cities[randomIndex];
 };
 
-const generateOffers = () => {
+const getOffers = () => {
   const offerTypes = [
     {id: `Flight`, name: `Add luggage`, price: `50`},
     {id: `Flight`, name: `Switch to comfort`, price: `80`},
@@ -31,7 +31,7 @@ const getSelectedOffers = (offers, type) => {
   return offers.filter((offer) => offer.id === type);
 };
 
-const generateDescription = () => {
+const getDescription = () => {
   const descriptions = [`Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
     `Cras aliquet varius magna, non porta ligula feugiat eget.`,
     `Fusce tristique felis at fermentum pharetra.`,
@@ -52,7 +52,7 @@ const generateDescription = () => {
   return description;
 };
 
-const generatePhoto = () => {
+const getPhoto = () => {
   let photos = [];
   for (let i = 1; i <= getRandomInteger(1, 6); i++) {
     photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
@@ -62,7 +62,7 @@ const generatePhoto = () => {
 
 
 let startEvent = dayjs();
-const generateDate = () => {
+const getDate = () => {
   const MAX_MINUTES = 59;
   const MAX_HOURS = 23;
   const start = startEvent;
@@ -76,20 +76,20 @@ const generateDate = () => {
 };
 
 
-export const generateEvent = () => {
-  const eventType = generateEventType();
-  const offers = generateOffers(eventType);
+export const getEvent = () => {
+  const eventType = getEventType();
+  const offers = getOffers(eventType);
   return {
     eventType,
-    city: generateCity(),
+    city: getCity(),
     offers,
     selectedOffers: getSelectedOffers(offers, eventType),
-    destination: {description: generateDescription(),
-      photos: generatePhoto(),
+    destination: {description: getDescription(),
+      photos: getPhoto(),
       cities},
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),
-    date: generateDate(),
+    date: getDate(),
   };
 };
 

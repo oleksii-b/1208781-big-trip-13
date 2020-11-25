@@ -1,5 +1,4 @@
-import {getEventDuration} from '../mock/utils.js';
-// import {getRandomInteger} from '../mock/utils';
+import {getEventDuration} from '../mock/utils';
 
 const createOffersTemplate = (offers) => {
   return offers.map((offer) =>
