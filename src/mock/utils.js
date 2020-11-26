@@ -13,10 +13,9 @@ export const getEventDuration = (startDate, endDate) => {
   const hours = timeDuration.hours();
   const minutes = timeDuration.minutes();
   return `
-      ${(days > 0 && addZeroToNumber(days) + `D`) || ``}
-      ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}
-      ${addZeroToNumber(minutes)}M
-    `;
+  ${(days > 0 && addZeroToNumber(days) + `D`) || ``}
+  ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}
+  ${addZeroToNumber(minutes)}M`;
 };
 
 export const getRandomInteger = (a = 0, b = 1) => {

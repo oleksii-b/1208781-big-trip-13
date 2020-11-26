@@ -32,7 +32,8 @@ const getSelectedOffers = (offers, type) => {
 };
 
 const getDescription = () => {
-  const descriptions = [`Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
+  const descriptions = [
+    `Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
     `Cras aliquet varius magna, non porta ligula feugiat eget.`,
     `Fusce tristique felis at fermentum pharetra.`,
     `Aliquam id orci ut lectus varius viverra.`,
@@ -60,21 +61,20 @@ const getPhoto = () => {
   return photos;
 };
 
-
 let startEvent = dayjs();
 const getDate = () => {
   const MAX_MINUTES = 59;
   const MAX_HOURS = 23;
+  const hours = getRandomInteger(0, MAX_HOURS);
+  const minutes = getRandomInteger(0, MAX_MINUTES);
   const start = startEvent;
-  const finish = startEvent.add(getRandomInteger(0, MAX_HOURS), `h`)
-    .add(getRandomInteger(0, MAX_MINUTES), `m`);
+  const finish = startEvent.add(hours, `h`).add(minutes, `m`);
   startEvent = finish;
   return {
     start,
     finish,
   };
 };
-
 
 export const getEvent = () => {
   const eventType = getEventType();
@@ -84,12 +84,13 @@ export const getEvent = () => {
     city: getCity(),
     offers,
     selectedOffers: getSelectedOffers(offers, eventType),
-    destination: {description: getDescription(),
+    destination: {
+      description: getDescription(),
       photos: getPhoto(),
-      cities},
+      cities,
+    },
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     date: getDate(),
   };
 };
-
