@@ -1,7 +1,8 @@
 import {createCityTemplate} from './new-point';
 import {createOfferTemplate} from './new-point';
+import {createElement} from '../mock/utils';
 
-export const createEditPointTemplate = (event) => {
+const createEditPointTemplate = (event) => {
   const {eventType, city, offers, destination: {description, cities}, date: {start, finish}} = event;
   const destinationCities = createCityTemplate(cities);
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
@@ -114,3 +115,26 @@ export const createEditPointTemplate = (event) => {
     </section>
   </form>`;
 };
+
+export default class EditPoint {
+  constructor(point) {
+    this._point = point;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createEditPointTemplate(this._point);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

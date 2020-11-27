@@ -8,6 +8,8 @@ import {createEditPointTemplate} from './view/edit-point';
 import {createPointTemplate} from './view/point';
 import {createTripListTemplate} from './view/trip-list';
 import {getEvent} from './mock/trip-event';
+import {createElement, RenderPosition, render1} from './mock/utils';
+import EditPointView from './view/edit-point';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
@@ -21,7 +23,7 @@ events.sort((a, b) => {
   }
   return 0;
 });
-
+console.log(events);
 const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
@@ -38,7 +40,7 @@ render(tripContentElement, createNewPointTemplate(events[0]), `afterbegin`);
 render(tripContentElement, createSortTemplate(), `afterbegin`);
 render(tripContentElement, createTripListTemplate(), `beforeend`);
 const tripList = tripContentElement.querySelector(`.trip-events__list`);
-render(tripList, createEditPointTemplate(events[0]), `beforeend`);
+render1(tripList, new EditPointView(events[1]).getElement(), RenderPosition.BEFOREEND);
 render(tripInfoElement, createPriceTemplate(events), `beforeend`);
 
 for (let i = 1; i < COUNT_POINT; i++) {
