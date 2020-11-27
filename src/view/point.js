@@ -1,20 +1,17 @@
 import {getEventDuration} from '../mock/utils';
 
 const createOffersTemplate = (offers) => {
-  return offers.map((offer) =>
-    `<li class="event__offer">
-          <span class="event__offer-title">${offer.name ? offer.name : ``}</span>
-          ${offer.name ? `&plus;&euro;&nbsp;` : ``}
-          <span class="event__offer-price">${offer.price ? offer.price : ``}</span>
-        </li>`).join(``);
+  return offers.map((offer) =>`
+    <li class="event__offer">
+      <span class="event__offer-title">${offer.name ? offer.name : ``}</span>
+       ${offer.name ? `&plus;&euro;&nbsp;` : ``}
+      <span class="event__offer-price">${offer.price ? offer.price : ``}</span>
+    </li>`).join(``);
 };
 
 
 export const createPointTemplate = (event) => {
   const {eventType, city, selectedOffers, price, isFavorite, date: {start, finish}} = event;
-  // // const randomLength = getRandomInteger(0, offers.length);
-  // const selectedOffers = offers.find((offer) => offer.id === eventType).offers;
-  // // selectedOffers.length = randomLength;
   const offerTemplate = createOffersTemplate(selectedOffers);
 
   const durationTime = getEventDuration(start, finish);

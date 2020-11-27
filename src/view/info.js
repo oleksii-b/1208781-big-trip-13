@@ -10,6 +10,7 @@ export const createInfoTemplate = (events) => {
     ? events[events.length - 1].date.finish.format(`DD`)
     : events[events.length - 1].date.finish.format(`MMM DD`);
   const routeInfoTemplate = createRouteInfoTemplate(events);
+
   return `<section class="trip-main__trip-info  trip-info">
     <div class="trip-info__main">
       <h1 class="trip-info__title">${routeInfoTemplate}</h1>

@@ -4,11 +4,13 @@ import {getRandomInteger} from './utils';
 const getEventType = () => {
   const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
   const randomIndex = getRandomInteger(0, eventTypes.length - 1);
+
   return eventTypes[randomIndex];
 };
 const cities = [`Amsterdam`, `Chamonix`, `Geneva`, `London`, `Moscow`, `Brussels`, `Budapest`, `Madrid`, `Helsinki`, `Paris`, `Prague`];
 const getCity = () => {
   const randomIndex = getRandomInteger(0, cities.length - 1);
+
   return cities[randomIndex];
 };
 
@@ -27,6 +29,7 @@ const getOffers = () => {
   ];
   return offerTypes;
 };
+
 const getSelectedOffers = (offers, type) => {
   return offers.filter((offer) => offer.id === type);
 };
@@ -50,6 +53,7 @@ const getDescription = () => {
   for (let i = 1; i <= randomIndex; i++) {
     description += descriptions[getRandomInteger(0, descriptions.length - 1)];
   }
+
   return description;
 };
 
@@ -58,6 +62,7 @@ const getPhoto = () => {
   for (let i = 1; i <= getRandomInteger(1, 6); i++) {
     photos.push(`http://picsum.photos/248/152?r=${Math.random()}`);
   }
+
   return photos;
 };
 
@@ -69,7 +74,9 @@ const getDate = () => {
   const minutes = getRandomInteger(0, MAX_MINUTES);
   const start = startEvent;
   const finish = startEvent.add(hours, `h`).add(minutes, `m`);
+
   startEvent = finish;
+
   return {
     start,
     finish,
@@ -79,6 +86,7 @@ const getDate = () => {
 export const getEvent = () => {
   const eventType = getEventType();
   const offers = getOffers(eventType);
+
   return {
     eventType,
     city: getCity(),
