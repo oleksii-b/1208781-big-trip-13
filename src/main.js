@@ -1,5 +1,3 @@
-import {createPriceTemplate} from './view/price';
-import {createSortTemplate} from './view/sort';
 import {createTripListTemplate} from './view/trip-list';
 import {getEvent} from './mock/trip-event';
 import {RenderPosition, render1} from './mock/utils';
@@ -10,6 +8,8 @@ import MenuView from './view/menu';
 import NewPointView from './view/new-point';
 import PointView from './view/point';
 import PriceView from './view/price';
+import SortView from './view/sort';
+import TripListView from './view/trip-list';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
@@ -37,8 +37,8 @@ const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 render1(tripControlsElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
 render1(tripControlsElement, new MenuView().getElement(), RenderPosition.AFTERBEGIN);
 render1(tripContentElement, new NewPointView(events[0]).getElement(), RenderPosition.AFTERBEGIN);
-render(tripContentElement, createSortTemplate(), `afterbegin`);
-render(tripContentElement, createTripListTemplate(), `beforeend`);
+render1(tripContentElement, new SortView().getElement(), RenderPosition.AFTERBEGIN);
+render1(tripContentElement, new TripListView().getElement(), RenderPosition.BEFOREEND);
 const tripList = tripContentElement.querySelector(`.trip-events__list`);
 render1(tripList, new EditPointView(events[1]).getElement(), RenderPosition.BEFOREEND);
 render1(tripInfoElement, new PriceView(events).getElement(), RenderPosition.BEFOREEND);
