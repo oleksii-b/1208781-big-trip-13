@@ -1,10 +1,12 @@
+import {createElement} from '../mock/utils';
+
 const createRouteInfoTemplate = (events) => {
   return events.length > 3
     ? `${events[0].city} &mdash; ... &mdash; ${events[events.length - 1].city}`
     : events.map((event) => `${event.city} &mdash;`).join(` `);
 };
 
-export const createInfoTemplate = (events) => {
+const createInfoTemplate = (events) => {
   const dateStart = events[0].date.start.format(`MMM DD`);
   const dateFinish = events[0].date.start.format(`MMM`) === events[events.length - 1].date.finish.format(`MMM`)
     ? events[events.length - 1].date.finish.format(`DD`)
@@ -18,3 +20,26 @@ export const createInfoTemplate = (events) => {
     </div>
   </section>`;
 };
+
+export default class Info {
+  constructor(route) {
+    this._route = route;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createInfoTemplate(this._route);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

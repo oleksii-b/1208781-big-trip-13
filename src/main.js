@@ -1,15 +1,15 @@
-import {createInfoTemplate} from './view/info';
 import {createPriceTemplate} from './view/price';
 import {createMenuTemplate} from './view/menu';
-import {createFiltersTemplate} from './view/filters';
 import {createSortTemplate} from './view/sort';
 import {createNewPointTemplate} from './view/new-point';
-import {createEditPointTemplate} from './view/edit-point';
 import {createPointTemplate} from './view/point';
 import {createTripListTemplate} from './view/trip-list';
 import {getEvent} from './mock/trip-event';
-import {createElement, RenderPosition, render1} from './mock/utils';
+import {RenderPosition, render1} from './mock/utils';
 import EditPointView from './view/edit-point';
+import InfoView from './view/info';
+import FiltersView from './view/filters';
+import MenuView from './view/menu';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
@@ -31,11 +31,11 @@ const render = (container, template, place) => {
 const tripMainElement = document.querySelector(`.trip-main`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
-render(tripMainElement, createInfoTemplate(events), `afterbegin`);
+render1(tripMainElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
 const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
 
-render(tripControlsElement, createFiltersTemplate(), `beforeend`);
-render(tripControlsElement, createMenuTemplate(), `afterbegin`);
+render1(tripControlsElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
+render1(tripControlsElement, new MenuView().getElement(), RenderPosition.AFTERBEGIN);
 render(tripContentElement, createNewPointTemplate(events[0]), `afterbegin`);
 render(tripContentElement, createSortTemplate(), `afterbegin`);
 render(tripContentElement, createTripListTemplate(), `beforeend`);
