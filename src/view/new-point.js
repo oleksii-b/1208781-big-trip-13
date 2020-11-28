@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {getRandomInteger} from '../mock/utils';
 import {createElement} from '../mock/utils';
 
-const createPhotoTemplate = (photos) => {
+export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
     `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
 };

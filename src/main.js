@@ -4,7 +4,6 @@ import EditPointView from './view/edit-point';
 import InfoView from './view/info';
 import FiltersView from './view/filters';
 import MenuView from './view/menu';
-import NewPointView from './view/new-point';
 import PointView from './view/point';
 import PriceView from './view/price';
 import SortView from './view/sort';
@@ -35,8 +34,8 @@ render(tripContentElement, new SortView().getElement(), RenderPosition.AFTERBEGI
 
 const tripListComponent = new TripListView();
 render(tripContentElement, tripListComponent.getElement(), RenderPosition.BEFOREEND);
-
 render(tripInfoElement, new PriceView(events).getElement(), RenderPosition.BEFOREEND);
+
 const renderPoint = (tripListElement, event) => {
   const pointEditComponent = new EditPointView(event);
   const pointComponent = new PointView(event);

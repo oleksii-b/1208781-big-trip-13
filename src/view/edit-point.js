@@ -3,7 +3,7 @@ import {createOfferTemplate} from './new-point';
 import {createElement} from '../mock/utils';
 
 const createEditPointTemplate = (event) => {
-  const {eventType, city, offers, destination: {description, cities}, date: {start, finish}} = event;
+  const {eventType, city, price, offers, destination: {description, cities}, date: {start, finish}} = event;
   const destinationCities = createCityTemplate(cities);
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
@@ -98,7 +98,7 @@ const createEditPointTemplate = (event) => {
             <span class="visually-hidden">Price</span>
             &euro;
           </label>
-          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="160">
+          <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
         </div>
 
         <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
