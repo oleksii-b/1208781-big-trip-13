@@ -1,0 +1,3 @@
+const createNoPointTemplate = () => {
+  return ``;
+};
