@@ -31,7 +31,11 @@ const getOffers = () => {
 };
 
 const getSelectedOffers = (offers, type) => {
-  return offers.filter((offer) => offer.id === type);
+  const selectedOffers = offers.filter((offer) => offer.id === type);
+  const randomLength = getRandomInteger(0, selectedOffers.length);
+  selectedOffers.length = randomLength;
+
+  return selectedOffers;
 };
 
 const getDescription = () => {

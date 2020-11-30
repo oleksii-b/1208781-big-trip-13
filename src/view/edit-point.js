@@ -1,12 +1,30 @@
 import {createCityTemplate} from './new-point';
-import {createOfferTemplate} from './new-point';
 import {createElement} from '../mock/utils';
 
+const createOfferTemplate = (offers, selectedOffers) => {
+  return `
+  <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+      ${offers.map((offer) =>
+    `<div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train"
+          ${selectedOffers.includes(offer) ? `checked` : ``}>
+          <label class="event__offer-label" for="event-offer-train-1">
+            <span class="event__offer-title">${offer.name}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${offer.price}</span>
+          </label>
+        </div>`).join(``)}
+    </div>
+  </section>`;
+};
+
 const createEditPointTemplate = (event) => {
-  const {eventType, city, price, offers, destination: {description, cities}, date: {start, finish}} = event;
+  const {eventType, city, selectedOffers, price, offers, destination: {description, cities}, date: {start, finish}} = event;
   const destinationCities = createCityTemplate(cities);
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
-  const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
+  const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``;
 
   return `<li class="trip-events__item">
     <form class="event event--edit" action="#" method="post">
