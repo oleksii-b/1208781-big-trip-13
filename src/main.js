@@ -10,7 +10,7 @@ import SortView from './view/sort';
 import TripListView from './view/trip-list';
 import NoPointView from './view/no-point';
 
-const COUNT_POINT = 0;
+const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
 
 events.sort((a, b) => {
