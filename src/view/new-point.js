@@ -1,5 +1,6 @@
 import dayjs from 'dayjs';
 import {getRandomInteger} from '../mock/utils';
+import {createElement} from '../mock/utils';
 
 const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
@@ -29,13 +30,14 @@ export const createCityTemplate = (cities) => {
     `<option value=${city}></option>`).join(``);
 };
 
-export const createNewPointTemplate = (event) => {
+const createNewPointTemplate = (event) => {
   const {eventType, offers, destination: {description, photos, cities}} = event;
   const destinationCities = createCityTemplate(cities);
   const defaultCity = cities[0];
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
   const photoTemplate = createPhotoTemplate(photos);
+
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
@@ -144,3 +146,25 @@ export const createNewPointTemplate = (event) => {
     </section>
   </form>`;
 };
+
+export default class NewPoint {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createNewPointTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

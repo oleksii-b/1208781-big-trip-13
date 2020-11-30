@@ -1,4 +1,5 @@
 import {getEventDuration} from '../mock/utils';
+import {createElement} from '../mock/utils';
 
 const createOffersTemplate = (offers) => {
   return offers.map((offer) =>`
@@ -10,7 +11,7 @@ const createOffersTemplate = (offers) => {
 };
 
 
-export const createPointTemplate = (event) => {
+const createPointTemplate = (event) => {
   const {eventType, city, selectedOffers, price, isFavorite, date: {start, finish}} = event;
   const offerTemplate = createOffersTemplate(selectedOffers);
 
@@ -50,3 +51,26 @@ export const createPointTemplate = (event) => {
     </div>
   </li>`;
 };
+
+export default class Point {
+  constructor(event) {
+    this._event = event;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createPointTemplate(this._event);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}

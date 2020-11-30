@@ -2,6 +2,22 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
+export const RenderPosition = {
+  AFTERBEGIN: `afterbegin`,
+  BEFOREEND: `beforeend`,
+};
+
+export const render = (container, element, place) => {
+  switch (place) {
+    case RenderPosition.AFTERBEGIN:
+      container.prepend(element);
+      break;
+    case RenderPosition.BEFOREEND:
+      container.append(element);
+      break;
+  }
+};
+
 const addZeroToNumber = (number) => {
   return (number < 10 ? `0${number}` : number);
 };
@@ -24,4 +40,11 @@ export const getRandomInteger = (a = 0, b = 1) => {
   const max = Math.floor(Math.max(a, b));
 
   return Math.floor(min + Math.random() * (max - min + 1));
+};
+
+export const createElement = (template) => {
+  const newElement = document.createElement(`div`);
+  newElement.innerHTML = template;
+
+  return newElement.firstChild;
 };
