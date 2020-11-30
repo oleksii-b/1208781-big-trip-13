@@ -10,7 +10,7 @@ import SortView from './view/sort';
 import TripListView from './view/trip-list';
 import NoPointView from './view/no-point';
 
-const COUNT_POINT = 20;
+const COUNT_POINT = 0;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
 
 events.sort((a, b) => {
@@ -26,15 +26,10 @@ events.sort((a, b) => {
 const tripMainElement = document.querySelector(`.trip-main`);
 const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
-
+const tripListComponent = new TripListView();
 
 render(tripControlsElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
 render(tripControlsElement, new MenuView().getElement(), RenderPosition.AFTERBEGIN);
-
-
-const tripListComponent = new TripListView();
-
-
 
 const renderPoint = (tripListElement, event) => {
   const pointEditComponent = new EditPointView(event);
@@ -81,13 +76,12 @@ const renderContent = (contentContainer, data) => {
     render(tripInfoElement, new PriceView(events).getElement(), RenderPosition.BEFOREEND);
     render(contentContainer, new SortView().getElement(), RenderPosition.AFTERBEGIN);
     render(contentContainer, tripListComponent.getElement(), RenderPosition.BEFOREEND);
-    for (let i = 1; i < COUNT_POINT; i++) {
-      renderPoint(tripListComponent.getElement(), data[i]);
-    }
+    data.forEach((elem) => {
+      renderPoint(tripListComponent.getElement(), elem);
+    });
   } else {
     render(contentContainer, new NoPointView().getElement(), RenderPosition.AFTERBEGIN);
   }
 };
 
 renderContent(tripContentElement, events);
-

@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {getRandomInteger} from '../mock/utils';
 import {createElement} from '../mock/utils';
 
-export const createPhotoTemplate = (photos) => {
+const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
     `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
 };
@@ -37,6 +37,7 @@ const createNewPointTemplate = (event) => {
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
   const photoTemplate = createPhotoTemplate(photos);
+
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
       <div class="event__type-wrapper">
