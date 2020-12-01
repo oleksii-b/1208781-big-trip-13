@@ -16,24 +16,24 @@ const getCity = () => {
 
 const getOffers = () => {
   const offerTypes = [
-    {id: `Flight`, name: `Add luggage`, price: `50`},
-    {id: `Flight`, name: `Switch to comfort`, price: `80`},
-    {id: `Flight`, name: `Add meal`, price: `15`},
-    {id: `Flight`, name: `Choose seats`, price: `5`},
-    {id: `Flight`, name: `Travel by train`, price: `40`},
-    {id: `Taxi`, name: `Order Uber`, price: `20`},
-    {id: `Drive`, name: `Rent a car`, price: `200`},
-    {id: `Check-in`, name: `Add breakfast`, price: `50`},
-    {id: `Sightseeing`, name: `Book tickets`, price: `40`},
-    {id: `Sightseeing`, name: `Lunch in city`, price: `30`},
+    {id: `Flight`, name: `Add luggage`, price: `50`, title: `luggage`},
+    {id: `Flight`, name: `Switch to comfort`, price: `80`, title: `comfort`},
+    {id: `Flight`, name: `Add meal`, price: `15`, title: `meal`},
+    {id: `Flight`, name: `Choose seats`, price: `5`, title: `seats`},
+    {id: `Flight`, name: `Travel by train`, price: `40`, title: `train`},
+    {id: `Taxi`, name: `Order Uber`, price: `20`, title: `uber`},
+    {id: `Drive`, name: `Rent a car`, price: `200`, title: `car`},
+    {id: `Check-in`, name: `Add breakfast`, price: `50`, title: `breakfast`},
+    {id: `Sightseeing`, name: `Book tickets`, price: `40`, title: `tickets`},
+    {id: `Sightseeing`, name: `Lunch in city`, price: `30`, title: `lunch`},
   ];
   return offerTypes;
 };
 
 const getSelectedOffers = (offers, type) => {
-  const selectedOffers = offers.filter((offer) => offer.id === type);
-  const randomLength = getRandomInteger(0, selectedOffers.length);
-  selectedOffers.length = randomLength;
+  const selectedOffers = offers.filter(({id}) => id === type);
+  const selectedOffersCount = getRandomInteger(0, selectedOffers.length);
+  selectedOffers.length = selectedOffersCount;
 
   return selectedOffers;
 };
