@@ -1,5 +1,7 @@
 import {createCityTemplate} from './new-point';
 import {createElement} from '../mock/utils';
+import {createPhotoTemplate} from './new-point';
+import {createDestinationTemplate} from './new-point';
 
 const createOfferTemplate = (offers, selectedOffers) => {
   return `
@@ -21,10 +23,12 @@ const createOfferTemplate = (offers, selectedOffers) => {
 };
 
 const createEditPointTemplate = (event) => {
-  const {eventType, city, selectedOffers, price, offers, destination: {description, cities}, date: {start, finish}} = event;
+  const {eventType, city, selectedOffers, price, offers, destination: {description, photos, cities}, date: {start, finish}} = event;
   const destinationCities = createCityTemplate(cities);
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``;
+  const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
+  const destinationTemplate = createDestinationTemplate(description, photoTemplate);
 
   return (
     `<li class="trip-events__item">
@@ -128,10 +132,7 @@ const createEditPointTemplate = (event) => {
         </header>
         <section class="event__details">
           ${offerTemplate} 
-          <section class="event__section  event__section--destination">
-            <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-            <p class="event__destination-description">${description}</p>
-          </section>
+          ${destinationTemplate}
         </section>
       </form>
     </li>`

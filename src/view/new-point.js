@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import {getRandomInteger} from '../mock/utils';
 import {createElement} from '../mock/utils';
 
-const createPhotoTemplate = (photos) => {
+export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
     `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
 };
@@ -26,6 +26,21 @@ const createOfferTemplate = (offers) => {
   );
 };
 
+export const createDestinationTemplate = (description, photos) => {
+  return (description || photos)
+    ? `<section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${photos}
+          </div>
+        </div>
+      </section>`
+    : ``;
+};
+
 export const createCityTemplate = (cities) => {
   return cities.map((city) =>
     `<option value=${city}></option>`).join(``);
@@ -37,7 +52,8 @@ const createNewPointTemplate = (event) => {
   const defaultCity = cities[0];
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
-  const photoTemplate = createPhotoTemplate(photos);
+  const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
+  const destinationTemplate = createDestinationTemplate(description, photoTemplate);
 
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -133,17 +149,7 @@ const createNewPointTemplate = (event) => {
     </header>
     <section class="event__details">
         ${offerTemplate}
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-            ${photoTemplate}
-          </div>
-        </div>
-      </section>
+        ${destinationTemplate}      
     </section>
   </form>`;
 };
