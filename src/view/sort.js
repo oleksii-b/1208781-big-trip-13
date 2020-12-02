@@ -2,7 +2,7 @@ import {createElement} from '../mock/utils';
 
 const createSortTemplate = () => {
   return (
-    `<div>
+    `<section>
       <h2 class="visually-hidden">Trip events</h2>
       <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
         <div class="trip-sort__item  trip-sort__item--day">
@@ -30,7 +30,7 @@ const createSortTemplate = () => {
           <label class="trip-sort__btn" for="sort-offer">Offers</label>
         </div>
       </form>
-    </div>`
+    </section>`
   );
 };
 
