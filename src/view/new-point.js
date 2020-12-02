@@ -2,27 +2,48 @@ import dayjs from 'dayjs';
 import {getRandomInteger} from '../mock/utils';
 import {createElement} from '../mock/utils';
 
-const createPhotoTemplate = (photos) => {
+export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
     `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
 };
 
-export const createOfferTemplate = (offers) => {
-  return `
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-      ${offers.map((offer) =>
-    `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" ${getRandomInteger(0, 1) ? `checked` : ``}>
-          <label class="event__offer-label" for="event-offer-train-1">
-            <span class="event__offer-title">${offer.name}</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">${offer.price}</span>
-          </label>
-        </div>`).join(``)}
-    </div>
-  </section>`;
+const createOfferTemplate = (offers) => {
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+    ${offers.map((offer) => (
+      `<div class="event__offer-selector">
+            <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" ${getRandomInteger(0, 1) ? `checked` : ``}>
+            <label class="event__offer-label" for="event-offer-train-1">
+              <span class="event__offer-title">${offer.name}</span>
+              &plus;&euro;&nbsp;
+              <span class="event__offer-price">${offer.price}</span>
+            </label>
+          </div>`
+    )).join(``)}
+      </div>
+    </section>`
+  );
+};
+
+export const createDestinationTemplate = (description, photos) => {
+  if (description || photos) {
+    return (
+      `<section class="event__section  event__section--destination">
+        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+        <p class="event__destination-description">${description}</p>
+
+        <div class="event__photos-container">
+          <div class="event__photos-tape">
+            ${photos}
+          </div>
+        </div>
+      </section>`
+    );
+  }
+
+  return ``;
 };
 
 export const createCityTemplate = (cities) => {
@@ -36,7 +57,8 @@ const createNewPointTemplate = (event) => {
   const defaultCity = cities[0];
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
-  const photoTemplate = createPhotoTemplate(photos);
+  const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
+  const destinationTemplate = createDestinationTemplate(description, photoTemplate);
 
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -132,17 +154,7 @@ const createNewPointTemplate = (event) => {
     </header>
     <section class="event__details">
         ${offerTemplate}
-
-      <section class="event__section  event__section--destination">
-        <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-        <p class="event__destination-description">${description}</p>
-
-        <div class="event__photos-container">
-          <div class="event__photos-tape">
-            ${photoTemplate}
-          </div>
-        </div>
-      </section>
+        ${destinationTemplate}      
     </section>
   </form>`;
 };
