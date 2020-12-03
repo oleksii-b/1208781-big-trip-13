@@ -1,4 +1,4 @@
-import Abstract from "../view/abstract";
+import Abstract from '../view/abstract';
 
 export const RenderPosition = {
   AFTERBEGIN: `afterbegin`,
@@ -42,7 +42,7 @@ export const replace = (newChild, oldChild) => {
 
   const parent = oldChild.parentElement;
 
-  if (parent === null || newChild === null || oldChild === null) {
+  if ([parent, oldChild, newChild].includes(null)) {
     throw new Error(`Can't replace unexisting elements`);
   }
 

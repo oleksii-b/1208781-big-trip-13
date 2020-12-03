@@ -65,6 +65,7 @@ export default class Point extends AbstractView {
   getTemplate() {
     return createPointTemplate(this._event);
   }
+
   _editClickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
