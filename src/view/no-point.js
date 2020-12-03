@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils';
+import AbstractView from './abstract';
 
 const createNoPointTemplate = () => {
   return (
@@ -9,23 +9,8 @@ const createNoPointTemplate = () => {
   );
 };
 
-export default class NoPoint {
-  constructor() {
-    this._element = null;
-  }
-
+export default class NoPoint extends AbstractView {
   getTemplate() {
     return createNoPointTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

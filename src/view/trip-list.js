@@ -1,26 +1,11 @@
-import {createElement} from '../mock/utils';
+import AbstractView from './abstract';
 
 const createTripListTemplate = () => {
   return `<ul class="trip-events__list"></ul>`;
 };
 
-export default class TripList {
-  constructor() {
-    this._element = null;
-  }
-
+export default class TripList extends AbstractView {
   getTemplate() {
     return createTripListTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
