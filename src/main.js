@@ -1,5 +1,5 @@
 import {getEvent} from '../src/mock/trip-event';
-import {RenderPosition, render} from './utils/utils';
+import {RenderPosition, render, replace} from './utils/render';
 import EditPointView from './view/edit-point';
 import InfoView from './view/info';
 import FiltersView from './view/filters';
@@ -28,19 +28,19 @@ const tripControlsElement = tripMainElement.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
 const tripListComponent = new TripListView();
 
-render(tripControlsElement, new FiltersView().getElement(), RenderPosition.BEFOREEND);
-render(tripControlsElement, new MenuView().getElement(), RenderPosition.AFTERBEGIN);
+render(tripControlsElement, new FiltersView(), RenderPosition.BEFOREEND);
+render(tripControlsElement, new MenuView(), RenderPosition.AFTERBEGIN);
 
 const renderPoint = (tripListElement, event) => {
   const pointEditComponent = new EditPointView(event);
   const pointComponent = new PointView(event);
 
   const replacePointToForm = () => {
-    tripListElement.replaceChild(pointEditComponent.getElement(), pointComponent.getElement());
+    replace(pointEditComponent, pointComponent);
   };
 
   const replaceFormToPoint = () => {
-    tripListElement.replaceChild(pointComponent.getElement(), pointEditComponent.getElement());
+    replace(pointComponent, pointEditComponent);
   };
 
   const onEscKeyDown = (evt) => {
@@ -68,21 +68,21 @@ const renderPoint = (tripListElement, event) => {
 
   });
 
-  render(tripListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
+  render(tripListElement, pointComponent, RenderPosition.BEFOREEND);
 };
 
 const renderContent = (contentContainer, data) => {
   if (data.length) {
-    render(tripMainElement, new InfoView(events).getElement(), RenderPosition.AFTERBEGIN);
+    render(tripMainElement, new InfoView(events), RenderPosition.AFTERBEGIN);
     const tripInfoElement = tripMainElement.querySelector(`.trip-info`);
-    render(tripInfoElement, new PriceView(events).getElement(), RenderPosition.BEFOREEND);
-    render(contentContainer, new SortView().getElement(), RenderPosition.AFTERBEGIN);
-    render(contentContainer, tripListComponent.getElement(), RenderPosition.BEFOREEND);
+    render(tripInfoElement, new PriceView(events), RenderPosition.BEFOREEND);
+    render(contentContainer, new SortView(), RenderPosition.AFTERBEGIN);
+    render(contentContainer, tripListComponent, RenderPosition.BEFOREEND);
     data.forEach((elem) => {
       renderPoint(tripListComponent.getElement(), elem);
     });
   } else {
-    render(contentContainer, new NoPointView().getElement(), RenderPosition.AFTERBEGIN);
+    render(contentContainer, new NoPointView(), RenderPosition.AFTERBEGIN);
   }
 };
 
