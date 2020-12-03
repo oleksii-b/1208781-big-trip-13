@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../mock/utils';
+import {getRandomInteger} from '../utils/utils';
 import AbstractView from './abstract';
 
 export const createPhotoTemplate = (photos) => {

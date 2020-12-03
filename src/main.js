@@ -1,5 +1,5 @@
-import {getEvent} from './mock/trip-event';
-import {RenderPosition, render} from './mock/utils';
+import {getEvent} from '../src/mock/trip-event';
+import {RenderPosition, render} from './utils/utils';
 import EditPointView from './view/edit-point';
 import InfoView from './view/info';
 import FiltersView from './view/filters';
@@ -51,21 +51,23 @@ const renderPoint = (tripListElement, event) => {
     }
   };
 
-  pointComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  pointComponent.setEditClickHandler(() => {
     replacePointToForm();
     document.addEventListener(`keydown`, onEscKeyDown);
   });
 
-  pointEditComponent.getElement().querySelector(`form`).addEventListener(`submit`, (evt) => {
-    evt.preventDefault();
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
+
   });
 
-  pointEditComponent.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, () => {
+  pointEditComponent.setCloseFormClickHandler(() => {
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
+
   });
+
   render(tripListElement, pointComponent.getElement(), RenderPosition.BEFOREEND);
 };
 
