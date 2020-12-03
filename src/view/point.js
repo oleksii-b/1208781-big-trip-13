@@ -1,5 +1,5 @@
 import {getEventDuration} from '../mock/utils';
-import {createElement} from '../mock/utils';
+import AbstractView from './abstract';
 
 const createOffersTemplate = (offers) => {
   return offers.map((offer) => (
@@ -55,25 +55,13 @@ const createPointTemplate = (event) => {
   );
 };
 
-export default class Point {
+export default class Point extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createPointTemplate(this._event);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

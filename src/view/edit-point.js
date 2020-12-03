@@ -1,7 +1,7 @@
 import {createCityTemplate} from './new-point';
-import {createElement} from '../mock/utils';
 import {createPhotoTemplate} from './new-point';
 import {createDestinationTemplate} from './new-point';
+import AbstractView from './abstract';
 
 const createOfferTemplate = (offers, selectedOffers) => {
   return `
@@ -140,25 +140,13 @@ const createEditPointTemplate = (event) => {
   );
 };
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }
