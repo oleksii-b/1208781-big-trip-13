@@ -52,20 +52,20 @@ const renderPoint = (tripListElement, event) => {
   };
 
   pointComponent.setEditClickHandler(() => {
-    replacePointToForm();
-    document.addEventListener(`keydown`, onEscKeyDown);
+    if (!tripListComponent.getElement().querySelector(`form`)) {
+      replacePointToForm();
+      document.addEventListener(`keydown`, onEscKeyDown);
+    }
   });
 
   pointEditComponent.setSubmitFormHandler(() => {
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
-
   });
 
   pointEditComponent.setCloseFormHandler(() => {
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
-
   });
 
   render(tripListElement, pointComponent, RenderPosition.BEFOREEND);
