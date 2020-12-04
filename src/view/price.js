@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils';
+import AbstractView from './abstract';
 
 const createPriceTemplate = (events) => {
   const totalPrice = events.reduce((acc, event) => acc + event.price, 0);
@@ -12,25 +12,13 @@ const createPriceTemplate = (events) => {
   );
 };
 
-export default class Price {
+export default class Price extends AbstractView {
   constructor(events) {
+    super();
     this._events = events;
-    this._element = null;
   }
 
   getTemplate() {
     return createPriceTemplate(this._events);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

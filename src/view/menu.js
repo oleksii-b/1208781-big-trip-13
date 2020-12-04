@@ -1,4 +1,4 @@
-import {createElement} from '../mock/utils';
+import AbstractView from './abstract';
 
 const createMenuTemplate = () => {
   return (
@@ -10,23 +10,8 @@ const createMenuTemplate = () => {
   );
 };
 
-export default class Menu {
-  constructor() {
-    this._element = null;
-  }
-
+export default class Menu extends AbstractView {
   getTemplate() {
     return createMenuTemplate();
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

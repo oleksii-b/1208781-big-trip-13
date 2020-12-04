@@ -1,6 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../mock/utils';
-import {createElement} from '../mock/utils';
+import {getRandomInteger} from '../utils/utils';
+import AbstractView from './abstract';
 
 export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
@@ -159,24 +159,13 @@ const createNewPointTemplate = (event) => {
   </form>`;
 };
 
-export default class NewPoint {
+export default class NewPoint extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
   }
 
   getTemplate() {
     return createNewPointTemplate(this._event);
-  }
-
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
   }
 }

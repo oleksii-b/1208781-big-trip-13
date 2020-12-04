@@ -1,5 +1,5 @@
-import {getEventDuration} from '../mock/utils';
-import {createElement} from '../mock/utils';
+import {getEventDuration} from '../utils/utils';
+import AbstractView from './abstract';
 
 const createOffersTemplate = (offers) => {
   return offers.map((offer) => (
@@ -55,25 +55,24 @@ const createPointTemplate = (event) => {
   );
 };
 
-export default class Point {
+export default class Point extends AbstractView {
   constructor(event) {
+    super();
     this._event = event;
-    this._element = null;
+    this._onToggleButtonClick = this._onToggleButtonClick.bind(this);
   }
 
   getTemplate() {
     return createPointTemplate(this._event);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _onToggleButtonClick(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setEditClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onToggleButtonClick);
   }
 }

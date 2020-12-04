@@ -1,7 +1,7 @@
 import {createCityTemplate} from './new-point';
-import {createElement} from '../mock/utils';
 import {createPhotoTemplate} from './new-point';
 import {createDestinationTemplate} from './new-point';
+import AbstractView from './abstract';
 
 const createOfferTemplate = (offers, selectedOffers) => {
   return `
@@ -140,25 +140,35 @@ const createEditPointTemplate = (event) => {
   );
 };
 
-export default class EditPoint {
+export default class EditPoint extends AbstractView {
   constructor(point) {
+    super();
     this._point = point;
-    this._element = null;
+    this._onFormSubmit = this._onFormSubmit.bind(this);
+    this._onFormClose = this._onFormClose.bind(this);
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
+  _onFormSubmit(evt) {
+    evt.preventDefault();
+    this._callback.submitForm();
   }
 
-  removeElement() {
-    this._element = null;
+  _onFormClose(evt) {
+    evt.preventDefault();
+    this._callback.closeForm();
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.submitForm = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._onFormSubmit);
+  }
+
+  setFormCloseHandler(callback) {
+    this._callback.closeForm = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onFormClose);
   }
 }
