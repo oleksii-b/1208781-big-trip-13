@@ -144,31 +144,31 @@ export default class EditPoint extends AbstractView {
   constructor(point) {
     super();
     this._point = point;
-    this._submitFormHandler = this._submitFormHandler.bind(this);
-    this._closeFormHandler = this._closeFormHandler.bind(this);
+    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._formCloseHandler = this._formCloseHandler.bind(this);
   }
 
   getTemplate() {
     return createEditPointTemplate(this._point);
   }
 
-  _submitFormHandler(evt) {
+  _formSubmitHandler(evt) {
     evt.preventDefault();
     this._callback.submitForm();
   }
 
-  _closeFormHandler(evt) {
+  _formCloseHandler(evt) {
     evt.preventDefault();
     this._callback.closeForm();
   }
 
-  setSubmitFormHandler(callback) {
+  setFormSubmitHandler(callback) {
     this._callback.submitForm = callback;
-    this.getElement().querySelector(`form`).addEventListener(`submit`, this._submitFormHandler);
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._formSubmitHandler);
   }
 
-  setCloseFormHandler(callback) {
+  setFormCloseHandler(callback) {
     this._callback.closeForm = callback;
-    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._closeFormHandler);
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._formCloseHandler);
   }
 }

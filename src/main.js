@@ -58,12 +58,12 @@ const renderPoint = (tripListElement, event) => {
     }
   });
 
-  pointEditComponent.setSubmitFormHandler(() => {
+  pointEditComponent.setFormSubmitHandler(() => {
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
 
-  pointEditComponent.setCloseFormHandler(() => {
+  pointEditComponent.setFormCloseHandler(() => {
     replaceFormToPoint();
     document.removeEventListener(`keydown`, onEscKeyDown);
   });
