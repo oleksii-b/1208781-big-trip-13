@@ -7,26 +7,24 @@ import EditPointView from '../view/edit-point';
 import PointView from '../view/point';
 import {render, RenderPosition, replace} from '../utils/render';
 
-const COUNT_POINT = 20;
-
 export default class Trip {
-  constructor(tripContentContainer) {
+  constructor(tripContentContainer, events) {
     this._tripContentContainer = tripContentContainer;
 
     this._tripListComponent = new TripListView();
     this._sortComponent = new SortView();
-    this._priceComponent = new PriceView();
+    this._priceComponent = new PriceView(events);
     this._noPointComponent = new NoPointView();
-    this._infoComponent = new InfoView();
+    this._infoComponent = new InfoView(events);
   }
 
   init(events) {
     this._events = events.slice();
     if (events.length) {
-      this._renderInfo();
-      this._renderPrice();
+      this._renderInfo(events);
+      this._renderPrice(events);
       this._renderSort();
-      this._tripListComponent();
+      this._renderTripList();
       events.forEach((event) => this._renderPoint(event));
     } else {
       this._renderNoPoint();
@@ -78,7 +76,7 @@ export default class Trip {
   }
 
   _renderPrice() {
-    render(this._infoComponent, this._priceComponent. RenderPosition.BEFOREEND);
+    render(this._infoComponent, this._priceComponent, RenderPosition.BEFOREEND);
   }
 
   _renderInfo() {
@@ -90,7 +88,7 @@ export default class Trip {
     render(this._tripContentContainer, this._noPointComponent, RenderPosition.AFTERBEGIN);
   }
 
-  renderTripList() {
+  _renderTripList() {
     render(this._tripContentContainer, this._tripListComponent, RenderPosition.BEFOREEND);
 
   }
