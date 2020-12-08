@@ -23,5 +23,5 @@ const tripContentElement = document.querySelector(`.trip-events`);
 render(tripControlsElement, new FiltersView(), RenderPosition.BEFOREEND);
 render(tripControlsElement, new MenuView(), RenderPosition.AFTERBEGIN);
 
-const tripPresenter = new TripPresenter(tripContentElement, events);
+const tripPresenter = new TripPresenter(tripContentElement);
 tripPresenter.init(events);

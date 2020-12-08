@@ -9,17 +9,16 @@ import {updateItem} from '../utils/utils';
 import {render, RenderPosition} from '../utils/render';
 
 export default class Trip {
-  constructor(tripContentContainer, points) {
+  constructor(tripContentContainer) {
     this._tripContentContainer = tripContentContainer;
     this._pointPresenter = {};
 
     this._tripListComponent = new TripListView();
     this._sortComponent = new SortView();
-    this._priceComponent = new PriceView(points);
     this._noPointComponent = new NoPointView();
-    this._infoComponent = new InfoView(points);
 
     this._onPointChange = this._onPointChange.bind(this);
+    this._onModeChange = this._onModeChange.bind(this);
   }
 
   init(points) {
@@ -35,13 +34,17 @@ export default class Trip {
     }
   }
 
+  _onModeChange() {
+    Object.values(this._pointPresenter).forEach((presenter) => presenter.resetView());
+  }
+
   _onPointChange(updatedPoint) {
     this._points = updateItem(this._points, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 
   _renderPoint(point) {
-    const pointPresenter = new PointPresenter(this._tripListComponent, this._onPointChange);
+    const pointPresenter = new PointPresenter(this._tripListComponent, this._onPointChange, this._onModeChange);
     pointPresenter.init(point);
     this._pointPresenter[point.id] = pointPresenter;
   }
@@ -50,12 +53,14 @@ export default class Trip {
     render(this._tripContentContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderPrice() {
+  _renderPrice(points) {
+    this._priceComponent = new PriceView(points);
     render(this._infoComponent, this._priceComponent, RenderPosition.BEFOREEND);
   }
 
-  _renderInfo() {
+  _renderInfo(points) {
     const tripMainElement = document.querySelector(`.trip-main`);
+    this._infoComponent = new InfoView(points);
     render(tripMainElement, this._infoComponent, RenderPosition.AFTERBEGIN);
   }
 
