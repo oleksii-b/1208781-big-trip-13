@@ -40,7 +40,7 @@ export default class Point {
       replace(this._pointComponent, prevPointComponent);
     }
 
-    if (this._tripListContainer.getElement().contains(prevEditPointComponent.getTemplate())) {
+    if (this._tripListContainer.getElement().contains(prevEditPointComponent.getElement())) {
       replace(this._editPointComponent, prevEditPointComponent);
     }
 
