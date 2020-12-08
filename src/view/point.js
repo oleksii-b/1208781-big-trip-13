@@ -56,19 +56,31 @@ const createPointTemplate = (event) => {
 };
 
 export default class Point extends AbstractView {
-  constructor(event) {
+  constructor(point) {
     super();
-    this._event = event;
+    this._point = point;
+
     this._onToggleButtonClick = this._onToggleButtonClick.bind(this);
+    this._onFavoriteClick = this._onFavoriteClick.bind(this);
   }
 
   getTemplate() {
-    return createPointTemplate(this._event);
+    return createPointTemplate(this._point);
+  }
+
+  _onFavoriteClick(evt) {
+    evt.preventDefault();
+    this._callback.favoriteClick();
   }
 
   _onToggleButtonClick(evt) {
     evt.preventDefault();
     this._callback.click();
+  }
+
+  setFavoriteClickHandler(callback) {
+    this._callback.favoriteClick = callback;
+    this.getElement().querySelector(`.event__favorite-btn`).addEventListener(`click`, this._onFavoriteClick);
   }
 
   setEditClickHandler(callback) {

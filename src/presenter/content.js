@@ -4,36 +4,46 @@ import SortView from '../view/sort';
 import NoPointView from '../view/no-point';
 import TripListView from '../view/trip-list';
 import PointPresenter from '../presenter/point';
+import {updateItem} from '../utils/utils';
 
 import {render, RenderPosition} from '../utils/render';
 
 export default class Trip {
-  constructor(tripContentContainer, events) {
+  constructor(tripContentContainer, points) {
     this._tripContentContainer = tripContentContainer;
+    this._pointPresenter = {};
 
     this._tripListComponent = new TripListView();
     this._sortComponent = new SortView();
-    this._priceComponent = new PriceView(events);
+    this._priceComponent = new PriceView(points);
     this._noPointComponent = new NoPointView();
-    this._infoComponent = new InfoView(events);
+    this._infoComponent = new InfoView(points);
+
+    this._onPointChange = this._onPointChange.bind(this);
   }
 
-  init(events) {
-    this._events = events.slice();
-    if (events.length) {
-      this._renderInfo(events);
-      this._renderPrice(events);
+  init(points) {
+    this._points = points.slice();
+    if (points.length) {
+      this._renderInfo(points);
+      this._renderPrice(points);
       this._renderSort();
       this._renderTripList();
-      events.forEach((event) => this._renderPoint(event));
+      points.forEach((point) => this._renderPoint(point));
     } else {
       this._renderNoPoint();
     }
   }
 
-  _renderPoint(event) {
-    const pointPresenter = new PointPresenter(this._tripListComponent);
-    pointPresenter.init(event);
+  _onPointChange(updatedPoint) {
+    this._points = updateItem(this._points, updatedPoint);
+    this._pointPresenter[updatedPoint.id].init(updatedPoint);
+  }
+
+  _renderPoint(point) {
+    const pointPresenter = new PointPresenter(this._tripListComponent, this._onPointChange);
+    pointPresenter.init(point);
+    this._pointPresenter[point.id] = pointPresenter;
   }
 
   _renderSort() {
@@ -56,5 +66,10 @@ export default class Trip {
   _renderTripList() {
     render(this._tripContentContainer, this._tripListComponent, RenderPosition.BEFOREEND);
 
+  }
+
+  _clearTripList() {
+    Object.values(this._pointPresenter).forEach((presenter) => presenter.destroy());
+    this._pointPresenter = {};
   }
 }
