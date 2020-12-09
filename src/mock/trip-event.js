@@ -1,7 +1,6 @@
 import dayjs from 'dayjs';
-import {getRandomInteger} from '../utils/utils';
-
-const generateId = () => Date.now() + parseInt(Math.random() * 10000, 10);
+import {nanoid} from 'nanoid';
+import {getRandomInteger} from '../utils/common';
 
 const getEventType = () => {
   const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
@@ -94,7 +93,7 @@ export const getEvent = () => {
   const offers = getOffers(eventType);
 
   return {
-    id: generateId(),
+    id: nanoid(),
     eventType,
     city: getCity(),
     offers,

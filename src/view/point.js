@@ -1,4 +1,4 @@
-import {getEventDuration} from '../utils/utils';
+import {getEventDuration} from '../utils/common';
 import AbstractView from './abstract';
 
 const createOffersTemplate = (offers) => {

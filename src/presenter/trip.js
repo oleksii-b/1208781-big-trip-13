@@ -4,8 +4,7 @@ import SortView from '../view/sort';
 import NoPointView from '../view/no-point';
 import TripListView from '../view/trip-list';
 import PointPresenter from '../presenter/point';
-import {updateItem} from '../utils/utils';
-
+import {getUpdatedPoints} from '../utils/common';
 import {render, RenderPosition} from '../utils/render';
 
 export default class Trip {
@@ -23,6 +22,7 @@ export default class Trip {
 
   init(points) {
     this._points = points.slice();
+
     if (points.length) {
       this._renderInfo(points);
       this._renderPrice(points);
@@ -39,7 +39,7 @@ export default class Trip {
   }
 
   _onPointChange(updatedPoint) {
-    this._points = updateItem(this._points, updatedPoint);
+    this._points = getUpdatedPoints(this._points, updatedPoint);
     this._pointPresenter[updatedPoint.id].init(updatedPoint);
   }
 

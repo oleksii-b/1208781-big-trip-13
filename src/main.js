@@ -2,7 +2,7 @@ import {getEvent} from '../src/mock/trip-event';
 import {RenderPosition, render} from './utils/render';
 import FiltersView from './view/filters';
 import MenuView from './view/menu';
-import TripPresenter from '../src/presenter/content';
+import TripPresenter from '../src/presenter/trip';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);

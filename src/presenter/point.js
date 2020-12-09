@@ -84,7 +84,7 @@ export default class Point {
   }
 
   _onFormPressEsc(evt) {
-    if (evt.key === `Esc` || evt.key === `Escape`) {
+    if ([`Esc`, `Escape`].includes(evt.key)) {
       evt.preventDefault();
       this._replaceFormToPoint();
     }
