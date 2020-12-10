@@ -27,8 +27,8 @@ export default class Point {
   init(point) {
     this._point = point;
 
-    const prevPointComponent = this._pointComponent;
-    const prevEditPointComponent = this._editPointComponent;
+    this._prevPointComponent = this._pointComponent;
+    this._prevEditPointComponent = this._editPointComponent;
 
     this._editPointComponent = new EditPointView(point);
     this._pointComponent = new PointView(point);
@@ -38,21 +38,25 @@ export default class Point {
     this._editPointComponent.setFormSubmitHandler(this._onFormSubmit);
     this._pointComponent.setFavoriteClickHandler(this._onFavoriteClick);
 
-    if ([prevEditPointComponent, prevPointComponent].includes(null)) {
+    if ([this._prevEditPointComponent, this._prevPointComponent].includes(null)) {
       render(this._tripListContainer, this._pointComponent, RenderPosition.BEFOREEND);
       return;
     }
 
+    this._updatePoint();
+  }
+
+  _updatePoint() {
     if (this._mode === Mode.DEFAULT) {
-      replace(this._pointComponent, prevPointComponent);
+      replace(this._pointComponent, this._prevPointComponent);
     }
 
     if (this._mode === Mode.EDITING) {
-      replace(this._editPointComponent, prevEditPointComponent);
+      replace(this._editPointComponent, this._prevEditPointComponent);
     }
 
-    remove(prevPointComponent);
-    remove(prevEditPointComponent);
+    remove(this._prevPointComponent);
+    remove(this._prevEditPointComponent);
   }
 
   resetView() {
