@@ -16,6 +16,8 @@ export default class Point {
     this._pointComponent = null;
     this._editPointComponent = null;
     this._mode = Mode.DEFAULT;
+    this._prevPointComponent = null;
+    this._prevEditPointComponent = null;
 
     this._onToggleButtonClick = this._onToggleButtonClick.bind(this);
     this._onFormSubmit = this._onFormSubmit.bind(this);
