@@ -36,7 +36,26 @@ const createSortTemplate = () => {
 };
 
 export default class Sort extends AbstractView {
+  constructor() {
+    super();
+
+    this._onSortTypeClick = this._onSortTypeClick.bind(this);
+  }
   getTemplate() {
     return createSortTemplate();
+  }
+
+  _onSortTypeClick(evt) {
+    if (evt.target.tagName !== `input`) {
+      return;
+    }
+
+    evt.preventDefault();
+    this._callback.sortTypeClick(evt.target.dataset.sortType);
+  }
+
+  setSortTypeClickHandler(callback) {
+    this._callback.sortTypeClick = callback;
+    this.getElement().addEventListener(`click`, this._onSortTypeClick);
   }
 }
