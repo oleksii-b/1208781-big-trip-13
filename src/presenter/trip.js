@@ -7,7 +7,7 @@ import PointPresenter from '../presenter/point';
 import {getUpdatedPoints} from '../utils/common';
 import {render, RenderPosition} from '../utils/render';
 import {SortType} from '../const';
-import {sortPriceDown} from '../utils/sort';
+import {sortPriceDown, sortTimeDown} from '../utils/sort';
 
 export default class Trip {
   constructor(tripContentContainer) {
@@ -42,6 +42,9 @@ export default class Trip {
     switch (sortType) {
       case SortType.PRICE_DOWN:
         this._points.sort(sortPriceDown);
+        break;
+      case SortType.TIME_DOWN:
+        this._points.sort(sortTimeDown);
         break;
       default: this._points = this._sourcedPoints.slice();
     }
