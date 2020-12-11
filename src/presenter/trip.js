@@ -32,7 +32,6 @@ export default class Trip {
       this._renderPrice(points);
       this._renderSort();
       this._renderTripList();
-      points.forEach((point) => this._renderPoint(point));
     } else {
       this._renderNoPoint();
     }
@@ -57,7 +56,7 @@ export default class Trip {
     }
     this._sortPoints(sortType);
     this._clearTripList();
-    this._points.forEach((point) => this._renderPoint(point));
+    this._renderTripList();
   }
 
   _onModeChange() {
@@ -97,7 +96,7 @@ export default class Trip {
 
   _renderTripList() {
     render(this._tripContentContainer, this._tripListComponent, RenderPosition.BEFOREEND);
-
+    this._points.forEach((point) => this._renderPoint(point));
   }
 
   _clearTripList() {

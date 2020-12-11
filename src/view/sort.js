@@ -47,7 +47,6 @@ export default class Sort extends AbstractView {
 
   _onSortTypeClick(evt) {
     if ([`sort-price`, `sort-day`, `sort-time`].includes(evt.target.value)) {
-      evt.preventDefault();
       this._callback.sortTypeClick(evt.target.dataset.sortType);
     }
   }
