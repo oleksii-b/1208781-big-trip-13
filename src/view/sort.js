@@ -1,5 +1,4 @@
 import AbstractView from './abstract';
-import {SortType} from '../const';
 
 const createSortTemplate = () => {
   return (
@@ -7,7 +6,7 @@ const createSortTemplate = () => {
       <h2 class="visually-hidden">Trip events</h2>
       <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
         <div class="trip-sort__item  trip-sort__item--day">
-          <input id="sort-day" class="trip-sort__input  visually-hidden" data-sort-type="${SortType.DEFAULT}" type="radio" name="trip-sort" value="sort-day" checked>
+          <input id="sort-day" class="trip-sort__input  visually-hidden"  type="radio" name="trip-sort" value="sort-day" checked>
           <label class="trip-sort__btn" for="sort-day">Day</label>
         </div>
 
@@ -17,12 +16,12 @@ const createSortTemplate = () => {
         </div>
 
         <div class="trip-sort__item  trip-sort__item--time">
-          <input id="sort-time" class="trip-sort__input  visually-hidden" data-sort-type="${SortType.TIME_DOWN}" type="radio" name="trip-sort" value="sort-time">
+          <input id="sort-time" class="trip-sort__input  visually-hidden"  type="radio" name="trip-sort" value="sort-time">
           <label class="trip-sort__btn" for="sort-time">Time</label>
         </div>
 
         <div class="trip-sort__item  trip-sort__item--price">
-          <input id="sort-price" class="trip-sort__input  visually-hidden" data-sort-type="${SortType.PRICE_DOWN}" type="radio" name="trip-sort" value="sort-price">
+          <input id="sort-price" class="trip-sort__input  visually-hidden"  type="radio" name="trip-sort" value="sort-price">
           <label class="trip-sort__btn" for="sort-price">Price</label>
         </div>
 
@@ -46,13 +45,14 @@ export default class Sort extends AbstractView {
   }
 
   _onSortTypeClick(evt) {
-    if ([`sort-price`, `sort-day`, `sort-time`].includes(evt.target.value)) {
-      this._callback.sortTypeClick(evt.target.dataset.sortType);
+    const {target: {value}} = evt;
+    if ([`sort-price`, `sort-day`, `sort-time`].includes(value)) {
+      this._callback.sortTypeClick(value);
     }
   }
 
   setSortTypeClickHandler(callback) {
     this._callback.sortTypeClick = callback;
-    this.getElement().addEventListener(`click`, this._onSortTypeClick);
+    this.getElement().addEventListener(`change`, this._onSortTypeClick);
   }
 }

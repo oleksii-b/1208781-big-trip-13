@@ -1,4 +1,4 @@
-export const sortPriceDown = (pointA, pointB) => pointB.price - pointA.price;
-export const sortTimeDown = (pointA, pointB) => {
-  return (pointB.date.finish - pointB.date.start) - (pointA.date.finish - pointA.date.start);
+export const sortPriceDown = (prevPoint, nextPoint) => nextPoint.price - prevPoint.price;
+export const sortTimeDown = (prevPoint, nextPoint) => {
+  return (nextPoint.date.finish - nextPoint.date.start) - (prevPoint.date.finish - prevPoint.date.start);
 };

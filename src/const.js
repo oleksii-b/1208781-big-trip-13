@@ -1,5 +1,5 @@
 export const SortType = {
-  DEFAULT: `deafult`,
-  PRICE_DOWN: `price-down`,
-  TIME_DOWN: `time-down`,
+  DEFAULT: `sort-day`,
+  PRICE_DOWN: `sort-price`,
+  TIME_DOWN: `sort-time`,
 };

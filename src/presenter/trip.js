@@ -51,9 +51,6 @@ export default class Trip {
   }
 
   _onSortTypeClick(sortType) {
-    if (this._currentSortType === sortType) {
-      return;
-    }
     this._sortPoints(sortType);
     this._clearTripList();
     this._renderTripList();
