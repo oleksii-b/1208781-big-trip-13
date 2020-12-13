@@ -1,3 +1,4 @@
+import {SortType} from '../const';
 import AbstractView from './abstract';
 
 const createSortTemplate = () => {
@@ -38,21 +39,20 @@ export default class Sort extends AbstractView {
   constructor() {
     super();
 
-    this._onSortTypeClick = this._onSortTypeClick.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
   }
   getTemplate() {
     return createSortTemplate();
   }
 
-  _onSortTypeClick(evt) {
-    const {target: {value}} = evt;
-    if ([`sort-price`, `sort-day`, `sort-time`].includes(value)) {
-      this._callback.sortTypeClick(value);
+  _onSortTypeChange({target: {value}}) {
+    if (Object.values(SortType).includes(value)) {
+      this._callback.updateSortType(value);
     }
   }
 
-  setSortTypeClickHandler(callback) {
-    this._callback.sortTypeClick = callback;
-    this.getElement().addEventListener(`change`, this._onSortTypeClick);
+  setSortTypeChangeHandler(callback) {
+    this._callback.updateSortType = callback;
+    this.getElement().addEventListener(`change`, this._onSortTypeChange);
   }
 }

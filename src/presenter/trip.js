@@ -45,7 +45,8 @@ export default class Trip {
       case SortType.TIME_DOWN:
         this._points.sort(sortTimeDown);
         break;
-      default: this._points = this._sourcedPoints.slice();
+      default:
+        this._points = this._sourcedPoints.slice();
     }
     this._currentSortType = sortType;
   }
@@ -73,7 +74,7 @@ export default class Trip {
 
   _renderSort() {
     render(this._tripContentContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
-    this._sortComponent.setSortTypeClickHandler(this._onSortTypeClick);
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeClick);
   }
 
   _renderPrice(points) {
