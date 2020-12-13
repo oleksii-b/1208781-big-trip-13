@@ -6,6 +6,8 @@ import TripListView from '../view/trip-list';
 import PointPresenter from '../presenter/point';
 import {getUpdatedPoints} from '../utils/common';
 import {render, RenderPosition} from '../utils/render';
+import {SortType} from '../const';
+import {sortPriceDown, sortTimeDown} from '../utils/sort';
 
 export default class Trip {
   constructor(tripContentContainer) {
@@ -18,20 +20,41 @@ export default class Trip {
 
     this._onPointChange = this._onPointChange.bind(this);
     this._onModeChange = this._onModeChange.bind(this);
+    this._onSortTypeClick = this._onSortTypeClick.bind(this);
   }
 
   init(points) {
     this._points = points.slice();
+    this._sourcedPoints = points.slice();
 
     if (points.length) {
       this._renderInfo(points);
       this._renderPrice(points);
       this._renderSort();
       this._renderTripList();
-      points.forEach((point) => this._renderPoint(point));
     } else {
       this._renderNoPoint();
     }
+  }
+
+  _sortPoints(sortType) {
+    switch (sortType) {
+      case SortType.PRICE_DOWN:
+        this._points.sort(sortPriceDown);
+        break;
+      case SortType.TIME_DOWN:
+        this._points.sort(sortTimeDown);
+        break;
+      default:
+        this._points = this._sourcedPoints.slice();
+    }
+    this._currentSortType = sortType;
+  }
+
+  _onSortTypeClick(sortType) {
+    this._sortPoints(sortType);
+    this._clearTripList();
+    this._renderTripList();
   }
 
   _onModeChange() {
@@ -51,6 +74,7 @@ export default class Trip {
 
   _renderSort() {
     render(this._tripContentContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeClick);
   }
 
   _renderPrice(points) {
@@ -70,7 +94,7 @@ export default class Trip {
 
   _renderTripList() {
     render(this._tripContentContainer, this._tripListComponent, RenderPosition.BEFOREEND);
-
+    this._points.forEach((point) => this._renderPoint(point));
   }
 
   _clearTripList() {
