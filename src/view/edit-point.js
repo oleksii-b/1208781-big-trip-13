@@ -23,14 +23,23 @@ const createOfferTemplate = (offers, selectedOffers) => {
   </section>`;
 };
 
+const createEventTypeListTemplate = (eventType, isChecked) => {
+  const eventTypeLowerCase = eventType.toLowerCase();
+
+  return (
+    `<div class="event__type-item">
+        <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
+        <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
+  </div>`);
+};
+
 const createEditPointTemplate = (data) => {
-  const {eventType, city, selectedOffers, price, offers, destination: {description, photos, cities}, date: {start, finish}, withOffers, withDescription, withPhoto} = data;
+  const {eventType, eventTypes, cities, selectedOffers, price, offers, destination: {description, photos, city}, date: {start, finish}, withOffers, withDescription, withPhoto} = data;
   const destinationCities = createCityTemplate(cities);
   const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase());
   // const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``;
   const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
   // const destinationTemplate = createDestinationTemplate(description, photoTemplate);
-
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -45,56 +54,7 @@ const createEditPointTemplate = (data) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-
-                <div class="event__type-item">
-                  <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-                  <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-                  <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-                  <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-                  <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-                  <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-                  <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
-                  <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-                  <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-                  <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-                </div>
-
-                <div class="event__type-item">
-                  <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-                  <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-                </div>
+                ${eventTypes.map((elem) => createEventTypeListTemplate(elem, elem.toLowerCase() === eventType.toLowerCase())).join(``)}                
               </fieldset>
             </div>
           </div>
@@ -148,6 +108,7 @@ export default class EditPoint extends SmartView {
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
     this._onEventTypeChange = this._onEventTypeChange.bind(this);
+    this._onDestinationChange = this._onDestinationChange.bind(this);
 
     this._setInnerHandlers();
   }
@@ -180,7 +141,7 @@ export default class EditPoint extends SmartView {
 
   _onFormSubmit(evt) {
     evt.preventDefault();
-    this._callback.submitForm(this._point);
+    this._callback.submitForm(EditPoint.parseDataToPoint(this._data));
   }
 
   _onFormClose(evt) {
@@ -194,13 +155,21 @@ export default class EditPoint extends SmartView {
     this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length});
   }
 
+  _onDestinationChange(evt) {
+    evt.preventDefault();
+    console.log(evt.target.value);
+    this.updateData({destination: {photos: this._data.destination.photos, city: evt.target.value}});
+    
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._onDestinationChange);
   }
 
   restoreHandlers() {
     this._setInnerHandlers();
-    this.setFormCloseHandler();
+    this.setFormCloseHandler(this._callback.closeForm);
     this.setFormSubmitHandler(this._callback.submitForm);
   }
 

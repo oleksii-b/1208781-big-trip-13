@@ -2,8 +2,9 @@ import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
 import {getRandomInteger} from '../utils/common';
 
+const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
+
 const getEventType = () => {
-  const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
   const randomIndex = getRandomInteger(0, eventTypes.length - 1);
 
   return eventTypes[randomIndex];
@@ -95,13 +96,14 @@ export const getEvent = () => {
   return {
     id: nanoid(),
     eventType,
-    city: getCity(),
+    eventTypes,
+    cities,
     offers,
     selectedOffers: getSelectedOffers(offers, eventType),
     destination: {
       description: getDescription(),
       photos: getPhoto(),
-      cities,
+      city: getCity(),
     },
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),

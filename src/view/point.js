@@ -13,7 +13,7 @@ const createOffersTemplate = (offers) => {
 
 
 const createPointTemplate = (event) => {
-  const {eventType, city, selectedOffers, price, isFavorite, date: {start, finish}} = event;
+  const {eventType, destination: {city}, selectedOffers, price, isFavorite, date: {start, finish}} = event;
   const offerTemplate = createOffersTemplate(selectedOffers);
 
   const durationTime = getEventDuration(start, finish);

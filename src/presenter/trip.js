@@ -20,7 +20,7 @@ export default class Trip {
 
     this._onPointChange = this._onPointChange.bind(this);
     this._onModeChange = this._onModeChange.bind(this);
-    this._onSortTypeClick = this._onSortTypeClick.bind(this);
+    this._onSortTypeChange = this._onSortTypeChange.bind(this);
   }
 
   init(points) {
@@ -51,7 +51,7 @@ export default class Trip {
     this._currentSortType = sortType;
   }
 
-  _onSortTypeClick(sortType) {
+  _onSortTypeChange(sortType) {
     this._sortPoints(sortType);
     this._clearTripList();
     this._renderTripList();
@@ -74,7 +74,7 @@ export default class Trip {
 
   _renderSort() {
     render(this._tripContentContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
-    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeClick);
+    this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
   _renderPrice(points) {

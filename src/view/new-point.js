@@ -52,7 +52,7 @@ export const createCityTemplate = (cities) => {
 };
 
 const createNewPointTemplate = (event) => {
-  const {eventType, offers, destination: {description, photos, cities}} = event;
+  const {eventType, offers, cities, destination: {description, photos}} = event;
   const destinationCities = createCityTemplate(cities);
   const defaultCity = cities[0];
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
