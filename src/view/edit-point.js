@@ -153,7 +153,6 @@ export default class EditPoint extends SmartView {
   }
 
   getTemplate() {
-    window.__data1__ = this._data;
     return createEditPointTemplate(this._data);
   }
 
@@ -163,7 +162,7 @@ export default class EditPoint extends SmartView {
         {},
         point,
         {
-          withOffers: offerForThisType.length,
+          withOffers: offerForThisType.length > 0,
           withDescription: point.destination.description,
           withPhoto: point.destination.photos.length,
         }
@@ -191,7 +190,8 @@ export default class EditPoint extends SmartView {
 
   _onEventTypeChange(evt) {
     evt.preventDefault();
-    this.updateData({eventType: evt.target.value});
+    const offerForThisType = this._data.offers.filter((offer) => offer.id.toLowerCase() === evt.target.value);
+    this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length});
   }
 
   _setInnerHandlers() {
@@ -201,7 +201,7 @@ export default class EditPoint extends SmartView {
   restoreHandlers() {
     this._setInnerHandlers();
     this.setFormCloseHandler();
-    this.setFormSubmitHandler();
+    this.setFormSubmitHandler(this._callback.submitForm);
   }
 
   setFormSubmitHandler(callback) {
