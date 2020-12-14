@@ -1,7 +1,7 @@
 import {createCityTemplate} from './new-point';
 import {createPhotoTemplate} from './new-point';
 import {createDestinationTemplate} from './new-point';
-import AbstractView from './abstract';
+import SmartView from './smart';
 
 const createOfferTemplate = (offers, selectedOffers) => {
   return `
@@ -23,13 +23,13 @@ const createOfferTemplate = (offers, selectedOffers) => {
   </section>`;
 };
 
-const createEditPointTemplate = (event) => {
-  const {eventType, city, selectedOffers, price, offers, destination: {description, photos, cities}, date: {start, finish}} = event;
+const createEditPointTemplate = (data) => {
+  const {eventType, city, selectedOffers, price, offers, destination: {description, photos, cities}, date: {start, finish}, withOffers, withDescription, withPhoto} = data;
   const destinationCities = createCityTemplate(cities);
-  const offerForThisType = offers.filter((offer) => offer.id === eventType);
-  const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``;
+  const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase());
+  // const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``;
   const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
-  const destinationTemplate = createDestinationTemplate(description, photoTemplate);
+  // const destinationTemplate = createDestinationTemplate(description, photoTemplate);
 
   return (
     `<li class="trip-events__item">
@@ -77,7 +77,7 @@ const createEditPointTemplate = (event) => {
                 </div>
 
                 <div class="event__type-item">
-                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
+                  <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight">
                   <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
                 </div>
 
@@ -132,24 +132,51 @@ const createEditPointTemplate = (event) => {
           </button>
         </header>
         <section class="event__details">
-          ${offerTemplate} 
-          ${destinationTemplate}
+          ${withOffers ? createOfferTemplate(offerForThisType, selectedOffers) : ``} 
+          ${withDescription || withPhoto ? createDestinationTemplate(description, photoTemplate) : ``}
         </section>
       </form>
     </li>`
   );
 };
 
-export default class EditPoint extends AbstractView {
+export default class EditPoint extends SmartView {
   constructor(point) {
     super();
-    this._point = point;
+    this._data = EditPoint.parsePointToData(point);
+
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
+    this._onEventTypeChange = this._onEventTypeChange.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._point);
+    window.__data1__ = this._data;
+    return createEditPointTemplate(this._data);
+  }
+
+  static parsePointToData(point) {
+    const offerForThisType = point.offers.filter((offer) => offer.id === point.eventType);
+    return Object.assign(
+        {},
+        point,
+        {
+          withOffers: offerForThisType.length,
+          withDescription: point.destination.description,
+          withPhoto: point.destination.photos.length,
+        }
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+    delete data.withDescription;
+    delete data.withOffers;
+    delete data.withPhoto;
+
+    return data;
   }
 
   _onFormSubmit(evt) {
@@ -160,6 +187,21 @@ export default class EditPoint extends AbstractView {
   _onFormClose(evt) {
     evt.preventDefault();
     this._callback.closeForm();
+  }
+
+  _onEventTypeChange(evt) {
+    evt.preventDefault();
+    this.updateData({eventType: evt.target.value});
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormCloseHandler();
+    this.setFormSubmitHandler();
   }
 
   setFormSubmitHandler(callback) {
