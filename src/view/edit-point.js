@@ -1,5 +1,25 @@
-import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, createDestinationTemplate, createOfferTemplate} from './new-point';
+import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, createDestinationTemplate} from './new-point';
 import SmartView from './smart';
+
+const createOfferTemplate = (offers, selectedOffers) => {
+  return `
+  <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+  ${offers.map((offer, index) => (
+    `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${index}" type="checkbox" name="event-offer-${offer.title}"
+        ${selectedOffers.includes(offer) ? `checked` : ``}>
+        <label class="event__offer-label" for="event-offer-${offer.title}-${index}">
+          <span class="event__offer-title">${offer.name}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${offer.price}</span>
+        </label>
+      </div>`
+  )).join(``)}
+    </div>
+  </section>`;
+};
 
 const createEditPointTemplate = (data) => {
   const {eventType, eventTypes, city, selectedOffers, price, offers, destinations, date: {start, finish}, withOffers} = data;
