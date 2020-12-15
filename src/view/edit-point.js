@@ -1,38 +1,5 @@
-import {createCityTemplate} from './new-point';
-import {createPhotoTemplate} from './new-point';
-import {createDestinationTemplate} from './new-point';
+import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, createDestinationTemplate, createOfferTemplate} from './new-point';
 import SmartView from './smart';
-
-const createOfferTemplate = (offers, selectedOffers) => {
-  return `
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-  ${offers.map((offer, index) => (
-    `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${index}" type="checkbox" name="event-offer-${offer.title}"
-        ${selectedOffers.includes(offer) ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-${offer.title}-${index}">
-          <span class="event__offer-title">${offer.name}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${offer.price}</span>
-        </label>
-      </div>`
-  )).join(``)}
-    </div>
-  </section>`;
-};
-
-const createEventTypeListTemplate = (eventType, isChecked) => {
-  const eventTypeLowerCase = eventType.toLowerCase();
-
-  return (
-    `<div class="event__type-item">
-        <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
-        <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
-    </div>`
-  );
-};
 
 const createEditPointTemplate = (data) => {
   const {eventType, eventTypes, city, selectedOffers, price, offers, destinations, date: {start, finish}, withOffers} = data;
@@ -131,9 +98,7 @@ export default class EditPoint extends SmartView {
 
   static parseDataToPoint(data) {
     data = Object.assign({}, data);
-    delete data.withDescription;
     delete data.withOffers;
-    delete data.withPhoto;
 
     return data;
   }
@@ -183,5 +148,9 @@ export default class EditPoint extends SmartView {
   setFormCloseHandler(callback) {
     this._callback.closeForm = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onFormClose);
+  }
+
+  reset(point) {
+    this.updateData(EditPoint.parsePointToData(point));
   }
 }

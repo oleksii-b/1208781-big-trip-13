@@ -1,13 +1,24 @@
 import dayjs from 'dayjs';
 import {getRandomInteger} from '../utils/common';
-import AbstractView from './abstract';
+import SmartView from './smart';
 
 export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
     `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
 };
 
-const createOfferTemplate = (offers) => {
+export const createEventTypeListTemplate = (eventType, isChecked) => {
+  const eventTypeLowerCase = eventType.toLowerCase();
+
+  return (
+    `<div class="event__type-item">
+        <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
+        <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
+    </div>`
+  );
+};
+
+export const createOfferTemplate = (offers) => {
   return (
     `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -51,14 +62,13 @@ export const createCityTemplate = (cities) => {
     `<option value=${elem.city}></option>`).join(``);
 };
 
-const createNewPointTemplate = (event) => {
-  const {eventType, offers, cities, destination: {description, photos}} = event;
-  const destinationCities = createCityTemplate(cities);
-  const defaultCity = cities[0];
+const createNewPointTemplate = (data) => {
+  const {eventType, eventTypes, offers, destinations, withOffers} = data;
+  const destinationCities = createCityTemplate(destinations);
+  const defaultCity = destinations.city[0];
   const offerForThisType = offers.filter((offer) => offer.id === eventType);
-  const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType) : ``;
-  const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
-  const destinationTemplate = createDestinationTemplate(description, photoTemplate);
+  const descriptionForThisCity = destinations.find((destination) => destination.city === defaultCity);
+  const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
 
   return `<form class="event event--edit" action="#" method="post">
     <header class="event__header">
@@ -71,61 +81,14 @@ const createNewPointTemplate = (event) => {
         <div class="event__type-list">
           <fieldset class="event__type-group">
             <legend class="visually-hidden">Event type</legend>
-            <div class="event__type-item">
-              <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-              <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-            </div>
-            <div class="event__type-item">
-              <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-              <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-              <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-              <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-transport-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="transport">
-              <label class="event__type-label  event__type-label--transport" for="event-type-transport-1">Transport</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-              <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked>
-              <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-              <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-              <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-            </div>
-
-            <div class="event__type-item">
-              <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-              <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-            </div>
+            ${eventTypes.map((elem) => createEventTypeListTemplate(elem, elem.toLowerCase() === eventType.toLowerCase())).join(``)}
           </fieldset>
         </div>
       </div>
 
       <div class="event__field-group  event__field-group--destination">
         <label class="event__label  event__type-output" for="event-destination-1">
-          Flight
+          ${eventType}
         </label>
         <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${defaultCity}" list="destination-list-1">
         <datalist id="destination-list-1">
@@ -153,19 +116,91 @@ const createNewPointTemplate = (event) => {
       <button class="event__reset-btn" type="reset">Cancel</button>
     </header>
     <section class="event__details">
-        ${offerTemplate}
-        ${destinationTemplate}      
+        ${withOffers ? createOfferTemplate(offerForThisType) : ``}
+        ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}      
     </section>
   </form>`;
 };
 
-export default class NewPoint extends AbstractView {
-  constructor(event) {
+export default class NewPoint extends SmartView {
+  constructor(point) {
     super();
-    this._event = event;
+    this._data = NewPoint.parsePointToData(point);
+
+    this._onFormSubmit = this._onFormSubmit.bind(this);
+    this._onFormClose = this._onFormClose.bind(this);
+    this._onEventTypeChange = this._onEventTypeChange.bind(this);
+    this._onDestinationChange = this._onDestinationChange.bind(this);
+
+    this._setInnerHandlers();
   }
 
   getTemplate() {
     return createNewPointTemplate(this._event);
+  }
+
+  static parsePointToData(point) {
+    const offerForThisType = point.offers.filter((offer) => offer.id === point.eventType);
+    return Object.assign(
+        {},
+        point,
+        {
+          withOffers: offerForThisType.length > 0,
+        }
+    );
+  }
+
+  static parseDataToPoint(data) {
+    data = Object.assign({}, data);
+    delete data.withOffers;
+
+    return data;
+  }
+
+  _onFormSubmit(evt) {
+    evt.preventDefault();
+    this._callback.submitForm(NewPoint.parseDataToPoint(this._data));
+  }
+
+  _onFormClose(evt) {
+    evt.preventDefault();
+    this._callback.closeForm();
+  }
+
+  _onEventTypeChange(evt) {
+    evt.preventDefault();
+    const offerForThisType = this._data.offers.filter((offer) => offer.id.toLowerCase() === evt.target.value);
+    this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length});
+  }
+
+  _onDestinationChange(evt) {
+    evt.preventDefault();
+    if (!this._data.cities.includes(evt.target.value)) {
+      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
+    } else {
+      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
+      this.updateData({city: evt.target.value});
+    }
+  }
+
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
+  }
+
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormCloseHandler(this._callback.closeForm);
+    this.setFormSubmitHandler(this._callback.submitForm);
+  }
+
+  setFormSubmitHandler(callback) {
+    this._callback.submitForm = callback;
+    this.getElement().querySelector(`form`).addEventListener(`submit`, this._onFormSubmit);
+  }
+
+  setFormCloseHandler(callback) {
+    this._callback.closeForm = callback;
+    this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onFormClose);
   }
 }
