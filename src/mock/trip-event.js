@@ -92,7 +92,8 @@ const getDate = () => {
 export const getEvent = () => {
   const eventType = getEventType();
   const offers = getOffers(eventType);
-
+  const destinations = [];
+  cities.forEach((city) => destinations.push({city, description: getDescription(), photos: getPhoto()}));
   return {
     id: nanoid(),
     eventType,
@@ -105,6 +106,8 @@ export const getEvent = () => {
       photos: getPhoto(),
       city: getCity(),
     },
+    city: getCity(),
+    destinations,
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     date: getDate(),

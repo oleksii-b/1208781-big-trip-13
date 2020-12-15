@@ -30,16 +30,17 @@ const createEventTypeListTemplate = (eventType, isChecked) => {
     `<div class="event__type-item">
         <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
         <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
-  </div>`);
+    </div>`
+  );
 };
 
 const createEditPointTemplate = (data) => {
-  const {eventType, eventTypes, cities, selectedOffers, price, offers, destination: {description, photos, city}, date: {start, finish}, withOffers, withDescription, withPhoto} = data;
-  const destinationCities = createCityTemplate(cities);
+  const {eventType, eventTypes, city, selectedOffers, price, offers, destinations, date: {start, finish}, withOffers} = data;
+  const destinationCities = createCityTemplate(destinations);
   const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase());
-  // const offerTemplate = offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``;
-  const photoTemplate = photos.length ? createPhotoTemplate(photos) : ``;
-  // const destinationTemplate = createDestinationTemplate(description, photoTemplate);
+  const descriptionForThisCity = destinations.find((destination) => destination.city === city);
+  const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
+
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -93,7 +94,7 @@ const createEditPointTemplate = (data) => {
         </header>
         <section class="event__details">
           ${withOffers ? createOfferTemplate(offerForThisType, selectedOffers) : ``} 
-          ${withDescription || withPhoto ? createDestinationTemplate(description, photoTemplate) : ``}
+          ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}
         </section>
       </form>
     </li>`
@@ -124,8 +125,6 @@ export default class EditPoint extends SmartView {
         point,
         {
           withOffers: offerForThisType.length > 0,
-          withDescription: point.destination.description,
-          withPhoto: point.destination.photos.length,
         }
     );
   }
@@ -157,14 +156,17 @@ export default class EditPoint extends SmartView {
 
   _onDestinationChange(evt) {
     evt.preventDefault();
-    console.log(evt.target.value);
-    this.updateData({destination: {photos: this._data.destination.photos, city: evt.target.value}});
-    
+    if (!this._data.cities.includes(evt.target.value)) {
+      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
+    } else {
+      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
+      this.updateData({city: evt.target.value});
+    }
   }
 
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
-    this.getElement().querySelector(`.event__input--destination`).addEventListener(`change`, this._onDestinationChange);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
   }
 
   restoreHandlers() {

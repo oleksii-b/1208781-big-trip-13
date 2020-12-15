@@ -28,7 +28,7 @@ const createOfferTemplate = (offers) => {
 };
 
 export const createDestinationTemplate = (description, photos) => {
-  if (description || photos) {
+  if (description.length || photos) {
     return (
       `<section class="event__section  event__section--destination">
         <h3 class="event__section-title  event__section-title--destination">Destination</h3>
@@ -47,8 +47,8 @@ export const createDestinationTemplate = (description, photos) => {
 };
 
 export const createCityTemplate = (cities) => {
-  return cities.map((city) =>
-    `<option value=${city}></option>`).join(``);
+  return cities.map((elem) =>
+    `<option value=${elem.city}></option>`).join(``);
 };
 
 const createNewPointTemplate = (event) => {
