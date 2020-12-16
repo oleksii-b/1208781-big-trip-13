@@ -28,7 +28,6 @@ export default class Point {
 
   init(point) {
     this._point = point;
-
     this._prevPointComponent = this._pointComponent;
     this._prevEditPointComponent = this._editPointComponent;
     this._editPointComponent = new EditPointView(point);

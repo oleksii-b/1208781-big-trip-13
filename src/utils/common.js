@@ -27,5 +27,5 @@ export const getRandomInteger = (a = 0, b = 1) => {
 };
 
 export const getUpdatedPoints = (items, point) => {
-  return items.map((item) => item.id === point.id ? point : items);
+  return items.map((item) => item.id === point.id ? point : item);
 };

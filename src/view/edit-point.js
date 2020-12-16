@@ -69,7 +69,7 @@ const createEditPointTemplate = (data) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${price}">
+            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
           </div>
 
           <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
@@ -97,6 +97,7 @@ export default class EditPoint extends SmartView {
     this._onEventTypeChange = this._onEventTypeChange.bind(this);
     this._onDestinationChange = this._onDestinationChange.bind(this);
     this._onOffersChange = this._onOffersChange.bind(this);
+    this._onPriceInput = this._onPriceInput.bind(this);
 
     this._setInnerHandlers();
   }
@@ -118,7 +119,6 @@ export default class EditPoint extends SmartView {
 
   static parseDataToPoint(data) {
     data = Object.assign({}, data);
-    delete data.withOffers;
     delete data.offerForThisType;
 
     return data;
@@ -140,8 +140,7 @@ export default class EditPoint extends SmartView {
       offer.checked = false;
     }
     const offerForThisType = this._data.offers.filter((offer) => offer.id.toLowerCase() === evt.target.value);
-    this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length > 0, offerForThisType});
-
+    this.updateData({eventType: evt.target.value, offerForThisType});
   }
 
   _onDestinationChange(evt) {
@@ -161,9 +160,16 @@ export default class EditPoint extends SmartView {
     this.updateData({offers: this._data.offers}, true);
   }
 
+  _onPriceInput(evt) {
+    evt.preventDefault();
+    this.updateData({price: evt.target.value}, true);
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._onPriceInput);
+
     if (this._data.offerForThisType.length) {
       this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._onOffersChange);
     }
