@@ -13,8 +13,9 @@ const createOffersTemplate = (offers) => {
 
 
 const createPointTemplate = (event) => {
-  const {eventType, city, selectedOffers, price, isFavorite, date: {start, finish}} = event;
-  const offerTemplate = createOffersTemplate(selectedOffers);
+  const {eventType, city, offers, price, isFavorite, date: {start, finish}} = event;
+  const offersChecked = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase() && offer.checked);
+  const offerTemplate = createOffersTemplate(offersChecked);
 
   const durationTime = getEventDuration(start, finish);
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;

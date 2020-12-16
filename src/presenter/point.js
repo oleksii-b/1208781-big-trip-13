@@ -31,7 +31,6 @@ export default class Point {
 
     this._prevPointComponent = this._pointComponent;
     this._prevEditPointComponent = this._editPointComponent;
-
     this._editPointComponent = new EditPointView(point);
     this._pointComponent = new PointView(point);
 

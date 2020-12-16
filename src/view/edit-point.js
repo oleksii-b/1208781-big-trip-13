@@ -1,16 +1,16 @@
 import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, createDestinationTemplate} from './new-point';
 import SmartView from './smart';
 
-const createOfferTemplate = (offers, selectedOffers) => {
+const createOfferTemplate = (offers) => {
   return `
   <section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
   ${offers.map((offer, index) => (
     `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="event-offer-${offer.title}-${index}" type="checkbox" name="event-offer-${offer.title}"
-        ${selectedOffers.includes(offer) ? `checked` : ``}>
-        <label class="event__offer-label" for="event-offer-${offer.title}-${index}">
+        <input class="event__offer-checkbox  visually-hidden" id="${offer.title}-${index}" type="checkbox" name="${offer.title}"
+        ${offer.checked ? `checked` : ``}>
+        <label class="event__offer-label" for="${offer.title}-${index}">
           <span class="event__offer-title">${offer.name}</span>
           &plus;&euro;&nbsp;
           <span class="event__offer-price">${offer.price}</span>
@@ -22,12 +22,11 @@ const createOfferTemplate = (offers, selectedOffers) => {
 };
 
 const createEditPointTemplate = (data) => {
-  const {eventType, eventTypes, city, selectedOffers, price, offers, destinations, date: {start, finish}, withOffers} = data;
+  const {eventType, eventTypes, city, selectedOffers, price, offers, destinations, date: {start, finish}} = data;
   const destinationCities = createCityTemplate(destinations);
   const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase());
   const descriptionForThisCity = destinations.find((destination) => destination.city === city);
   const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
-
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -80,7 +79,7 @@ const createEditPointTemplate = (data) => {
           </button>
         </header>
         <section class="event__details">
-          ${withOffers ? createOfferTemplate(offerForThisType, selectedOffers) : ``} 
+          ${offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``} 
           ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}
         </section>
       </form>
@@ -97,6 +96,7 @@ export default class EditPoint extends SmartView {
     this._onFormClose = this._onFormClose.bind(this);
     this._onEventTypeChange = this._onEventTypeChange.bind(this);
     this._onDestinationChange = this._onDestinationChange.bind(this);
+    this._onOffersChange = this._onOffersChange.bind(this);
 
     this._setInnerHandlers();
   }
@@ -106,12 +106,12 @@ export default class EditPoint extends SmartView {
   }
 
   static parsePointToData(point) {
-    const offerForThisType = point.offers.filter((offer) => offer.id === point.eventType);
+    const offerForThisType = point.offers.filter((offer) => offer.id.toLowerCase() === point.eventType.toLowerCase());
     return Object.assign(
         {},
         point,
         {
-          withOffers: offerForThisType.length > 0,
+          offerForThisType,
         }
     );
   }
@@ -119,6 +119,7 @@ export default class EditPoint extends SmartView {
   static parseDataToPoint(data) {
     data = Object.assign({}, data);
     delete data.withOffers;
+    delete data.offerForThisType;
 
     return data;
   }
@@ -135,8 +136,12 @@ export default class EditPoint extends SmartView {
 
   _onEventTypeChange(evt) {
     evt.preventDefault();
+    for (let offer of this._data.offers) {
+      offer.checked = false;
+    }
     const offerForThisType = this._data.offers.filter((offer) => offer.id.toLowerCase() === evt.target.value);
-    this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length});
+    this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length > 0, offerForThisType});
+
   }
 
   _onDestinationChange(evt) {
@@ -149,9 +154,19 @@ export default class EditPoint extends SmartView {
     }
   }
 
+  _onOffersChange(evt) {
+    evt.preventDefault();
+    const offerElement = this._data.offers.find((elem) => elem.title === evt.target.name);
+    offerElement.checked = offerElement.checked ? false : true;
+    this.updateData({offers: this._data.offers}, true);
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
+    if (this._data.offerForThisType.length) {
+      this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._onOffersChange);
+    }
   }
 
   restoreHandlers() {
