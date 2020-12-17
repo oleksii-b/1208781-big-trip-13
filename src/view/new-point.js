@@ -63,10 +63,9 @@ export const createCityTemplate = (cities) => {
 };
 
 const createNewPointTemplate = (data) => {
-  const {eventType, eventTypes, offers, destinations, withOffers} = data;
+  const {eventType, eventTypes, offerForThisType, destinations} = data;
   const destinationCities = createCityTemplate(destinations);
   const defaultCity = destinations.city[0];
-  const offerForThisType = offers.filter((offer) => offer.id === eventType);
   const descriptionForThisCity = destinations.find((destination) => destination.city === defaultCity);
   const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
 
@@ -116,7 +115,7 @@ const createNewPointTemplate = (data) => {
       <button class="event__reset-btn" type="reset">Cancel</button>
     </header>
     <section class="event__details">
-        ${withOffers ? createOfferTemplate(offerForThisType) : ``}
+        ${offerForThisType.length ? createOfferTemplate(offerForThisType) : ``}
         ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}      
     </section>
   </form>`;
@@ -136,23 +135,25 @@ export default class NewPoint extends SmartView {
   }
 
   getTemplate() {
-    return createNewPointTemplate(this._event);
+    return createNewPointTemplate(this._data);
   }
 
   static parsePointToData(point) {
-    const offerForThisType = point.offers.filter((offer) => offer.id === point.eventType);
+    const offers = JSON.parse(JSON.stringify(point.offers));
+    const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === point.eventType.toLowerCase());
     return Object.assign(
         {},
         point,
         {
-          withOffers: offerForThisType.length > 0,
+          offerForThisType,
+          offers,
         }
     );
   }
 
   static parseDataToPoint(data) {
     data = Object.assign({}, data);
-    delete data.withOffers;
+    delete data.offerForThisType;
 
     return data;
   }
@@ -169,8 +170,11 @@ export default class NewPoint extends SmartView {
 
   _onEventTypeChange(evt) {
     evt.preventDefault();
+    for (let offer of this._data.offers) {
+      offer.checked = false;
+    }
     const offerForThisType = this._data.offers.filter((offer) => offer.id.toLowerCase() === evt.target.value);
-    this.updateData({eventType: evt.target.value, withOffers: offerForThisType.length});
+    this.updateData({eventType: evt.target.value, offerForThisType});
   }
 
   _onDestinationChange(evt) {
@@ -183,9 +187,26 @@ export default class NewPoint extends SmartView {
     }
   }
 
+  _onOffersChange(evt) {
+    evt.preventDefault();
+    const offerElement = this._data.offers.find((elem) => elem.title === evt.target.name);
+    offerElement.checked = offerElement.checked ? false : true;
+    this.updateData({offers: this._data.offers}, true);
+  }
+
+  _onPriceInput(evt) {
+    evt.preventDefault();
+    this.updateData({price: evt.target.value}, true);
+  }
+
   _setInnerHandlers() {
     this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
     this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._onPriceInput);
+
+    if (this._data.offerForThisType.length) {
+      this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._onOffersChange);
+    }
   }
 
   restoreHandlers() {
@@ -202,5 +223,9 @@ export default class NewPoint extends SmartView {
   setFormCloseHandler(callback) {
     this._callback.closeForm = callback;
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onFormClose);
+  }
+
+  reset(point) {
+    this.updateData(NewPoint.parsePointToData(point));
   }
 }
