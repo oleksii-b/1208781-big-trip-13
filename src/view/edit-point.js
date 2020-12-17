@@ -22,9 +22,8 @@ const createOfferTemplate = (offers) => {
 };
 
 const createEditPointTemplate = (data) => {
-  const {eventType, eventTypes, city, selectedOffers, price, offers, destinations, date: {start, finish}} = data;
+  const {eventType, eventTypes, city, price, offerForThisType, destinations, date: {start, finish}} = data;
   const destinationCities = createCityTemplate(destinations);
-  const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase());
   const descriptionForThisCity = destinations.find((destination) => destination.city === city);
   const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
   return (
@@ -79,7 +78,7 @@ const createEditPointTemplate = (data) => {
           </button>
         </header>
         <section class="event__details">
-          ${offerForThisType.length ? createOfferTemplate(offerForThisType, selectedOffers) : ``} 
+          ${offerForThisType.length ? createOfferTemplate(offerForThisType) : ``} 
           ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}
         </section>
       </form>
@@ -107,12 +106,14 @@ export default class EditPoint extends SmartView {
   }
 
   static parsePointToData(point) {
-    const offerForThisType = point.offers.filter((offer) => offer.id.toLowerCase() === point.eventType.toLowerCase());
+    const offers = JSON.parse(JSON.stringify(point.offers));
+    const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === point.eventType.toLowerCase());
     return Object.assign(
         {},
         point,
         {
           offerForThisType,
+          offers,
         }
     );
   }
