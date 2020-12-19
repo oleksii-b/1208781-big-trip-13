@@ -11,7 +11,7 @@ export default class Smart extends Abstract {
   }
 
   updateElement() {
-    let prevElement = this.getElement();
+    const prevElement = this.getElement();
     const parent = prevElement.parentElement;
     this.removeElement();
 
@@ -22,7 +22,7 @@ export default class Smart extends Abstract {
     this.restoreHandlers();
   }
 
-  updateData(update, justDataUpdating) {
+  updateData(update, isInProgress) {
     if (!update) {
       return;
     }
@@ -33,7 +33,7 @@ export default class Smart extends Abstract {
         update
     );
 
-    if (justDataUpdating) {
+    if (isInProgress) {
       return;
     }
 
