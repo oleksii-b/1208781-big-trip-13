@@ -6,17 +6,22 @@ const createOfferTemplate = (offers) => {
   <section class="event__section  event__section--offers">
     <h3 class="event__section-title  event__section-title--offers">Offers</h3>
     <div class="event__available-offers">
-  ${offers.map((offer, index) => (
-    `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="${offer.title}-${index}" type="checkbox" name="${offer.title}"
-        ${offer.checked ? `checked` : ``}>
-        <label class="event__offer-label" for="${offer.title}-${index}">
-          <span class="event__offer-title">${offer.name}</span>
+  ${offers.map((offer, index) => {
+    const {title, name, price, checked} = offer;
+    const id = `event-offer-${title}-${index}`;
+
+    return (
+      `<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${title}"
+        ${checked ? `checked` : ``}>
+        <label class="event__offer-label" for="${id}">
+          <span class="event__offer-title">${name}</span>
           &plus;&euro;&nbsp;
-          <span class="event__offer-price">${offer.price}</span>
+          <span class="event__offer-price">${price}</span>
         </label>
       </div>`
-  )).join(``)}
+    );
+  }).join(``)}
     </div>
   </section>`;
 };
@@ -156,7 +161,7 @@ export default class EditPoint extends SmartView {
 
   _onOffersChange(evt) {
     evt.preventDefault();
-    const offerElement = this._data.offers.find((elem) => elem.title === evt.target.name);
+    const offerElement = this._data.offers.find(({title}) => evt.target.name.includes(title));
     offerElement.checked = offerElement.checked ? false : true;
     this.updateData({offers: this._data.offers}, true);
   }

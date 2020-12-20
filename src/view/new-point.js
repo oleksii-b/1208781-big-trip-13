@@ -12,30 +12,35 @@ export const createEventTypeListTemplate = (eventType, isChecked) => {
 
   return (
     `<div class="event__type-item">
-        <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
-        <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
+      <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
+      <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
     </div>`
   );
 };
 
-export const createOfferTemplate = (offers) => {
-  return (
-    `<section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-      <div class="event__available-offers">
-    ${offers.map((offer) => (
+const createOfferTemplate = (offers) => {
+  return `
+  <section class="event__section  event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+    <div class="event__available-offers">
+  ${offers.map((offer, index) => {
+    const {title, name, price} = offer;
+    const id = `event-offer-${title}-${index}`;
+
+    return (
       `<div class="event__offer-selector">
-            <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train" ${getRandomInteger(0, 1) ? `checked` : ``}>
-            <label class="event__offer-label" for="event-offer-train-1">
-              <span class="event__offer-title">${offer.name}</span>
-              &plus;&euro;&nbsp;
-              <span class="event__offer-price">${offer.price}</span>
-            </label>
-          </div>`
-    )).join(``)}
-      </div>
-    </section>`
-  );
+        <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${title}"
+        ${getRandomInteger(0, 1) ? `checked` : ``}>
+        <label class="event__offer-label" for="${id}">
+          <span class="event__offer-title">${name}</span>
+          &plus;&euro;&nbsp;
+          <span class="event__offer-price">${price}</span>
+        </label>
+      </div>`
+    );
+  }).join(``)}
+    </div>
+  </section>`;
 };
 
 export const createDestinationTemplate = (description, photos) => {
@@ -58,15 +63,15 @@ export const createDestinationTemplate = (description, photos) => {
 };
 
 export const createCityTemplate = (cities) => {
-  return cities.map((elem) =>
-    `<option value=${elem.city}></option>`).join(``);
+  return cities.map(({city}) =>
+    `<option value=${city}></option>`).join(``);
 };
 
 const createNewPointTemplate = (data) => {
   const {eventType, eventTypes, offerForThisType, destinations} = data;
   const destinationCities = createCityTemplate(destinations);
   const defaultCity = destinations.city[0];
-  const descriptionForThisCity = destinations.find((destination) => destination.city === defaultCity);
+  const descriptionForThisCity = destinations.find(({city}) => city === defaultCity);
   const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
 
   return (
