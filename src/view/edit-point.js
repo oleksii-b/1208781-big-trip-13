@@ -2,28 +2,32 @@ import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, cr
 import SmartView from './smart';
 
 const createOfferTemplate = (offers) => {
-  return `
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-  ${offers.map((offer, index) => {
-    const {title, name, price, checked} = offer;
-    const id = `event-offer-${title}-${index}`;
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+      ${offers.map((offer, index) => {
+      const {title, name, price, checked} = offer;
+      const id = `event-offer-${title}-${index}`;
 
-    return (
-      `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${title}"
-        ${checked ? `checked` : ``}>
-        <label class="event__offer-label" for="${id}">
-          <span class="event__offer-title">${name}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${price}</span>
-        </label>
-      </div>`
-    );
-  }).join(``)}
+      return (
+        `<div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" 
+          id="${id}" 
+          type="checkbox" 
+          name="event-offer-${title}"
+          ${checked ? `checked` : ``}>
+          <label class="event__offer-label" for="${id}">
+            <span class="event__offer-title">${name}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${price}</span>
+          </label>
+        </div>`
+      );
+    }).join(``)}
     </div>
-  </section>`;
+    </section>`
+  );
 };
 
 const createEditPointTemplate = (data) => {

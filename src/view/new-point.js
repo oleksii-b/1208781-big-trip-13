@@ -12,35 +12,45 @@ export const createEventTypeListTemplate = (eventType, isChecked) => {
 
   return (
     `<div class="event__type-item">
-      <input id="event-type-${eventTypeLowerCase}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${eventTypeLowerCase}" ${isChecked ? `checked` : ``}>
-      <label class="event__type-label  event__type-label--${eventTypeLowerCase}" for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
+      <input id="event-type-${eventTypeLowerCase}-1" 
+      class="event__type-input  visually-hidden" 
+      type="radio" 
+      name="event-type" 
+      value="${eventTypeLowerCase}" 
+      ${isChecked ? `checked` : ``}>
+      <label class="event__type-label  event__type-label--${eventTypeLowerCase}" 
+      for="event-type-${eventTypeLowerCase}-1">${eventType}</label>
     </div>`
   );
 };
 
 const createOfferTemplate = (offers) => {
-  return `
-  <section class="event__section  event__section--offers">
-    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-    <div class="event__available-offers">
-  ${offers.map((offer, index) => {
-    const {title, name, price} = offer;
-    const id = `event-offer-${title}-${index}`;
+  return (
+    `<section class="event__section  event__section--offers">
+      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+      ${offers.map((offer, index) => {
+      const {title, name, price} = offer;
+      const id = `event-offer-${title}-${index}`;
 
-    return (
-      `<div class="event__offer-selector">
-        <input class="event__offer-checkbox  visually-hidden" id="${id}" type="checkbox" name="event-offer-${title}"
-        ${getRandomInteger(0, 1) ? `checked` : ``}>
-        <label class="event__offer-label" for="${id}">
-          <span class="event__offer-title">${name}</span>
-          &plus;&euro;&nbsp;
-          <span class="event__offer-price">${price}</span>
-        </label>
-      </div>`
-    );
-  }).join(``)}
-    </div>
-  </section>`;
+      return (
+        `<div class="event__offer-selector">
+          <input class="event__offer-checkbox  visually-hidden" 
+          id="${id}" 
+          type="checkbox" 
+          name="event-offer-${title}"
+          ${getRandomInteger(0, 1) ? `checked` : ``}>
+          <label class="event__offer-label" for="${id}">
+            <span class="event__offer-title">${name}</span>
+            &plus;&euro;&nbsp;
+            <span class="event__offer-price">${price}</span>
+          </label>
+        </div>`
+      );
+    }).join(``)}
+      </div>
+    </section>`
+  );
 };
 
 export const createDestinationTemplate = (description, photos) => {
