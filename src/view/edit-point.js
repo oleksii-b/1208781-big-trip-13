@@ -12,11 +12,13 @@ const createOfferTemplate = (offers) => {
 
       return (
         `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" 
-          id="${id}" 
-          type="checkbox" 
-          name="event-offer-${title}"
-          ${checked ? `checked` : ``}>
+          <input 
+            class="event__offer-checkbox  visually-hidden" 
+            id="${id}" 
+            type="checkbox" 
+            name="event-offer-${title}"
+            ${checked ? `checked` : ``}
+          >
           <label class="event__offer-label" for="${id}">
             <span class="event__offer-title">${name}</span>
             &plus;&euro;&nbsp;
