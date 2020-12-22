@@ -2,7 +2,7 @@ import AbstractView from './abstract';
 
 const createRouteInfoTemplate = (events) => {
   return events.length > 3
-    ? `${events[0].city} &mdash; ... &mdash; ${events[events.length - 1].city}`
+    ? `${events[0].destination.city} &mdash; ... &mdash; ${events[events.length - 1].destination.city}`
     : events.map((event) => `${event.city} &mdash;`).join(` `);
 };
 

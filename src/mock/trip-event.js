@@ -2,8 +2,9 @@ import dayjs from 'dayjs';
 import {nanoid} from 'nanoid';
 import {getRandomInteger} from '../utils/common';
 
+const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
+
 const getEventType = () => {
-  const eventTypes = [`Taxi`, `Bus`, `Train`, `Ship`, `Transport`, `Drive`, `Flight`, `Check-in`, `Sightseeing`, `Restaurant`];
   const randomIndex = getRandomInteger(0, eventTypes.length - 1);
 
   return eventTypes[randomIndex];
@@ -17,26 +18,18 @@ const getCity = () => {
 
 const getOffers = () => {
   const offerTypes = [
-    {id: `Flight`, name: `Add luggage`, price: `50`, title: `luggage`},
-    {id: `Flight`, name: `Switch to comfort`, price: `80`, title: `comfort`},
-    {id: `Flight`, name: `Add meal`, price: `15`, title: `meal`},
-    {id: `Flight`, name: `Choose seats`, price: `5`, title: `seats`},
-    {id: `Flight`, name: `Travel by train`, price: `40`, title: `train`},
-    {id: `Taxi`, name: `Order Uber`, price: `20`, title: `uber`},
-    {id: `Drive`, name: `Rent a car`, price: `200`, title: `car`},
-    {id: `Check-in`, name: `Add breakfast`, price: `50`, title: `breakfast`},
-    {id: `Sightseeing`, name: `Book tickets`, price: `40`, title: `tickets`},
-    {id: `Sightseeing`, name: `Lunch in city`, price: `30`, title: `lunch`},
+    {id: `Flight`, name: `Add luggage`, price: `50`, title: `luggage`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Flight`, name: `Switch to comfort`, price: `80`, title: `comfort`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Flight`, name: `Add meal`, price: `15`, title: `meal`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Flight`, name: `Choose seats`, price: `5`, title: `seats`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Flight`, name: `Travel by train`, price: `40`, title: `train`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Taxi`, name: `Order Uber`, price: `20`, title: `uber`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Drive`, name: `Rent a car`, price: `200`, title: `car`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Check-in`, name: `Add breakfast`, price: `50`, title: `breakfast`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Sightseeing`, name: `Book tickets`, price: `40`, title: `tickets`, checked: Boolean(getRandomInteger(0, 1))},
+    {id: `Sightseeing`, name: `Lunch in city`, price: `30`, title: `lunch`, checked: Boolean(getRandomInteger(0, 1))},
   ];
   return offerTypes;
-};
-
-const getSelectedOffers = (offers, type) => {
-  const selectedOffers = offers.filter(({id}) => id === type);
-  const selectedOffersCount = getRandomInteger(0, selectedOffers.length);
-  selectedOffers.length = selectedOffersCount;
-
-  return selectedOffers;
 };
 
 const getDescription = () => {
@@ -90,19 +83,22 @@ const getDate = () => {
 
 export const getEvent = () => {
   const eventType = getEventType();
-  const offers = getOffers(eventType);
+  const destinations = [];
+  cities.forEach((city) => destinations.push({city, description: getDescription(), photos: getPhoto()}));
 
   return {
     id: nanoid(),
     eventType,
-    city: getCity(),
-    offers,
-    selectedOffers: getSelectedOffers(offers, eventType),
+    eventTypes,
+    cities,
+    offers: getOffers(),
     destination: {
       description: getDescription(),
       photos: getPhoto(),
-      cities,
+      city: getCity(),
     },
+    city: getCity(),
+    destinations,
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     date: getDate(),

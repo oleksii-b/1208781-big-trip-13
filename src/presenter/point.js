@@ -28,10 +28,8 @@ export default class Point {
 
   init(point) {
     this._point = point;
-
     this._prevPointComponent = this._pointComponent;
     this._prevEditPointComponent = this._editPointComponent;
-
     this._editPointComponent = new EditPointView(point);
     this._pointComponent = new PointView(point);
 
@@ -63,6 +61,7 @@ export default class Point {
 
   resetView() {
     if (this._mode !== Mode.DEFAULT) {
+      this._editPointComponent.reset(this._point);
       this._replaceFormToPoint();
     }
   }
@@ -92,6 +91,7 @@ export default class Point {
   _onFormPressEsc(evt) {
     if ([`Esc`, `Escape`].includes(evt.key)) {
       evt.preventDefault();
+      this._editPointComponent.reset(this._point);
       this._replaceFormToPoint();
     }
   }
@@ -101,6 +101,7 @@ export default class Point {
   }
 
   _onFormClose() {
+    this._editPointComponent.reset(this._point);
     this._replaceFormToPoint();
   }
 
