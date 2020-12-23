@@ -224,9 +224,9 @@ export default class EditPoint extends SmartView {
         start: dayjs(userDate),
         finish: dayjs(userDate),
       }
-    });
-
+    }, true);
     this._startDatepicker.set(userDate);
+    this._endDatepicker.set(`minDate`, this._data.date.start.toDate());
   }
 
   _onEndDateChange([userDate]) {
@@ -236,8 +236,6 @@ export default class EditPoint extends SmartView {
         finish: dayjs(userDate),
       }
     }, true);
-
-    this._endDatepicker.set(`minDate`, userDate);
   }
 
   _setInnerHandlers() {
