@@ -1,5 +1,7 @@
 import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, createDestinationTemplate} from './new-point';
 import SmartView from './smart';
+import flatpickr from 'flatpickr';
+import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 const createOfferTemplate = (offers) => {
   return (
