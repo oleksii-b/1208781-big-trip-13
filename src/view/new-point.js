@@ -2,7 +2,6 @@ import dayjs from 'dayjs';
 import {getRandomInteger} from '../utils/common';
 import SmartView from './smart';
 import flatpickr from 'flatpickr';
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
 export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
@@ -243,7 +242,7 @@ export default class NewPoint extends SmartView {
           enableTime: true,
           dateFormat: `y/m/d H:i`,
           defaultDate: this._data.date.start.toDate(),
-          onChange: this._onStartDateChange
+          onChange: this._onStartDateChange,
         }
     );
 
@@ -254,28 +253,28 @@ export default class NewPoint extends SmartView {
           dateFormat: `y/m/d H:i`,
           defaultDate: this._data.date.finish.toDate(),
           minDate: this._data.date.start.toDate(),
-          onChange: this._onEndDateChange
+          onChange: this._onEndDateChange,
         }
     );
   }
 
-  _onStartDateChange([userDate]) {
+  _onStartDateChange(userDate) {
     this.updateData({
       date: {
         start: dayjs(userDate),
         finish: dayjs(userDate),
-      }
+      },
     }, true);
     this._startDatepicker.set(userDate);
     this._endDatepicker.set(`minDate`, this._data.date.start.toDate());
   }
 
-  _onEndDateChange([userDate]) {
+  _onEndDateChange(userDate) {
     this.updateData({
       date: {
         start: this._data.date.start,
         finish: dayjs(userDate),
-      }
+      },
     }, true);
   }
 
