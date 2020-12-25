@@ -190,13 +190,11 @@ export default class NewPoint extends SmartView {
   _onFormSubmit(evt) {
     evt.preventDefault();
     this._callback.submitForm(NewPoint.parseDataToPoint(this._data));
-    document.querySelector(`.trip-main__event-add-btn`).disabled = false;
   }
 
   _onFormClose(evt) {
     evt.preventDefault();
     this._callback.closeForm();
-    document.querySelector(`.trip-main__event-add-btn`).disabled = false;
   }
 
   _onEventTypeChange(evt) {
