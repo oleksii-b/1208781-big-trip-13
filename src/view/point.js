@@ -13,7 +13,7 @@ const createOffersTemplate = (offers) => {
 
 
 const createPointTemplate = (event) => {
-  const {eventType, city, offers, price, isFavorite, date: {start, finish}} = event;
+  const {eventType, destination: {city}, offers, price, isFavorite, date: {start, finish}} = event;
   const offersChecked = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase() && offer.checked);
   const offerTemplate = createOffersTemplate(offersChecked);
 

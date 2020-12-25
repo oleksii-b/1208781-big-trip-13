@@ -1,6 +1,7 @@
 import EditPointView from '../view/edit-point';
 import PointView from '../view/point';
 import {render, RenderPosition, replace, remove} from '../utils/render';
+import {UserAction, UpdateType} from '../const';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -24,6 +25,7 @@ export default class Point {
     this._onFormClose = this._onFormClose.bind(this);
     this._onFormPressEsc = this._onFormPressEsc.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
+    this._onDeleteClick = this._onDeleteClick.bind(this);
   }
 
   init(point) {
@@ -37,6 +39,7 @@ export default class Point {
     this._editPointComponent.setFormCloseHandler(this._onFormClose);
     this._editPointComponent.setFormSubmitHandler(this._onFormSubmit);
     this._pointComponent.setFavoriteClickHandler(this._onFavoriteClick);
+    this._editPointComponent.setDeleteClickHandler(this._onDeleteClick);
 
     if ([this._prevEditPointComponent, this._prevPointComponent].includes(null)) {
       render(this._tripListContainer, this._pointComponent, RenderPosition.BEFOREEND);
@@ -72,7 +75,10 @@ export default class Point {
   }
 
   _onFavoriteClick() {
-    this._changeData(Object.assign({}, this._point, {isFavorite: !this._point.isFavorite}));
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite}));
   }
 
   _replacePointToForm() {
@@ -105,8 +111,19 @@ export default class Point {
     this._replaceFormToPoint();
   }
 
-  _onFormSubmit(point) {
-    this._changeData(point);
+  _onFormSubmit(update) {
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        update);
     this._replaceFormToPoint();
+  }
+
+  _onDeleteClick(point) {
+    this._changeData(
+        UserAction.DELETE_POINT,
+        UpdateType.MINOR,
+        point
+    );
   }
 }
