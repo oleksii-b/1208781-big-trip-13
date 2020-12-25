@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import {getRandomInteger} from '../utils/common';
 import SmartView from './smart';
+import flatpickr from 'flatpickr';
 
 export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
@@ -145,13 +146,18 @@ export default class NewPoint extends SmartView {
   constructor(point) {
     super();
     this._data = NewPoint.parsePointToData(point);
+    this._startDatepicker = null;
+    this._endDatepicker = null;
 
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
     this._onEventTypeChange = this._onEventTypeChange.bind(this);
     this._onDestinationChange = this._onDestinationChange.bind(this);
+    this._onStartDateChange = this._onStartDateChange.bind(this);
+    this._onEndDateChange = this._onEndDateChange.bind(this);
 
     this._setInnerHandlers();
+    this._setDatePickers();
   }
 
   getTemplate() {
@@ -217,6 +223,59 @@ export default class NewPoint extends SmartView {
   _onPriceInput(evt) {
     evt.preventDefault();
     this.updateData({price: evt.target.value}, true);
+  }
+
+  _setDatePickers() {
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+
+    this._startDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-start-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `y/m/d H:i`,
+          defaultDate: this._data.date.start.toDate(),
+          onChange: this._onStartDateChange,
+        }
+    );
+
+    this._endDatepicker = flatpickr(
+        this.getElement().querySelector(`#event-end-time-1`),
+        {
+          enableTime: true,
+          dateFormat: `y/m/d H:i`,
+          defaultDate: this._data.date.finish.toDate(),
+          minDate: this._data.date.start.toDate(),
+          onChange: this._onEndDateChange,
+        }
+    );
+  }
+
+  _onStartDateChange(userDate) {
+    this.updateData({
+      date: {
+        start: dayjs(userDate),
+        finish: dayjs(userDate),
+      },
+    }, true);
+    this._startDatepicker.set(userDate);
+    this._endDatepicker.set(`minDate`, this._data.date.start.toDate());
+  }
+
+  _onEndDateChange(userDate) {
+    this.updateData({
+      date: {
+        start: this._data.date.start,
+        finish: dayjs(userDate),
+      },
+    }, true);
   }
 
   _setInnerHandlers() {
