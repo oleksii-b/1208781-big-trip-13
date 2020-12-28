@@ -5,8 +5,7 @@ const createFiltersTemplate = (filters, currentFilter) => {
 
   return (
     `<form class="trip-filters" action="#" method="get">
-      ${filters.map((filter) => {
-      const {type, name} = filter;
+      ${filters.map(({type, name}) => {
       return (
         `<div class="trip-filters__filter">
           <input 

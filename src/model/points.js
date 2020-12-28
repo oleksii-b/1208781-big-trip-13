@@ -21,20 +21,12 @@ export default class Points extends Observer {
       throw new Error(`Can't update unexisting point`);
     }
 
-    this._points = [
-      ...this._points.slice(0, index),
-      update,
-      ...this._points.slice(index + 1)
-    ];
-
+    this._points = this._points.map((point, i) => i === index ? update : point);
     this._notify(updateType, update);
   }
 
   addPoint(updateType, update) {
-    this._points = [
-      update,
-      ...this._points
-    ];
+    this._points.unshift(update);
 
     this._notify(updateType, update);
   }

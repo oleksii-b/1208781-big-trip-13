@@ -45,11 +45,11 @@ export default class Trip {
     this._pointNewPresenter.init();
   }
 
-  _getPoints() {
+  get points() {
     const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-
     const filteredPoints = filter[filterType](points);
+
     switch (this._currentSortType) {
       case SortType.PRICE_DOWN:
         return filteredPoints.sort(sortPriceDown);
@@ -165,7 +165,7 @@ export default class Trip {
   }
 
   _renderTrip() {
-    const points = this._getPoints();
+    const points = this.points;
     this._renderInfo(points);
     this._renderPrice(points);
 

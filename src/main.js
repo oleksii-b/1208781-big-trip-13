@@ -2,7 +2,7 @@ import {getEvent} from '../src/mock/trip-event';
 import {RenderPosition, render} from './utils/render';
 import MenuView from './view/menu';
 import TripPresenter from '../src/presenter/trip';
-import PointsModel from './/model/points';
+import PointsModel from './model/points';
 import FilterModel from './model/filter';
 import FilterPresenter from './presenter/filter';
 

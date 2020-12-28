@@ -20,7 +20,7 @@ export default class Filter {
   init() {
     this._currentFilter = this._filterModel.getFilter();
 
-    const filters = this._getFilters();
+    const filters = this.filters;
     const prevFilterComponent = this._filterComponent;
 
     this._filterComponent = new FilterView(filters, this._currentFilter);
@@ -47,7 +47,7 @@ export default class Filter {
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
-  _getFilters() {
+  get filters() {
     return [
       {
         type: FilterType.EVERYTHING,
