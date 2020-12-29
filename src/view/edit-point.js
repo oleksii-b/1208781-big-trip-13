@@ -36,7 +36,7 @@ const createOfferTemplate = (offers) => {
 };
 
 const createEditPointTemplate = (data) => {
-  const {eventType, eventTypes, city, price, offerForThisType, destinations, date: {start, finish}} = data;
+  const {eventType, eventTypes, destination: {city}, price, offerForThisType, destinations, date: {start, finish}} = data;
   const destinationCities = createCityTemplate(destinations);
   const descriptionForThisCity = destinations.find((destination) => destination.city === city);
   const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
@@ -115,6 +115,7 @@ export default class EditPoint extends SmartView {
     this._onPriceInput = this._onPriceInput.bind(this);
     this._onStartDateChange = this._onStartDateChange.bind(this);
     this._onEndDateChange = this._onEndDateChange.bind(this);
+    this._onFormDeleteClick = this._onFormDeleteClick.bind(this);
 
     this._setInnerHandlers();
     this._setDatePickers();
@@ -144,6 +145,20 @@ export default class EditPoint extends SmartView {
     return data;
   }
 
+  removeElement() {
+    super.removeElement();
+
+    if (this._startDatepicker) {
+      this._startDatepicker.destroy();
+      this._startDatepicker = null;
+    }
+
+    if (this._endDatepicker) {
+      this._endDatepicker.destroy();
+      this._endDatepicker = null;
+    }
+  }
+
   _onFormSubmit(evt) {
     evt.preventDefault();
     this._callback.submitForm(EditPoint.parseDataToPoint(this._data));
@@ -169,7 +184,7 @@ export default class EditPoint extends SmartView {
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
     } else {
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
-      this.updateData({city: evt.target.value});
+      this.updateData({destination: {city: evt.target.value}});
     }
   }
 
@@ -183,6 +198,11 @@ export default class EditPoint extends SmartView {
   _onPriceInput(evt) {
     evt.preventDefault();
     this.updateData({price: evt.target.value}, true);
+  }
+
+  _onFormDeleteClick(evt) {
+    evt.preventDefault();
+    this._callback.deleteForm(EditPoint.parseDataToPoint(this._data));
   }
 
   _setDatePickers() {
@@ -229,7 +249,7 @@ export default class EditPoint extends SmartView {
     this._endDatepicker.set(`minDate`, this._data.date.start.toDate());
   }
 
-  _onEndDateChange(userDate) {
+  _onEndDateChange([userDate]) {
     this.updateData({
       date: {
         start: this._data.date.start,
@@ -253,11 +273,17 @@ export default class EditPoint extends SmartView {
     this.setFormCloseHandler(this._callback.closeForm);
     this.setFormSubmitHandler(this._callback.submitForm);
     this._setDatePickers();
+    this.setDeleteClickHandler(this._callback.deleteForm);
   }
 
   setFormSubmitHandler(callback) {
     this._callback.submitForm = callback;
     this.getElement().querySelector(`form`).addEventListener(`submit`, this._onFormSubmit);
+  }
+
+  setDeleteClickHandler(callback) {
+    this._callback.deleteForm = callback;
+    this.getElement().querySelector(`.event__reset-btn`).addEventListener(`click`, this._onFormDeleteClick);
   }
 
   setFormCloseHandler(callback) {

@@ -64,7 +64,7 @@ const getPhoto = () => {
   return photos;
 };
 
-let startEvent = dayjs();
+let startEvent = dayjs().subtract(120, `h`);
 const getDate = () => {
   const MAX_MINUTES = 59;
   const MAX_HOURS = 23;
@@ -81,11 +81,15 @@ const getDate = () => {
   };
 };
 
-export const getEvent = () => {
-  const eventType = getEventType();
+const getDestinations = () => {
   const destinations = [];
   cities.forEach((city) => destinations.push({city, description: getDescription(), photos: getPhoto()}));
 
+  return destinations;
+};
+
+export const getEvent = () => {
+  const eventType = getEventType();
   return {
     id: nanoid(),
     eventType,
@@ -97,10 +101,25 @@ export const getEvent = () => {
       photos: getPhoto(),
       city: getCity(),
     },
-    city: getCity(),
-    destinations,
+    destinations: getDestinations(),
     price: getRandomInteger(20, 200),
     isFavorite: Boolean(getRandomInteger(0, 1)),
     date: getDate(),
   };
+};
+
+export const BLANK_POINT = {
+  price: `0`,
+  cities,
+  eventTypes,
+  eventType: eventTypes[0],
+  offers: getOffers(),
+  pointEventType: getEventType(),
+  destinations: getDestinations(),
+  destination: getDestinations()[0],
+  date: {
+    start: dayjs(),
+    finish: dayjs(),
+  },
+  isFavorite: false,
 };
