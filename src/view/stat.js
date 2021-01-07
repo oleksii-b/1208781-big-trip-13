@@ -1,4 +1,6 @@
 import SmartView from './smart';
+import Chart from "chart.js";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const createStatTemplate = (points) => {
   return (
