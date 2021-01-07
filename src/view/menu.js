@@ -6,8 +6,8 @@ const createMenuTemplate = () => {
     `<section>
       <h2 class="visually-hidden">Switch trip view</h2>
       <nav class="trip-controls__trip-tabs  trip-tabs">
-        <a class="trip-tabs__btn  trip-tabs__btn--active" href="#" data-value="Table">Table</a>
-        <a class="trip-tabs__btn" href="#" data-value="Stats">Stats</a>
+        <a class="trip-tabs__btn  trip-tabs__btn--active" href="#" data-value="${MenuItem.TABLE}">Table</a>
+        <a class="trip-tabs__btn" href="#" data-value="${MenuItem.STATS}">Stats</a>
       </nav>
     </section>`
   );

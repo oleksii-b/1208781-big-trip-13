@@ -1,5 +1,4 @@
 import InfoView from '../view/info';
-import PriceView from '../view/price';
 import SortView from '../view/sort';
 import NoPointView from '../view/no-point';
 import TripListView from '../view/trip-list';
@@ -20,7 +19,6 @@ export default class Trip {
 
     this._tripListComponent = new TripListView();
     this._sortComponent = null;
-    this._priceComponent = null;
     this._infoComponent = null;
     this._noPointComponent = new NoPointView();
 
@@ -121,15 +119,6 @@ export default class Trip {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
-  _renderPrice(points) {
-    if (this._priceComponent !== null) {
-      this._priceComponent = null;
-    }
-
-    this._priceComponent = new PriceView(points);
-    render(this._infoComponent, this._priceComponent, RenderPosition.BEFOREEND);
-  }
-
   _renderInfo(points) {
     if (this._infoComponent !== null) {
       this._infoComponent = null;
@@ -156,7 +145,6 @@ export default class Trip {
 
     remove(this._noPointComponent);
     remove(this._sortComponent);
-    remove(this._priceComponent);
     remove(this._infoComponent);
 
     if (resetSortType) {
@@ -167,7 +155,6 @@ export default class Trip {
   _renderTrip() {
     const points = this.points;
     this._renderInfo(points);
-    this._renderPrice(points);
 
     if (points.length) {
       this._renderSort();
