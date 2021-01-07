@@ -7,6 +7,7 @@ import FilterModel from './model/filter';
 import FilterPresenter from './presenter/filter';
 import {MenuItem} from './const';
 import InfoPresenter from './presenter/info';
+import StatView from './view/stat';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
@@ -42,8 +43,9 @@ const onMenuClick = (menuItem) => {
 };
 
 menuComponent.setMenuClickHandler(onMenuClick);
-
-tripPresenter.init();
+// временно отключаем отрисовку доски
+// tripPresenter.init();
+render(tripContentElement, new StatView(pointsModel.getPoints()), RenderPosition.BEFOREEND);
 filterPresenter.init();
 infoPresenter.init();
 
