@@ -5,6 +5,7 @@ import TripPresenter from '../src/presenter/trip';
 import PointsModel from './model/points';
 import FilterModel from './model/filter';
 import FilterPresenter from './presenter/filter';
+import {MenuItem} from './const';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
@@ -17,10 +18,30 @@ const filterModel = new FilterModel();
 const tripControlsElement = document.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
 
-render(tripControlsElement, new MenuView(), RenderPosition.AFTERBEGIN);
+const menuComponent = new MenuView();
+
+render(tripControlsElement, menuComponent, RenderPosition.AFTERBEGIN);
 
 const tripPresenter = new TripPresenter(tripContentElement, pointsModel, filterModel);
 const filterPresenter = new FilterPresenter(tripControlsElement, filterModel);
+
+const onMenuClick = (menuItem) => {
+  switch (menuItem) {
+    case MenuItem.TABLE:
+      console.log(`table`)
+      // отрисовка доски
+      // скрыть статистику
+      break;
+    case MenuItem.STATS:
+      console.log(`stat`)
+      // скрыть доску
+      // показать статистику
+      break;
+  }
+};
+
+menuComponent.setMenuClickHandler(onMenuClick);
+
 tripPresenter.init();
 filterPresenter.init();
 
