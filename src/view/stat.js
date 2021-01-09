@@ -4,8 +4,17 @@ import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 const renderMoneyChart = (moneyCtx, points) => {
   const types = [];
-  points.forEach((point) => types.push(point.eventType));
+  points.forEach((point) => types.push(point.eventType.toUpperCase()));
   const uniquePoints = [...new Set(types)];
+
+  const costsForTypes = [];
+  uniquePoints.forEach((type) => {
+    let cost = 0;
+    points.forEach((point) => {
+      cost += point.eventType.toUpperCase() === type ? point.price : 0;
+    });
+    costsForTypes.push(cost);
+  });
 
   return new Chart(moneyCtx, {
     plugins: [ChartDataLabels],
@@ -13,7 +22,7 @@ const renderMoneyChart = (moneyCtx, points) => {
     data: {
       labels: uniquePoints,
       datasets: [{
-        data: [400, 300, 200, 160, 150, 100],
+        data: costsForTypes,
         backgroundColor: `#1E90FF`,
         hoverBackgroundColor: `#B0E0E6`,
         anchor: `start`
@@ -73,14 +82,26 @@ const renderMoneyChart = (moneyCtx, points) => {
   });
 };
 
-const renderTypeChart = (typeCtx, data) => {
+const renderTypeChart = (typeCtx, points) => {
+  const types = [];
+  points.forEach((point) => types.push(point.eventType.toUpperCase()));
+  const uniquePoints = [...new Set(types)];
+  const countOfTypes = [];
+  uniquePoints.forEach((type) => {
+    let count = 0;
+    points.forEach((point) => {
+      count += point.eventType.toUpperCase() === type ? 1 : 0;
+    });
+    countOfTypes.push(count);
+  });
+
   return new Chart(typeCtx, {
     plugins: [ChartDataLabels],
     type: `horizontalBar`,
     data: {
-      labels: [`TAXI`, `BUS`, `TRAIN`, `SHIP`, `TRANSPORT`, `DRIVE`],
+      labels: uniquePoints,
       datasets: [{
-        data: [4, 3, 2, 1, 1, 1],
+        data: countOfTypes,
         backgroundColor: `#1E90FF`,
         hoverBackgroundColor: `#B0E0E6`,
         anchor: `start`
@@ -140,7 +161,7 @@ const renderTypeChart = (typeCtx, data) => {
   });
 }
 
-const createStatTemplate = (points) => {
+const createStatTemplate = () => {
   return (
     `<section class="statistics">
         <h2 class="visually-hidden">Trip statistics</h2>
@@ -175,7 +196,7 @@ export default class Statistics extends SmartView {
   }
 
   getTemplate() {
-    return createStatTemplate(this._data);
+    return createStatTemplate();
   }
 
   removeElement() {
