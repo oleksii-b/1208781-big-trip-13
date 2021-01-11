@@ -11,7 +11,6 @@ import StatView from './view/stat';
 
 const COUNT_POINT = 20;
 const events = new Array(COUNT_POINT).fill().map(getEvent);
-console.log(events);
 
 const pointsModel = new PointsModel();
 pointsModel.setPoints(events);

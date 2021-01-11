@@ -23,9 +23,10 @@ export const getDurationDays = (diffInMs) => {
   const days = timeDuration.days();
   const hours = timeDuration.hours();
 
-  return `
-    ${addZeroToNumber(days) + `D`}
-    ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}`;
+  return (
+    `${addZeroToNumber(days) + `D`}
+    ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}`
+  );
 };
 
 export const getRandomInteger = (a = 0, b = 1) => {
