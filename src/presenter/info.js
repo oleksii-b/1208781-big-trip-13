@@ -1,7 +1,6 @@
 import InfoView from '../view/info';
 import {render, RenderPosition, remove, replace} from '../utils/render';
 import {sortDefault} from '../utils/sort';
-import {filter} from '../utils/filter';
 
 export default class InfoPresenter {
   constructor(container, pointsModel, filterModel) {
@@ -32,11 +31,9 @@ export default class InfoPresenter {
   }
 
   get points() {
-    const filterType = this._filterModel.getFilter();
     const points = this._pointsModel.getPoints();
-    const filteredPoints = filter[filterType](points);
 
-    return filteredPoints.sort(sortDefault);
+    return points.sort(sortDefault);
   }
 
   _onModelEvent() {

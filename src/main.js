@@ -8,11 +8,37 @@ import FilterPresenter from './presenter/filter';
 import {MenuItem} from './const';
 import InfoPresenter from './presenter/info';
 import StatView from './view/stat';
+import Api from './api.js';
 
 const COUNT_POINT = 20;
+const AUTHORIZATION = `Basic 237rduhkdjasdjaasd`;
+const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
+
 const events = new Array(COUNT_POINT).fill().map(getEvent);
+console.log(events)
+const api = new Api(END_POINT, AUTHORIZATION);
+api.getPoints().then((points) => {
+  console.log(points);
+})
+api.getDestinations().then((destinations) => {
+  console.log(destinations)
+})
+api.getOffers().then((offers) => {
+  console.log(offers)
+})
 
 const pointsModel = new PointsModel();
+Promise
+  .all([
+    api.getPoints(),
+    api.getDestinations(),
+    api.getOffers,
+  ])
+  .then(([points, destinations, offers]) => {
+    pointsModel.setDestinations(destinations);
+    pointsModel.setOffers(offers);
+    pointsModel.setPoints(points)
+  });
 pointsModel.setPoints(events);
 
 const filterModel = new FilterModel();
@@ -50,8 +76,17 @@ tripPresenter.init();
 filterPresenter.init();
 infoPresenter.init();
 
-document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, (evt) => {
+const onNewEventClick = (evt) => {
   evt.preventDefault();
+  if (statComponent) {
+    remove(statComponent);
+  }
+
+  tripPresenter.destroy();
+  tripPresenter.init();
+  menuComponent.setMenuItem(MenuItem.TABLE);
   evt.target.disabled = true;
   tripPresenter.createPoint();
-});
+};
+
+document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, onNewEventClick);
