@@ -6,8 +6,7 @@ const addZeroToNumber = (number) => {
   return (number < 10 ? `0${number}` : number);
 };
 
-export const getEventDuration = (startDate, endDate) => {
-  const diffInMs = endDate.diff(startDate);
+export const getEventDuration = (diffInMs) => {
   const timeDuration = dayjs.duration(diffInMs);
   const days = timeDuration.days();
   const hours = timeDuration.hours();
@@ -17,6 +16,17 @@ export const getEventDuration = (startDate, endDate) => {
     ${(days > 0 && addZeroToNumber(days) + `D`) || ``}
     ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}
     ${addZeroToNumber(minutes)}M`;
+};
+
+export const getDurationDays = (diffInMs) => {
+  const timeDuration = dayjs.duration(diffInMs);
+  const days = timeDuration.days();
+  const hours = timeDuration.hours();
+
+  return (
+    `${addZeroToNumber(days) + `D`}
+    ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}`
+  );
 };
 
 export const getRandomInteger = (a = 0, b = 1) => {

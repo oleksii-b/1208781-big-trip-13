@@ -1,5 +1,3 @@
-import InfoView from '../view/info';
-import PriceView from '../view/price';
 import SortView from '../view/sort';
 import NoPointView from '../view/no-point';
 import TripListView from '../view/trip-list';
@@ -20,7 +18,6 @@ export default class Trip {
 
     this._tripListComponent = new TripListView();
     this._sortComponent = null;
-    this._priceComponent = null;
     this._infoComponent = null;
     this._noPointComponent = new NoPointView();
 
@@ -29,14 +26,14 @@ export default class Trip {
     this._onViewAction = this._onViewAction.bind(this);
     this._onModelEvent = this._onModelEvent.bind(this);
 
-    this._pointsModel.addObserver(this._onModelEvent);
-    this._filterModel.addObserver(this._onModelEvent);
-
     this._pointNewPresenter = new PointNewPresenter(this._tripListComponent, this._onViewAction);
   }
 
   init() {
     this._renderTrip();
+
+    this._pointsModel.addObserver(this._onModelEvent);
+    this._filterModel.addObserver(this._onModelEvent);
   }
 
   createPoint() {
@@ -121,25 +118,6 @@ export default class Trip {
     this._sortComponent.setSortTypeChangeHandler(this._onSortTypeChange);
   }
 
-  _renderPrice(points) {
-    if (this._priceComponent !== null) {
-      this._priceComponent = null;
-    }
-
-    this._priceComponent = new PriceView(points);
-    render(this._infoComponent, this._priceComponent, RenderPosition.BEFOREEND);
-  }
-
-  _renderInfo(points) {
-    if (this._infoComponent !== null) {
-      this._infoComponent = null;
-    }
-
-    const tripMainElement = document.querySelector(`.trip-main`);
-    this._infoComponent = new InfoView(points);
-    render(tripMainElement, this._infoComponent, RenderPosition.AFTERBEGIN);
-  }
-
   _renderNoPoint() {
     render(this._tripContentContainer, this._noPointComponent, RenderPosition.AFTERBEGIN);
   }
@@ -156,8 +134,6 @@ export default class Trip {
 
     remove(this._noPointComponent);
     remove(this._sortComponent);
-    remove(this._priceComponent);
-    remove(this._infoComponent);
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
@@ -166,8 +142,6 @@ export default class Trip {
 
   _renderTrip() {
     const points = this.points;
-    this._renderInfo(points);
-    this._renderPrice(points);
 
     if (points.length) {
       this._renderSort();
@@ -175,5 +149,13 @@ export default class Trip {
     } else {
       this._renderNoPoint();
     }
+  }
+
+  destroy() {
+    this._clearTrip(true);
+
+    this._pointsModel.removeObserver(this._onModelEvent);
+    this._filterModel.removeObserver(this._onModelEvent);
+
   }
 }

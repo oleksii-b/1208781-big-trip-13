@@ -17,7 +17,7 @@ const createPointTemplate = (event) => {
   const offersChecked = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase() && offer.checked);
   const offerTemplate = createOffersTemplate(offersChecked);
 
-  const durationTime = getEventDuration(start, finish);
+  const durationTime = getEventDuration(finish.diff(start));
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;
   return (
     `<li class="trip-events__item">
