@@ -9,6 +9,7 @@ import {MenuItem} from './const';
 import InfoPresenter from './presenter/info';
 import StatView from './view/stat';
 import Api from './api.js';
+import { UpdateType } from './const';
 
 const COUNT_POINT = 20;
 const AUTHORIZATION = `Basic 237rduhkdjasdjaasd`;
@@ -32,14 +33,14 @@ Promise
   .all([
     api.getPoints(),
     api.getDestinations(),
-    api.getOffers,
+    api.getOffers()
   ])
   .then(([points, destinations, offers]) => {
     pointsModel.setDestinations(destinations);
     pointsModel.setOffers(offers);
-    pointsModel.setPoints(points)
+    pointsModel.setPoints(UpdateType.INIT, points);
   });
-pointsModel.setPoints(events);
+// pointsModel.setPoints(events);
 
 const filterModel = new FilterModel();
 

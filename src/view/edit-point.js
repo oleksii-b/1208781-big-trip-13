@@ -4,14 +4,15 @@ import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const createOfferTemplate = (offers) => {
+const createOfferTemplate = (offersForThisType, offers) => {
   return (
     `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
-      ${offers.map((offer, index) => {
-      const {title, name, price, checked} = offer;
+      ${offersForThisType.map((offer, index) => {
+      const {title, price} = offer;
       const id = `event-offer-${title}-${index}`;
+      const checked = offers.includes(offer) ? true : false;
 
       return (
         `<div class="event__offer-selector">
@@ -23,7 +24,7 @@ const createOfferTemplate = (offers) => {
             ${checked ? `checked` : ``}
           >
           <label class="event__offer-label" for="${id}">
-            <span class="event__offer-title">${name}</span>
+            <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${price}</span>
           </label>
@@ -35,11 +36,12 @@ const createOfferTemplate = (offers) => {
   );
 };
 
-const createEditPointTemplate = (data) => {
-  const {eventType, eventTypes, destination: {city}, price, offerForThisType, destinations, date: {start, finish}} = data;
+const createEditPointTemplate = (data, types, destinations) => {
+  const { eventType, destination: { city, pictures, description }, price, date: { start, finish }, offers } = data;
   const destinationCities = createCityTemplate(destinations);
-  const descriptionForThisCity = destinations.find((destination) => destination.city === city);
-  const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
+  const photoTemplate = pictures.length ? createPhotoTemplate(pictures) : ``;
+  const offersForThisType = types.filter((offer) => offer.type === eventType)[0].offers;
+
   return (
     `<li class="trip-events__item">
       <form class="event event--edit" action="#" method="post">
@@ -54,7 +56,7 @@ const createEditPointTemplate = (data) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${eventTypes.map((elem) => createEventTypeListTemplate(elem, elem.toLowerCase() === eventType.toLowerCase())).join(``)}                
+                ${types.map((elem) => createEventTypeListTemplate(elem.type)).join(``)}                
               </fieldset>
             </div>
           </div>
@@ -92,8 +94,8 @@ const createEditPointTemplate = (data) => {
           </button>
         </header>
         <section class="event__details">
-          ${offerForThisType.length ? createOfferTemplate(offerForThisType) : ``} 
-          ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}
+          ${offersForThisType.length ? createOfferTemplate(offersForThisType, offers) : ``} 
+          ${createDestinationTemplate(description, photoTemplate)}
         </section>
       </form>
     </li>`
@@ -101,11 +103,13 @@ const createEditPointTemplate = (data) => {
 };
 
 export default class EditPoint extends SmartView {
-  constructor(point) {
+  constructor(point, offers, destinations) {
     super();
     this._data = EditPoint.parsePointToData(point);
     this._startDatepicker = null;
     this._endDatepicker = null;
+    this._offers = offers;
+    this._destinations = destinations;
 
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
@@ -122,12 +126,12 @@ export default class EditPoint extends SmartView {
   }
 
   getTemplate() {
-    return createEditPointTemplate(this._data);
+    return createEditPointTemplate(this._data, this._offers, this._destinations);
   }
 
   static parsePointToData(point) {
     const offers = JSON.parse(JSON.stringify(point.offers));
-    const offerForThisType = offers.filter((offer) => offer.id.toLowerCase() === point.eventType.toLowerCase());
+    const offerForThisType = offers;
     return Object.assign(
         {},
         point,

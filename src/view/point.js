@@ -4,8 +4,8 @@ import AbstractView from './abstract';
 const createOffersTemplate = (offers) => {
   return offers.map((offer) => (
     `<li class="event__offer">
-      <span class="event__offer-title">${offer.name ? offer.name : ``}</span>
-       ${offer.name ? `&plus;&euro;&nbsp;` : ``}
+      <span class="event__offer-title">${offer.title ? offer.title : ``}</span>
+       ${offer.title ? `&plus;&euro;&nbsp;` : ``}
       <span class="event__offer-price">${offer.price ? offer.price : ``}</span>
     </li>`
   )).join(``);
@@ -14,8 +14,7 @@ const createOffersTemplate = (offers) => {
 
 const createPointTemplate = (event) => {
   const {eventType, destination: {city}, offers, price, isFavorite, date: {start, finish}} = event;
-  const offersChecked = offers.filter((offer) => offer.id.toLowerCase() === eventType.toLowerCase() && offer.checked);
-  const offerTemplate = createOffersTemplate(offersChecked);
+  const offerTemplate = createOffersTemplate(offers);
 
   const durationTime = getEventDuration(finish.diff(start));
   const favoriteClassName = isFavorite ? `event__favorite-btn--active` : ``;

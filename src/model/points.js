@@ -1,16 +1,16 @@
 import Observer from '../utils/observer';
-import Api from '../api';
 import dayjs from 'dayjs';
 
 export default class Points extends Observer {
   constructor() {
     super();
     this._points = [];
-    this._api = new Api()
   }
 
-  setPoints(points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
+
+    this._notify(updateType);
   }
 
   setDestinations(destinations) {
@@ -25,18 +25,15 @@ export default class Points extends Observer {
     return this._points;
   }
 
-  static adaptToClient(point) {
-    let srcPhotos = [];
-    let cities = [];
-    let destinations = [];
-    let photos = [];
-    this._destinations.forEach((description) => {
-      description.pictures.forEach((picture) => photos.push(picture.src))
-    })
+  getOffers() {
+    return this._offers;
+  }
 
-    point.description.pictures.forEach((picture) => srcPhotos.push(picture.src));
-    this._destinations.forEach((destination) => cities.push(destination.name));
-    this._destinations.forEach((destination) => destinations.push({city: destination.name, description: destination.description, photos}));
+  getDestinations() {
+    return this._destinations;
+  }
+
+  static adaptToClient(point) {
     const adaptedPoint = Object.assign(
         {},
         point,
@@ -48,17 +45,54 @@ export default class Points extends Observer {
             start: dayjs(point.date_from),
             finish: dayjs(point.date_to),
           },
-          destination: {
-            city: point.name,
-            description: point.description,
-            photos: srcPhotos,
-          },
-          cities,
-          destinations: this._destinations,
-          
-
+          destination: Object.assign(
+              {},
+              point.destination,
+              {
+                city: point.destination.name,
+              }
+          ),
         }
     );
+
+    delete adaptedPoint.type;
+    delete adaptedPoint.is_favorite;
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.destination.name;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          "type": point.eventType,
+          "is_favorite": point.isFavorite,
+          "base_price": point.price,
+          "date_from": point.date.start.toDate(),
+          "date_to": point.date.finish.toDate(),
+          "destination": Object.assign(
+              {},
+              point.destination,
+              {
+                name: point.destination.city
+              }
+          ),
+        }
+    );
+
+    delete adaptedPoint.eventType;
+    delete adaptedPoint.isFavorite;
+    delete adaptedPoint.price;
+    delete adaptedPoint.date.start;
+    delete adaptedPoint.date.finis;
+    delete adaptedPoint.destination.city;
+
+    return adaptedPoint;
   }
 
   updatePoint(updateType, update) {

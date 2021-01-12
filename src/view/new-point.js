@@ -1,14 +1,15 @@
 import dayjs from 'dayjs';
 import SmartView from './smart';
 import flatpickr from 'flatpickr';
-import {BLANK_POINT} from '../mock/trip-event';
+import { BLANK_POINT } from '../mock/trip-event';
+import { newPoint } from '../const';
 
 export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
-    `<img class="event__photo" src="${photo}" alt="Event photo">`).join(``);
+    `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join(``);
 };
 
-export const createEventTypeListTemplate = (eventType, isChecked) => {
+export const createEventTypeListTemplate = (eventType) => {
   const eventTypeLowerCase = eventType.toLowerCase();
 
   return (
@@ -19,7 +20,6 @@ export const createEventTypeListTemplate = (eventType, isChecked) => {
         type="radio" 
         name="event-type" 
         value="${eventTypeLowerCase}" 
-        ${isChecked ? `checked` : ``}
       >
       <label class="event__type-label  event__type-label--${eventTypeLowerCase}" 
       for="event-type-${eventTypeLowerCase}-1">${eventType}
@@ -76,16 +76,17 @@ export const createDestinationTemplate = (description, photos) => {
   return ``;
 };
 
-export const createCityTemplate = (cities) => {
-  return cities.map(({city}) =>
-    `<option value=${city}></option>`).join(``);
+export const createCityTemplate = (destinations) => {
+  return destinations.map(({name}) =>
+    `<option value=${name}></option>`).join(``);
 };
 
-const createNewPointTemplate = (data) => {
-  const {eventTypes, eventType, offerForThisType, destination: {city}, destinations, date: {start, finish}} = data;
+const createNewPointTemplate = (data, offers, destinations) => {
+  const {eventType, date: {start, finish}} = data;
+
   const destinationCities = createCityTemplate(destinations);
-  const descriptionForThisCity = destinations.find((destination) => destination.city === city);
-  const photoTemplate = descriptionForThisCity.photos.length ? createPhotoTemplate(descriptionForThisCity.photos) : ``;
+  const offersForThisType = offers.filter((offer) => offer.type === eventType)[0].offers;
+  const photoTemplate = destinations[0].pictures.length ? createPhotoTemplate(destinations[0].pictures) : ``;
 
   return (
     `<li class="trip-events__item">
@@ -100,7 +101,7 @@ const createNewPointTemplate = (data) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${eventTypes.map((event) => createEventTypeListTemplate(event, event === eventType)).join(``)}
+                ${offers.map((elem) => createEventTypeListTemplate(elem.type)).join(``)}
               </fieldset>
             </div>
           </div>
@@ -109,7 +110,7 @@ const createNewPointTemplate = (data) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${eventType}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinations[0].name}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinationCities}
             </datalist>
@@ -135,8 +136,8 @@ const createNewPointTemplate = (data) => {
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
-          ${offerForThisType.length ? createOfferTemplate(offerForThisType) : ``}
-          ${createDestinationTemplate(descriptionForThisCity.description, photoTemplate)}      
+          ${offersForThisType.length ? createOfferTemplate(offersForThisType) : ``}
+          ${createDestinationTemplate(destinations[0].description, photoTemplate)}      
         </section>
       </form>
     </li>`
@@ -144,9 +145,11 @@ const createNewPointTemplate = (data) => {
 };
 
 export default class NewPoint extends SmartView {
-  constructor(point = BLANK_POINT) {
+  constructor(point = newPoint, offers, destinations) {
     super();
     this._data = NewPoint.parsePointToData(point);
+    this._offers = offers;
+    this._destinations = destinations;
     this._startDatepicker = null;
     this._endDatepicker = null;
 
@@ -164,7 +167,7 @@ export default class NewPoint extends SmartView {
   }
 
   getTemplate() {
-    return createNewPointTemplate(this._data);
+    return createNewPointTemplate(this._data, this._offers, this._destinations);
   }
 
   static parsePointToData(point) {
