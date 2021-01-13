@@ -99,7 +99,7 @@ export default class Point {
   _onFormPressEsc(evt) {
     if ([`Esc`, `Escape`].includes(evt.key)) {
       evt.preventDefault();
-      this._editPointComponent.reset(this._point);
+      this._editPointComponent.reset(this._point, this._offers);
       this._replaceFormToPoint();
     }
   }
@@ -109,7 +109,7 @@ export default class Point {
   }
 
   _onFormClose() {
-    this._editPointComponent.reset(this._point);
+    this._editPointComponent.reset(this._point, this._offers);
     this._replaceFormToPoint();
   }
 

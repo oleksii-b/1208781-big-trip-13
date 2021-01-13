@@ -160,6 +160,7 @@ export default class Trip {
     const destinations = this.destinations;
 
     if (points.length) {
+      remove(this._noPointComponent);
       this._renderSort();
       this._renderTripList(points, offers, destinations);
     } else {
