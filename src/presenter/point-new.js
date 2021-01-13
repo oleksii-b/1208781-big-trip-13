@@ -1,6 +1,6 @@
 import NewPointView from '../view/new-point';
 import {remove, render, RenderPosition} from '../utils/render';
-import {UserAction, UpdateType} from '../const';
+import {UserAction, UpdateType, newPoint} from '../const';
 import {nanoid} from 'nanoid';
 
 export default class PointNew {
@@ -21,7 +21,7 @@ export default class PointNew {
       return;
     }
 
-    this._newPointComponent = new NewPointView(offers, destinations);
+    this._newPointComponent = new NewPointView(newPoint, offers, destinations);
     this._newPointComponent.setFormSubmitHandler(this._onFormSubmit);
     this._newPointComponent.setFormCloseHandler(this._onFormClose);
 

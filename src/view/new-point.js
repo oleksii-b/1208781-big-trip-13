@@ -1,8 +1,6 @@
 import dayjs from 'dayjs';
 import SmartView from './smart';
 import flatpickr from 'flatpickr';
-import { BLANK_POINT } from '../mock/trip-event';
-import { newPoint } from '../const';
 
 export const createPhotoTemplate = (photos) => {
   return photos.map((photo) =>
@@ -34,7 +32,7 @@ const createOfferTemplate = (offers) => {
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
       <div class="event__available-offers">
       ${offers.map((offer, index) => {
-      const {title, name, price, checked} = offer;
+      const {title, price} = offer;
       const id = `event-offer-${title}-${index}`;
 
       return (
@@ -43,9 +41,9 @@ const createOfferTemplate = (offers) => {
           id="${id}" 
           type="checkbox" 
           name="event-offer-${title}"
-          ${checked ? `checked` : ``}>
+          >
           <label class="event__offer-label" for="${id}">
-            <span class="event__offer-title">${name}</span>
+            <span class="event__offer-title">${title}</span>
             &plus;&euro;&nbsp;
             <span class="event__offer-price">${price}</span>
           </label>
@@ -82,11 +80,13 @@ export const createCityTemplate = (destinations) => {
 };
 
 const createNewPointTemplate = (data, offers, destinations) => {
-  const {eventType, date: {start, finish}} = data;
+  const {eventType, date: {start, finish}, destination: {city, pictures, description}} = data;
 
   const destinationCities = createCityTemplate(destinations);
-  const offersForThisType = offers.filter((offer) => offer.type === eventType)[0].offers;
-  const photoTemplate = destinations[0].pictures.length ? createPhotoTemplate(destinations[0].pictures) : ``;
+  const offersForThisType = offers.filter((offer) => offer.type === eventType.toLowerCase())[0].offers;
+  const photoTemplate = pictures.length
+    ? createPhotoTemplate(pictures)
+    : ``;
 
   return (
     `<li class="trip-events__item">
@@ -110,7 +110,7 @@ const createNewPointTemplate = (data, offers, destinations) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${eventType}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinations[0].name}" list="destination-list-1">
+            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${city}" list="destination-list-1">
             <datalist id="destination-list-1">
               ${destinationCities}
             </datalist>
@@ -137,7 +137,7 @@ const createNewPointTemplate = (data, offers, destinations) => {
         </header>
         <section class="event__details">
           ${offersForThisType.length ? createOfferTemplate(offersForThisType) : ``}
-          ${createDestinationTemplate(destinations[0].description, photoTemplate)}      
+          ${createDestinationTemplate(description, photoTemplate)}      
         </section>
       </form>
     </li>`
@@ -145,14 +145,13 @@ const createNewPointTemplate = (data, offers, destinations) => {
 };
 
 export default class NewPoint extends SmartView {
-  constructor(point = newPoint, offers, destinations) {
+  constructor(point, offers, destinations) {
     super();
-    this._data = NewPoint.parsePointToData(point);
     this._offers = offers;
     this._destinations = destinations;
     this._startDatepicker = null;
     this._endDatepicker = null;
-
+    this._data = NewPoint.parsePointToData(point, this._offers, this._destinations);
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
     this._onEventTypeChange = this._onEventTypeChange.bind(this);
@@ -170,22 +169,34 @@ export default class NewPoint extends SmartView {
     return createNewPointTemplate(this._data, this._offers, this._destinations);
   }
 
-  static parsePointToData(point) {
-    const offers = JSON.parse(JSON.stringify(point.offers));
-    const offerForThisType = offers.filter(({id}) => id === point.eventType);
+  static parsePointToData(point, offers, destinations) {
+    const checkedOffers = JSON.parse(JSON.stringify(point.offers));
+    const offerForThisType = offers.filter((offer) => offer.type === point.eventType.toLowerCase())[0].offers;
+
     return Object.assign(
         {},
         point,
         {
           offerForThisType,
-          offers,
+          checkedOffers,
+          destination: {
+            city: destinations[0].name,
+            description: destinations[0].description,
+            pictures: destinations[0].pictures,
+          },
         }
     );
   }
 
   static parseDataToPoint(data) {
-    data = Object.assign({}, data);
+    data = Object.assign({},
+        data,
+        {
+          offers: data.checkedOffers,
+        }
+    );
     delete data.offerForThisType;
+    delete data.checkedOffers;
 
     return data;
   }
@@ -202,33 +213,42 @@ export default class NewPoint extends SmartView {
 
   _onEventTypeChange(evt) {
     evt.preventDefault();
-    for (let offer of this._data.offers) {
-      offer.checked = false;
-    }
-    const offerForThisType = this._data.offers.filter((offer) => offer.id.toLowerCase() === evt.target.value);
-    this.updateData({eventType: evt.target.value, offerForThisType});
+    const offerForThisType = this._offers.filter((offer) => offer.type === evt.target.value)[0].offers;
+    this.updateData({eventType: evt.target.value, offerForThisType, checkedOffers: []});
   }
 
   _onDestinationChange(evt) {
     evt.preventDefault();
-    if (!this._data.cities.includes(evt.target.value)) {
+    if (!this._destinations.some((destination) => destination.name === evt.target.value)) {
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
     } else {
+      const selectedDestination = (this._destinations.find((destination) => destination.name === evt.target.value));
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
-      this.updateData({destination: {city: evt.target.value}});
+      this.updateData(
+          {
+            destination: {
+              city: evt.target.value,
+              description: selectedDestination.description,
+              pictures: selectedDestination.pictures,
+
+            },
+          });
     }
   }
 
   _onOffersChange(evt) {
     evt.preventDefault();
-    const offerElement = this._data.offers.find(({title}) => evt.target.name.includes(title));
-    offerElement.checked = offerElement.checked ? false : true;
-    this.updateData({offers: this._data.offers}, true);
+    if (this._data.checkedOffers.some((offer) => `event-offer-${offer.title}` === evt.target.name)) {
+      this._data.checkedOffers = this._data.checkedOffers.filter((offer) => `event-offer-${offer.title}` !== evt.target.name);
+    } else {
+      this._data.checkedOffers.push(this._data.offerForThisType.find((offer) => `event-offer-${offer.title}` === evt.target.name));
+    }
+    this.updateData({offers: this._data.checkedOffers}, true);
   }
 
   _onPriceInput(evt) {
     evt.preventDefault();
-    this.updateData({price: evt.target.value}, true);
+    this.updateData({price: +evt.target.value}, true);
   }
 
   _setDatePickers() {

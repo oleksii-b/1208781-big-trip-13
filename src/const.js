@@ -33,10 +33,13 @@ export const MenuItem = {
 export const BAR_HEIGHT = 55;
 
 export const newPoint = {
-  price: `0`,
-  eventType: `Taxi`,
+  price: 0,
+  eventType: `taxi`,
   offers: [],
-  destination: {},
+  destination: {
+    description: ``,
+    pictures: [],
+  },
   date: {
     start: dayjs(),
     finish: dayjs(),

@@ -37,9 +37,8 @@ export default class Trip {
   }
 
   createPoint() {
-    const offers = this._offers;
-    const destinations = this._destinations;
-
+    const offers = this.offers;
+    const destinations = this.destinations;
     this._currentSortType = SortType.DEFAULT;
     this._filterModel.setFilter(UpdateType.MAJOR, FilterType.EVERYTHING);
     this._pointNewPresenter.init(offers, destinations);
