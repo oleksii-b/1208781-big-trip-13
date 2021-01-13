@@ -36,6 +36,14 @@ export default class Trip {
     this._filterModel.addObserver(this._onModelEvent);
   }
 
+  showTripList() {
+    this._tripListComponent.show();
+  }
+
+  hideTripList() {
+    this._tripListComponent.hide();
+  }
+
   createPoint() {
     const offers = this.offers;
     const destinations = this.destinations;

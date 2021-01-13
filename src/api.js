@@ -37,7 +37,7 @@ export default class Api {
       url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointsModel.adaptToServer(point)),
-      headers: new Headers({"Content-Type": `application/json`})
+      headers: new Headers({"Content-Type": `application/json`}),
     })
       .then(Api.toJSON)
       .then(PointsModel.adaptToClient);
@@ -47,7 +47,7 @@ export default class Api {
     url,
     method = Method.GET,
     body = null,
-    headers = new Headers()
+    headers = new Headers(),
   }) {
     headers.append(`Authorization`, this._authorization);
 

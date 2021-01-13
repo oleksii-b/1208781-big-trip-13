@@ -21,6 +21,7 @@ const filterModel = new FilterModel();
 const tripControlsElement = document.querySelector(`.trip-controls`);
 const tripContentElement = document.querySelector(`.trip-events`);
 const tripMainElement = document.querySelector(`.trip-main`);
+const pageBodyElement = document.querySelector(`main .page-body__container`);
 
 const menuComponent = new MenuView();
 
@@ -32,13 +33,13 @@ let statComponent = null;
 const onMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
-      tripPresenter.init();
+      tripPresenter.showTripList();
       remove(statComponent);
       break;
     case MenuItem.STATS:
-      tripPresenter.destroy();
+      tripPresenter.hideTripList();
       statComponent = new StatView(pointsModel.getPoints());
-      render(tripContentElement, statComponent, RenderPosition.BEFOREEND);
+      render(pageBodyElement, statComponent, RenderPosition.BEFOREEND);
       break;
   }
 };
@@ -53,8 +54,7 @@ const onNewEventClick = (evt) => {
     remove(statComponent);
   }
 
-  tripPresenter.destroy();
-  tripPresenter.init();
+  tripPresenter.showTripList();
   menuComponent.setMenuItem(MenuItem.TABLE);
   evt.target.disabled = true;
   tripPresenter.createPoint();
