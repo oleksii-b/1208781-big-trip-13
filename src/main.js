@@ -33,6 +33,8 @@ let statComponent = null;
 const onMenuClick = (menuItem) => {
   switch (menuItem) {
     case MenuItem.TABLE:
+      tripPresenter.destroy();
+      tripPresenter.init();
       tripPresenter.showTripList();
       remove(statComponent);
       break;
