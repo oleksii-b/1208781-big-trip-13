@@ -1,4 +1,3 @@
-// import {getEvent} from '../src/mock/trip-event';
 import {RenderPosition, render, remove} from './utils/render';
 import MenuView from './view/menu';
 import TripPresenter from '../src/presenter/trip';
@@ -11,16 +10,11 @@ import StatView from './view/stat';
 import Api from './api.js';
 import {UpdateType} from './const';
 
-// const COUNT_POINT = 20;
 const AUTHORIZATION = `Basic 237rduhkdjasdjaasd`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 
-// const events = new Array(COUNT_POINT).fill().map(getEvent);
-
 const api = new Api(END_POINT, AUTHORIZATION);
 
-
-// pointsModel.setPoints(events);
 const pointsModel = new PointsModel();
 const filterModel = new FilterModel();
 
@@ -30,9 +24,7 @@ const tripMainElement = document.querySelector(`.trip-main`);
 
 const menuComponent = new MenuView();
 
-
-
-const tripPresenter = new TripPresenter(tripContentElement, pointsModel, filterModel);
+const tripPresenter = new TripPresenter(tripContentElement, pointsModel, filterModel, api);
 const filterPresenter = new FilterPresenter(tripControlsElement, filterModel);
 const infoPresenter = new InfoPresenter(tripMainElement, pointsModel, filterModel);
 let statComponent = null;

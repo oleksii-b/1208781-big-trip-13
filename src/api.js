@@ -2,7 +2,7 @@ import PointsModel from './model/points';
 
 const Method = {
   GET: `GET`,
-  PUT: `PUT`
+  PUT: `PUT`,
 };
 
 const SuccessHTTPStatusRange = {
@@ -23,7 +23,7 @@ export default class Api {
   }
 
   getDestinations() {
-    return this._load({ url: `destinations` })
+    return this._load({url: `destinations`})
       .then(Api.toJSON);
   }
 
@@ -34,7 +34,7 @@ export default class Api {
 
   updatePoint(point) {
     return this._load({
-      url: `tasks/${point.id}`,
+      url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointsModel.adaptToServer(point)),
       headers: new Headers({"Content-Type": `application/json`})

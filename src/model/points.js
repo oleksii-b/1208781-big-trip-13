@@ -71,25 +71,22 @@ export default class Points extends Observer {
         point,
         {
           "type": point.eventType,
+          "date_from": point.date.start.toDate().toISOString(),
+          "date_to": point.date.finish.toDate().toISOString(),
+          "destination": {
+            "name": point.destination.city,
+            "description": point.destination.description,
+            "pictures": point.destination.pictures,
+          },
+          "base_price": +point.price,
           "is_favorite": point.isFavorite,
-          "base_price": point.price,
-          "date_from": point.date.start.toDate(),
-          "date_to": point.date.finish.toDate(),
-          "destination": Object.assign(
-              {},
-              point.destination,
-              {
-                name: point.destination.city
-              }
-          ),
         }
     );
 
     delete adaptedPoint.eventType;
     delete adaptedPoint.isFavorite;
     delete adaptedPoint.price;
-    delete adaptedPoint.date.start;
-    delete adaptedPoint.date.finis;
+    delete adaptedPoint.date;
     delete adaptedPoint.destination.city;
 
     return adaptedPoint;

@@ -9,17 +9,17 @@ import {sortPriceDown, sortTimeDown, sortDefault} from '../utils/sort';
 import {filter} from '../utils/filter';
 
 export default class Trip {
-  constructor(tripContentContainer, pointsModel, filterModel) {
+  constructor(tripContentContainer, pointsModel, filterModel, api) {
     this._tripContentContainer = tripContentContainer;
     this._pointPresenter = {};
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
     this._currentSortType = SortType.DEFAULT;
-
     this._tripListComponent = new TripListView();
     this._sortComponent = null;
     this._infoComponent = null;
     this._noPointComponent = new NoPointView();
+    this._api = api;
 
     this._onModeChange = this._onModeChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
@@ -89,7 +89,9 @@ export default class Trip {
   _onViewAction(actionType, updateType, update) {
     switch (actionType) {
       case UserAction.UPDATE_POINT:
-        this._pointsModel.updatePoint(updateType, update);
+        this._api.updatePoint(update).then((response) => {
+          this._pointsModel.updatePoint(updateType, response);
+        });
         break;
       case UserAction.ADD_POINT:
         this._pointsModel.addPoint(updateType, update);
