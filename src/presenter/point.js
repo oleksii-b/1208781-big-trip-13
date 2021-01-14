@@ -28,11 +28,13 @@ export default class Point {
     this._onDeleteClick = this._onDeleteClick.bind(this);
   }
 
-  init(point) {
+  init(point, offers, destinations) {
     this._point = point;
+    this._offers = offers;
+    this._destinations = destinations;
     this._prevPointComponent = this._pointComponent;
     this._prevEditPointComponent = this._editPointComponent;
-    this._editPointComponent = new EditPointView(point);
+    this._editPointComponent = new EditPointView(point, offers, destinations);
     this._pointComponent = new PointView(point);
 
     this._pointComponent.setEditClickHandler(this._onToggleButtonClick);
@@ -97,7 +99,7 @@ export default class Point {
   _onFormPressEsc(evt) {
     if ([`Esc`, `Escape`].includes(evt.key)) {
       evt.preventDefault();
-      this._editPointComponent.reset(this._point);
+      this._editPointComponent.reset(this._point, this._offers);
       this._replaceFormToPoint();
     }
   }
@@ -107,7 +109,7 @@ export default class Point {
   }
 
   _onFormClose() {
-    this._editPointComponent.reset(this._point);
+    this._editPointComponent.reset(this._point, this._offers);
     this._replaceFormToPoint();
   }
 

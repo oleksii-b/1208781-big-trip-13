@@ -1,4 +1,5 @@
 import Observer from '../utils/observer';
+import dayjs from 'dayjs';
 
 export default class Points extends Observer {
   constructor() {
@@ -6,12 +7,89 @@ export default class Points extends Observer {
     this._points = [];
   }
 
-  setPoints(points) {
+  setPoints(updateType, points) {
     this._points = points.slice();
+
+    this._notify(updateType);
+  }
+
+  setDestinations(destinations) {
+    this._destinations = destinations;
+  }
+
+  setOffers(offers) {
+    this._offers = offers;
   }
 
   getPoints() {
     return this._points;
+  }
+
+  getOffers() {
+    return this._offers;
+  }
+
+  getDestinations() {
+    return this._destinations;
+  }
+
+  static adaptToClient(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          eventType: point.type,
+          isFavorite: point.is_favorite,
+          price: point.base_price,
+          date: {
+            start: dayjs(point.date_from),
+            finish: dayjs(point.date_to),
+          },
+          destination: Object.assign(
+              {},
+              point.destination,
+              {
+                city: point.destination.name,
+              }
+          ),
+        }
+    );
+
+    delete adaptedPoint.type;
+    delete adaptedPoint.is_favorite;
+    delete adaptedPoint.base_price;
+    delete adaptedPoint.date_from;
+    delete adaptedPoint.date_to;
+    delete adaptedPoint.destination.name;
+
+    return adaptedPoint;
+  }
+
+  static adaptToServer(point) {
+    const adaptedPoint = Object.assign(
+        {},
+        point,
+        {
+          "type": point.eventType,
+          "date_from": point.date.start.toDate().toISOString(),
+          "date_to": point.date.finish.toDate().toISOString(),
+          "destination": {
+            "name": point.destination.city,
+            "description": point.destination.description,
+            "pictures": point.destination.pictures,
+          },
+          "base_price": +point.price,
+          "is_favorite": point.isFavorite,
+        }
+    );
+
+    delete adaptedPoint.eventType;
+    delete adaptedPoint.isFavorite;
+    delete adaptedPoint.price;
+    delete adaptedPoint.date;
+    delete adaptedPoint.destination.city;
+
+    return adaptedPoint;
   }
 
   updatePoint(updateType, update) {

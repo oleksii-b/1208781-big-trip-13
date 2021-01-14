@@ -5,8 +5,7 @@ const createPriceTemplate = (events) => {
   if (events.length) {
     const totalPrice = events.reduce((acc, event) => acc + +event.price, 0);
     const totalPriceOffers = events
-    .reduce((acc1, {offers, eventType}) => acc1 + offers
-    .filter(({checked, id}) => checked && eventType === id.toLowerCase())
+    .reduce((acc1, {offers}) => acc1 + offers
     .reduce((acc, {price}) => acc + +price, 0), 0);
     totalCoast = totalPrice + totalPriceOffers;
   }

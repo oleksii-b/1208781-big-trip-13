@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 export const SortType = {
   DEFAULT: `sort-day`,
   PRICE_DOWN: `sort-price`,
@@ -13,7 +15,8 @@ export const UserAction = {
 export const UpdateType = {
   PATCH: `PATCH`,
   MINOR: `MINOR`,
-  MAJOR: `MAJOR`
+  MAJOR: `MAJOR`,
+  INIT: `INIT`,
 };
 
 export const FilterType = {
@@ -28,3 +31,18 @@ export const MenuItem = {
 };
 
 export const BAR_HEIGHT = 55;
+
+export const newPoint = {
+  price: 0,
+  eventType: `taxi`,
+  offers: [],
+  destination: {
+    description: ``,
+    pictures: [],
+  },
+  date: {
+    start: dayjs(),
+    finish: dayjs(),
+  },
+  isFavorite: false,
+};

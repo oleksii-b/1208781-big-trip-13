@@ -52,9 +52,11 @@ export default class Statistics extends SmartView {
   _setCharts() {
     this._removeCharts();
 
-    const moneyCtx = this.getElement().querySelector(`.statistics__chart--money`);
-    const typeCtx = this.getElement().querySelector(`.statistics__chart--transport`);
-    const timeCtx = this.getElement().querySelector(`.statistics__chart--time`);
+    const statElement = this.getElement();
+
+    const moneyCtx = statElement.querySelector(`.statistics__chart--money`);
+    const typeCtx = statElement.querySelector(`.statistics__chart--transport`);
+    const timeCtx = statElement.querySelector(`.statistics__chart--time`);
 
     const types = [];
     this._data.forEach((point) => types.push(point.eventType.toUpperCase()));
