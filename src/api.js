@@ -16,18 +16,18 @@ export default class Api {
     this._authorization = authorization;
   }
 
-  getPoints() {
+  get points() {
     return this._load({url: `points`})
       .then(Api.toJSON)
       .then((points) => points.map(PointsModel.adaptToClient));
   }
 
-  getDestinations() {
+  get destinations() {
     return this._load({url: `destinations`})
       .then(Api.toJSON);
   }
 
-  getOffers() {
+  get offers() {
     return this._load({url: `offers`})
     .then(Api.toJSON);
   }
@@ -55,16 +55,16 @@ export default class Api {
         `${this._endPoint}/${url}`,
         {method, body, headers}
     )
-        .then(Api.checkStatus)
-        .catch(Api.catchError);
+      .then(Api.checkStatus)
+      .catch(Api.catchError);
   }
 
   static checkStatus(response) {
-    if (
-      response.status < SuccessHTTPStatusRange.MIN ||
-        response.status > SuccessHTTPStatusRange.MAX
-    ) {
-      throw new Error(`${response.status}: ${response.statusText}`);
+    const {status, statusText} = response;
+    const {MIN, MAX} = SuccessHTTPStatusRange;
+
+    if (status < MIN || status > MAX) {
+      throw new Error(`${status}: ${statusText}`);
     }
 
     return response;

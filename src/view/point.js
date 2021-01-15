@@ -2,11 +2,11 @@ import {getEventDuration} from '../utils/common';
 import AbstractView from './abstract';
 
 const createOffersTemplate = (offers) => {
-  return offers.map((offer) => (
+  return offers.map(({title, price}) => (
     `<li class="event__offer">
-      <span class="event__offer-title">${offer.title ? offer.title : ``}</span>
-       ${offer.title ? `&plus;&euro;&nbsp;` : ``}
-      <span class="event__offer-price">${offer.price ? offer.price : ``}</span>
+      <span class="event__offer-title">${title ? title : ``}</span>
+       ${title ? `&plus;&euro;&nbsp;` : ``}
+      <span class="event__offer-price">${price ? price : ``}</span>
     </li>`
   )).join(``);
 };

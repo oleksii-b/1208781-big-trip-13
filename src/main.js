@@ -40,7 +40,7 @@ const onMenuClick = (menuItem) => {
       break;
     case MenuItem.STATS:
       tripPresenter.hideTripList();
-      statComponent = new StatView(pointsModel.getPoints());
+      statComponent = new StatView(pointsModel.points);
       render(pageBodyElement, statComponent, RenderPosition.BEFOREEND);
       break;
   }
@@ -66,9 +66,9 @@ document.querySelector(`.trip-main__event-add-btn`).addEventListener(`click`, on
 
 Promise
   .all([
-    api.getPoints(),
-    api.getDestinations(),
-    api.getOffers()
+    api.points,
+    api.destinations,
+    api.offers
   ])
   .then(([points, destinations, offers]) => {
     pointsModel.setDestinations(destinations);
