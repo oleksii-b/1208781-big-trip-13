@@ -37,11 +37,11 @@ export default class Trip {
   }
 
   showTripList() {
-    this._tripListComponent.isShown = false;
+    this._tripListComponent.isHidden = false;
   }
 
   hideTripList() {
-    this._tripListComponent.isShown = true;
+    this._tripListComponent.isHidden = true;
   }
 
   createPoint() {

@@ -2,7 +2,6 @@ import AbstractView from './abstract';
 
 
 const createFiltersTemplate = (filters, currentFilter) => {
-
   return (
     `<form class="trip-filters" action="#" method="get">
       ${filters.map(({type, name}) => {

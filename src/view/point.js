@@ -5,7 +5,7 @@ const createOffersTemplate = (offers) => {
   return offers.map(({title, price}) => (
     `<li class="event__offer">
       <span class="event__offer-title">${title ? title : ``}</span>
-       ${title ? `&plus;&euro;&nbsp;` : ``}
+      ${title ? `&plus;&euro;&nbsp;` : ``}
       <span class="event__offer-price">${price ? price : ``}</span>
     </li>`
   )).join(``);

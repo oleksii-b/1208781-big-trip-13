@@ -171,7 +171,7 @@ export default class NewPoint extends SmartView {
 
   static parsePointToData(point, offers, destinations) {
     const checkedOffers = JSON.parse(JSON.stringify(point.offers));
-    const offerForThisType = offers.filter((offer) => offer.type === point.eventType.toLowerCase())[0].offers;
+    const offerForThisType = offers.filter(({type}) => type === point.eventType.toLowerCase())[0].offers;
     const {name, description, pictures} = destinations[0];
 
     return Object.assign(

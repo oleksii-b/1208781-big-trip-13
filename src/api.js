@@ -29,7 +29,7 @@ export default class Api {
 
   get offers() {
     return this._load({url: `offers`})
-    .then(Api.toJSON);
+      .then(Api.toJSON);
   }
 
   updatePoint(point) {

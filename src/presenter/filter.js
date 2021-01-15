@@ -19,7 +19,6 @@ export default class Filter {
 
   init() {
     this._currentFilter = this._filterModel.getFilter();
-
     const filters = this.filters;
     const prevFilterComponent = this._filterComponent;
 
