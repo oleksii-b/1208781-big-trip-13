@@ -3,8 +3,8 @@ import SmartView from './smart';
 import flatpickr from 'flatpickr';
 
 export const createPhotoTemplate = (photos) => {
-  return photos.map((photo) =>
-    `<img class="event__photo" src="${photo.src}" alt="${photo.description}">`).join(``);
+  return photos.map(({src, description}) =>
+    `<img class="event__photo" src="${src}" alt="${description}">`).join(``);
 };
 
 export const createEventTypeListTemplate = (eventType) => {
@@ -101,7 +101,7 @@ const createNewPointTemplate = (data, offers, destinations) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${offers.map((elem) => createEventTypeListTemplate(elem.type)).join(``)}
+                ${offers.map(({type}) => createEventTypeListTemplate(type)).join(``)}
               </fieldset>
             </div>
           </div>
@@ -171,7 +171,8 @@ export default class NewPoint extends SmartView {
 
   static parsePointToData(point, offers, destinations) {
     const checkedOffers = JSON.parse(JSON.stringify(point.offers));
-    const offerForThisType = offers.filter((offer) => offer.type === point.eventType.toLowerCase())[0].offers;
+    const offerForThisType = offers.filter(({type}) => type === point.eventType.toLowerCase())[0].offers;
+    const {name, description, pictures} = destinations[0];
 
     return Object.assign(
         {},
@@ -180,16 +181,17 @@ export default class NewPoint extends SmartView {
           offerForThisType,
           checkedOffers,
           destination: {
-            city: destinations[0].name,
-            description: destinations[0].description,
-            pictures: destinations[0].pictures,
+            city: name,
+            description,
+            pictures,
           },
         }
     );
   }
 
   static parseDataToPoint(data) {
-    data = Object.assign({},
+    data = Object.assign(
+        {},
         data,
         {
           offers: data.checkedOffers,
@@ -213,16 +215,16 @@ export default class NewPoint extends SmartView {
 
   _onEventTypeChange(evt) {
     evt.preventDefault();
-    const offerForThisType = this._offers.filter((offer) => offer.type === evt.target.value)[0].offers;
+    const offerForThisType = this._offers.filter(({type}) => type === evt.target.value)[0].offers;
     this.updateData({eventType: evt.target.value, offerForThisType, checkedOffers: []});
   }
 
   _onDestinationChange(evt) {
     evt.preventDefault();
-    if (!this._destinations.some((destination) => destination.name === evt.target.value)) {
+    if (!this._destinations.some(({name}) => name === evt.target.value)) {
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
     } else {
-      const selectedDestination = (this._destinations.find((destination) => destination.name === evt.target.value));
+      const selectedDestination = (this._destinations.find(({name}) => name === evt.target.value));
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
       this.updateData(
           {
@@ -230,7 +232,6 @@ export default class NewPoint extends SmartView {
               city: evt.target.value,
               description: selectedDestination.description,
               pictures: selectedDestination.pictures,
-
             },
           });
     }
@@ -238,10 +239,10 @@ export default class NewPoint extends SmartView {
 
   _onOffersChange(evt) {
     evt.preventDefault();
-    if (this._data.checkedOffers.some((offer) => `event-offer-${offer.title}` === evt.target.name)) {
-      this._data.checkedOffers = this._data.checkedOffers.filter((offer) => `event-offer-${offer.title}` !== evt.target.name);
+    if (this._data.checkedOffers.some(({title}) => `event-offer-${title}` === evt.target.name)) {
+      this._data.checkedOffers = this._data.checkedOffers.filter(({title}) => `event-offer-${title}` !== evt.target.name);
     } else {
-      this._data.checkedOffers.push(this._data.offerForThisType.find((offer) => `event-offer-${offer.title}` === evt.target.name));
+      this._data.checkedOffers.push(this._data.offerForThisType.find(({title}) => `event-offer-${title}` === evt.target.name));
     }
     this.updateData({offers: this._data.checkedOffers}, true);
   }

@@ -54,7 +54,7 @@ export default class Trip {
 
   get points() {
     const filterType = this._filterModel.getFilter();
-    const points = this._pointsModel.getPoints();
+    const points = this._pointsModel.points;
     const filteredPoints = filter[filterType](points);
 
     switch (this._currentSortType) {
@@ -68,11 +68,11 @@ export default class Trip {
   }
 
   get offers() {
-    return this._pointsModel.getOffers();
+    return this._pointsModel.offers;
   }
 
   get destinations() {
-    return this._pointsModel.getDestinations();
+    return this._pointsModel.destinations;
   }
 
   _onModelEvent(updateType, data) {

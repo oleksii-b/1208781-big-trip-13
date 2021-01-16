@@ -7,6 +7,7 @@ export default class Abstract {
     }
     this._element = null;
     this._callback = {};
+    this.isHidden = false;
   }
 
   getTemplate() {
@@ -21,17 +22,15 @@ export default class Abstract {
     return this._element;
   }
 
-  hide() {
+  removeElement() {
+    this._element = null;
+  }
 
-    this.getElement().parentElement.classList.add(`trip-events--hidden`);
+  hide() {
+    this.isHidden = true;
   }
 
   show() {
-
-    this.getElement().parentElement.classList.remove(`trip-events--hidden`);
-  }
-
-  removeElement() {
-    this._element = null;
+    this.isHidden = false;
   }
 }

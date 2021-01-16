@@ -21,15 +21,15 @@ export default class Points extends Observer {
     this._offers = offers;
   }
 
-  getPoints() {
+  get points() {
     return this._points;
   }
 
-  getOffers() {
+  get offers() {
     return this._offers;
   }
 
-  getDestinations() {
+  get destinations() {
     return this._destinations;
   }
 

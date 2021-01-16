@@ -191,7 +191,7 @@ export default class EditPoint extends SmartView {
     if (!this._destinations.some((destination) => destination.name === evt.target.value)) {
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
     } else {
-      const selectedDestination = (this._destinations.find((destination) => destination.name === evt.target.value));
+      const selectedDestination = (this._destinations.find(({name}) => name === evt.target.value));
       this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
       this.updateData(
           {
@@ -199,7 +199,6 @@ export default class EditPoint extends SmartView {
               city: evt.target.value,
               description: selectedDestination.description,
               pictures: selectedDestination.pictures,
-
             },
           });
     }
@@ -207,10 +206,10 @@ export default class EditPoint extends SmartView {
 
   _onOffersChange(evt) {
     evt.preventDefault();
-    if (this._data.checkedOffers.some((offer) => `event-offer-${offer.title}` === evt.target.name)) {
-      this._data.checkedOffers = this._data.checkedOffers.filter((offer) => `event-offer-${offer.title}` !== evt.target.name);
+    if (this._data.checkedOffers.some(({title}) => `event-offer-${title}` === evt.target.name)) {
+      this._data.checkedOffers = this._data.checkedOffers.filter(({title}) => `event-offer-${title}` !== evt.target.name);
     } else {
-      this._data.checkedOffers.push(this._data.offerForThisType.find((offer) => `event-offer-${offer.title}` === evt.target.name));
+      this._data.checkedOffers.push(this._data.offerForThisType.find(({title}) => `event-offer-${title}` === evt.target.name));
     }
     this.updateData({offers: this._data.checkedOffers}, true);
   }

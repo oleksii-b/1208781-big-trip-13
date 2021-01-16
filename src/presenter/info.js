@@ -31,7 +31,7 @@ export default class InfoPresenter {
   }
 
   get points() {
-    const points = this._pointsModel.getPoints();
+    const points = this._pointsModel.points;
 
     return points.sort(sortDefault);
   }
