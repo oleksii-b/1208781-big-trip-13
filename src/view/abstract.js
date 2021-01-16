@@ -7,10 +7,7 @@ export default class Abstract {
     }
     this._element = null;
     this._callback = {};
-  }
-
-  set isHidden(value) {
-    this.getElement().parentElement.classList.toggle(`trip-events--hidden`, value);
+    this.isHidden = false;
   }
 
   getTemplate() {
@@ -27,5 +24,13 @@ export default class Abstract {
 
   removeElement() {
     this._element = null;
+  }
+
+  hide() {
+    this.isHidden = true;
+  }
+
+  show() {
+    this.isHidden = false;
   }
 }
