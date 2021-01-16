@@ -39,7 +39,7 @@ export default class Api {
       url: `points/${point.id}`,
       method: Method.PUT,
       body: JSON.stringify(PointsModel.adaptToServer(point)),
-      headers: new Headers({"Content-Type": `application/json`}),
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then(Api.toJSON)
       .then(PointsModel.adaptToClient);
@@ -50,7 +50,7 @@ export default class Api {
       url: `points`,
       method: Method.POST,
       body: JSON.stringify(PointsModel.adaptToServer(point)),
-      headers: new Headers({"Content-Type": `application/json`})
+      headers: new Headers({'Content-Type': `application/json`}),
     })
       .then(Api.toJSON)
       .then(PointsModel.adaptToClient);
@@ -59,7 +59,7 @@ export default class Api {
   deletePoint(point) {
     return this._load({
       url: `points/${point.id}`,
-      method: Method.DELETE
+      method: Method.DELETE,
     });
   }
 

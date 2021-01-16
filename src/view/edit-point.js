@@ -67,13 +67,14 @@ const createEditPointTemplate = (data, types, destinations) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${eventType}
             </label>
-            <input class="event__input  event__input--destination" 
-            id="event-destination-1" 
-            type="text" 
-            name="event-destination" 
-            value=${city} 
-            list="destination-list-1"
-            ${isDisabled ? `disabled` : ``}
+            <input 
+              class="event__input  event__input--destination" 
+              id="event-destination-1" 
+              type="text" 
+              name="event-destination" 
+              value=${city} 
+              list="destination-list-1"
+              ${isDisabled ? `disabled` : ``}
             >
             <datalist id="destination-list-1">
               ${destinationCities}
@@ -82,21 +83,23 @@ const createEditPointTemplate = (data, types, destinations) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" 
-            id="event-start-time-1" 
-            type="text" 
-            name="event-start-time" 
-            value="${start.format(`DD/MM/YY HH:mm`)}"
-            ${isDisabled ? `disabled` : ``}
+            <input 
+              class="event__input  event__input--time" 
+              id="event-start-time-1" 
+              type="text" 
+              name="event-start-time" 
+              value="${start.format(`DD/MM/YY HH:mm`)}"
+              ${isDisabled ? `disabled` : ``}
             >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" 
-            id="event-end-time-1" 
-            type="text" 
-            name="event-end-time" 
-            value="${finish.format(`DD/MM/YY HH:mm`)}"
-            ${isDisabled ? `disabled` : ``}
+            <input 
+              class="event__input  event__input--time" 
+              id="event-end-time-1" 
+              type="text" 
+              name="event-end-time" 
+              value="${finish.format(`DD/MM/YY HH:mm`)}"
+              ${isDisabled ? `disabled` : ``}
             >
           </div>
 
@@ -106,11 +109,11 @@ const createEditPointTemplate = (data, types, destinations) => {
               &euro;
             </label>
             <input class="event__input  event__input--price" 
-            id="event-price-1" 
-            type="number" 
-            name="event-price" 
-            value="${price}"
-            ${isDisabled ? `disabled` : ``}
+              id="event-price-1" 
+              type="number" 
+              name="event-price" 
+              value="${price}"
+              ${isDisabled ? `disabled` : ``}
             >
           </div>
 
