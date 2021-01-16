@@ -1,5 +1,5 @@
 import SmartView from './smart';
-import {BAR_HEIGHT} from '../const';
+import {BAR_HEIGHT} from '../utils/const';
 import {renderMoneyChart, renderTimeChart, renderTypeChart} from '../utils/stat';
 
 const createStatTemplate = () => {

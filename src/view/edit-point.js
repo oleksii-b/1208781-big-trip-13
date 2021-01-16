@@ -4,7 +4,7 @@ import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 import "../../node_modules/flatpickr/dist/flatpickr.min.css";
 
-const createOfferTemplate = (offersForThisType, offers) => {
+const createOfferTemplate = (offersForThisType, offers, isDisabled) => {
   return (
     `<section class="event__section  event__section--offers">
       <h3 class="event__section-title  event__section-title--offers">Offers</h3>
@@ -22,6 +22,7 @@ const createOfferTemplate = (offersForThisType, offers) => {
             type="checkbox" 
             name="event-offer-${title}"
             ${checked ? `checked` : ``}
+            ${isDisabled ? `disabled` : ``}
           >
           <label class="event__offer-label" for="${id}">
             <span class="event__offer-title">${title}</span>
@@ -37,11 +38,11 @@ const createOfferTemplate = (offersForThisType, offers) => {
 };
 
 const createEditPointTemplate = (data, types, destinations) => {
-  const {eventType, destination: {city, pictures, description}, price, date: {start, finish}, offers} = data;
+  const {eventType, destination: {city, pictures, description}, price, date: {start, finish}, offers, isDisabled, isSaving, isDeleting} = data;
   const destinationCities = createCityTemplate(destinations);
   const photoTemplate = pictures.length ? createPhotoTemplate(pictures) : ``;
 
-  const offersForThisType = types.filter((offer) => offer.type === eventType)[0].offers;
+  const offersForThisType = types.filter(({type}) => type === eventType)[0].offers;
 
   return (
     `<li class="trip-events__item">
@@ -57,7 +58,7 @@ const createEditPointTemplate = (data, types, destinations) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${types.map((elem) => createEventTypeListTemplate(elem.type)).join(``)}                
+                ${types.map((elem) => createEventTypeListTemplate(elem.type, isDisabled)).join(``)}                
               </fieldset>
             </div>
           </div>
@@ -66,7 +67,14 @@ const createEditPointTemplate = (data, types, destinations) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${eventType}
             </label>
-            <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${city} list="destination-list-1">
+            <input class="event__input  event__input--destination" 
+            id="event-destination-1" 
+            type="text" 
+            name="event-destination" 
+            value=${city} 
+            list="destination-list-1"
+            ${isDisabled ? `disabled` : ``}
+            >
             <datalist id="destination-list-1">
               ${destinationCities}
             </datalist>
@@ -74,10 +82,22 @@ const createEditPointTemplate = (data, types, destinations) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${start.format(`DD/MM/YY HH:mm`)}">
+            <input class="event__input  event__input--time" 
+            id="event-start-time-1" 
+            type="text" 
+            name="event-start-time" 
+            value="${start.format(`DD/MM/YY HH:mm`)}"
+            ${isDisabled ? `disabled` : ``}
+            >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${finish.format(`DD/MM/YY HH:mm`)}">
+            <input class="event__input  event__input--time" 
+            id="event-end-time-1" 
+            type="text" 
+            name="event-end-time" 
+            value="${finish.format(`DD/MM/YY HH:mm`)}"
+            ${isDisabled ? `disabled` : ``}
+            >
           </div>
 
           <div class="event__field-group  event__field-group--price">
@@ -85,17 +105,23 @@ const createEditPointTemplate = (data, types, destinations) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price" id="event-price-1" type="number" name="event-price" value="${price}">
+            <input class="event__input  event__input--price" 
+            id="event-price-1" 
+            type="number" 
+            name="event-price" 
+            value="${price}"
+            ${isDisabled ? `disabled` : ``}
+            >
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-          <button class="event__reset-btn" type="reset">Delete</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? `Saving...` : `Save`}</button>
+          <button class="event__reset-btn" type="reset">${isDeleting ? `Deleting...` : `Delete`}</button>
           <button class="event__rollup-btn" type="button">
             <span class="visually-hidden">Open event</span>
           </button>
         </header>
         <section class="event__details">
-          ${offersForThisType.length ? createOfferTemplate(offersForThisType, offers) : ``} 
+          ${offersForThisType.length ? createOfferTemplate(offersForThisType, offers, isDisabled) : ``} 
           ${createDestinationTemplate(description, photoTemplate)}
         </section>
       </form>
@@ -130,30 +156,8 @@ export default class EditPoint extends SmartView {
     return createEditPointTemplate(this._data, this._offers, this._destinations);
   }
 
-  static parsePointToData(point, offers) {
-    const checkedOffers = JSON.parse(JSON.stringify(point.offers));
-    const offerForThisType = offers.filter((offer) => offer.type === point.eventType)[0].offers;
-    return Object.assign(
-        {},
-        point,
-        {
-          offerForThisType,
-          checkedOffers,
-        }
-    );
-  }
-
-  static parseDataToPoint(data) {
-    data = Object.assign({},
-        data,
-        {
-          offers: data.checkedOffers,
-        }
-    );
-    delete data.offerForThisType;
-    delete data.checkedOffers;
-
-    return data;
+  reset(point, offers) {
+    this.updateData(EditPoint.parsePointToData(point, offers));
   }
 
   removeElement() {
@@ -170,58 +174,12 @@ export default class EditPoint extends SmartView {
     }
   }
 
-  _onFormSubmit(evt) {
-    evt.preventDefault();
-    this._callback.submitForm(EditPoint.parseDataToPoint(this._data));
-  }
-
-  _onFormClose(evt) {
-    evt.preventDefault();
-    this._callback.closeForm();
-  }
-
-  _onEventTypeChange(evt) {
-    evt.preventDefault();
-    const offerForThisType = this._offers.filter((offer) => offer.type === evt.target.value)[0].offers;
-    this.updateData({eventType: evt.target.value, offerForThisType, checkedOffers: []});
-  }
-
-  _onDestinationChange(evt) {
-    evt.preventDefault();
-    if (!this._destinations.some((destination) => destination.name === evt.target.value)) {
-      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
-    } else {
-      const selectedDestination = (this._destinations.find(({name}) => name === evt.target.value));
-      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
-      this.updateData(
-          {
-            destination: {
-              city: evt.target.value,
-              description: selectedDestination.description,
-              pictures: selectedDestination.pictures,
-            },
-          });
-    }
-  }
-
-  _onOffersChange(evt) {
-    evt.preventDefault();
-    if (this._data.checkedOffers.some(({title}) => `event-offer-${title}` === evt.target.name)) {
-      this._data.checkedOffers = this._data.checkedOffers.filter(({title}) => `event-offer-${title}` !== evt.target.name);
-    } else {
-      this._data.checkedOffers.push(this._data.offerForThisType.find(({title}) => `event-offer-${title}` === evt.target.name));
-    }
-    this.updateData({offers: this._data.checkedOffers}, true);
-  }
-
-  _onPriceInput(evt) {
-    evt.preventDefault();
-    this.updateData({price: evt.target.value}, true);
-  }
-
-  _onFormDeleteClick(evt) {
-    evt.preventDefault();
-    this._callback.deleteForm(EditPoint.parseDataToPoint(this._data));
+  restoreHandlers() {
+    this._setInnerHandlers();
+    this.setFormCloseHandler(this._callback.closeForm);
+    this.setFormSubmitHandler(this._callback.submitForm);
+    this._setDatePickers();
+    this.setDeleteClickHandler(this._callback.deleteForm);
   }
 
   _setDatePickers() {
@@ -257,6 +215,70 @@ export default class EditPoint extends SmartView {
     );
   }
 
+  _setInnerHandlers() {
+    this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
+    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
+    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._onPriceInput);
+
+    if (this._data.offerForThisType.length) {
+      this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._onOffersChange);
+    }
+  }
+
+  _onFormSubmit(evt) {
+    evt.preventDefault();
+    this._callback.submitForm(EditPoint.parseDataToPoint(this._data));
+  }
+
+  _onFormClose(evt) {
+    evt.preventDefault();
+    this._callback.closeForm();
+  }
+
+  _onEventTypeChange(evt) {
+    evt.preventDefault();
+    const offerForThisType = this._offers.filter(({type}) => type === evt.target.value)[0].offers;
+    this.updateData({eventType: evt.target.value, offerForThisType, checkedOffers: []});
+  }
+
+  _onDestinationChange(evt) {
+    evt.preventDefault();
+    if (!this._destinations.some(({name}) => name === evt.target.value)) {
+      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(`Введите город из списка`);
+    } else {
+      const selectedDestination = (this._destinations.find(({name}) => name === evt.target.value));
+      this.getElement().querySelector(`.event__input--destination`).setCustomValidity(``);
+      this.updateData(
+          {
+            destination: {
+              city: evt.target.value,
+              description: selectedDestination.description,
+              pictures: selectedDestination.pictures,
+            },
+          });
+    }
+  }
+
+  _onOffersChange(evt) {
+    evt.preventDefault();
+    if (this._data.checkedOffers.some(({title}) => `event-offer-${title}` === evt.target.name)) {
+      this._data.checkedOffers = this._data.checkedOffers.filter(({title}) => `event-offer-${title}` !== evt.target.name);
+    } else {
+      this._data.checkedOffers.push(this._data.offerForThisType.find(({title}) => `event-offer-${title}` === evt.target.name));
+    }
+    this.updateData({offers: this._data.checkedOffers}, true);
+  }
+
+  _onPriceInput(evt) {
+    evt.preventDefault();
+    this.updateData({price: evt.target.value}, true);
+  }
+
+  _onFormDeleteClick(evt) {
+    evt.preventDefault();
+    this._callback.deleteForm(EditPoint.parseDataToPoint(this._data));
+  }
+
   _onStartDateChange(userDate) {
     this.updateData({
       date: {
@@ -277,24 +299,6 @@ export default class EditPoint extends SmartView {
     }, true);
   }
 
-  _setInnerHandlers() {
-    this.getElement().querySelector(`.event__type-group`).addEventListener(`change`, this._onEventTypeChange);
-    this.getElement().querySelector(`.event__input--destination`).addEventListener(`input`, this._onDestinationChange);
-    this.getElement().querySelector(`.event__input--price`).addEventListener(`input`, this._onPriceInput);
-
-    if (this._data.offerForThisType.length) {
-      this.getElement().querySelector(`.event__available-offers`).addEventListener(`change`, this._onOffersChange);
-    }
-  }
-
-  restoreHandlers() {
-    this._setInnerHandlers();
-    this.setFormCloseHandler(this._callback.closeForm);
-    this.setFormSubmitHandler(this._callback.submitForm);
-    this._setDatePickers();
-    this.setDeleteClickHandler(this._callback.deleteForm);
-  }
-
   setFormSubmitHandler(callback) {
     this._callback.submitForm = callback;
     this.getElement().querySelector(`form`).addEventListener(`submit`, this._onFormSubmit);
@@ -310,7 +314,35 @@ export default class EditPoint extends SmartView {
     this.getElement().querySelector(`.event__rollup-btn`).addEventListener(`click`, this._onFormClose);
   }
 
-  reset(point, offers) {
-    this.updateData(EditPoint.parsePointToData(point, offers));
+  static parseDataToPoint(data) {
+    data = Object.assign({},
+        data,
+        {
+          offers: data.checkedOffers,
+        }
+    );
+    delete data.offerForThisType;
+    delete data.checkedOffers;
+    delete data.isDisabled;
+    delete data.isSaving;
+    delete data.isDeleting;
+
+    return data;
+  }
+
+  static parsePointToData(point, offers) {
+    const checkedOffers = JSON.parse(JSON.stringify(point.offers));
+    const offerForThisType = offers.filter(({type}) => type === point.eventType)[0].offers;
+    return Object.assign(
+        {},
+        point,
+        {
+          offerForThisType,
+          checkedOffers,
+          isDisabled: false,
+          isSaving: false,
+          isDeleting: false,
+        }
+    );
   }
 }
