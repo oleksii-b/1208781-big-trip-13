@@ -75,13 +75,13 @@ export default class Point {
       case State.SAVING:
         this._editPointComponent.updateData({
           isDisabled: true,
-          isSaving: true
+          isSaving: true,
         });
         break;
       case State.DELETING:
         this._editPointComponent.updateData({
           isDisabled: true,
-          isDeleting: true
+          isDeleting: true,
         });
         break;
       case State.ABORTING:
@@ -129,7 +129,8 @@ export default class Point {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
-        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite}));
+        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite})
+    );
   }
 
   _onFormPressEsc(evt) {
@@ -153,7 +154,8 @@ export default class Point {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
-        update);
+        update
+    );
   }
 
   _onDeleteClick(point) {

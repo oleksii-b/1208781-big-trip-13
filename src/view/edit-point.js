@@ -2,7 +2,7 @@ import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, cr
 import SmartView from './smart';
 import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
-import "../../node_modules/flatpickr/dist/flatpickr.min.css";
+import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
 const createOfferTemplate = (offersForThisType, offers, isDisabled) => {
   return (
@@ -186,6 +186,8 @@ export default class EditPoint extends SmartView {
   }
 
   _setDatePickers() {
+    const {date: {start, finish}} = this._data;
+
     if (this._startDatepicker) {
       this._startDatepicker.destroy();
       this._startDatepicker = null;
@@ -201,7 +203,7 @@ export default class EditPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `y/m/d H:i`,
-          defaultDate: this._data.date.start.toDate(),
+          defaultDate: start.toDate(),
           onChange: this._onStartDateChange,
         }
     );
@@ -211,8 +213,8 @@ export default class EditPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `y/m/d H:i`,
-          defaultDate: this._data.date.finish.toDate(),
-          minDate: this._data.date.start.toDate(),
+          defaultDate: finish.toDate(),
+          minDate: start.toDate(),
           onChange: this._onEndDateChange,
         }
     );

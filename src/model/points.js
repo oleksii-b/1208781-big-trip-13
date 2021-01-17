@@ -52,7 +52,6 @@ export default class Points extends Observer {
 
   addPoint(updateType, update) {
     this._points.unshift(update);
-
     this._notify(updateType, update);
   }
 

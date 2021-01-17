@@ -39,10 +39,10 @@ const createOfferTemplate = (offers, isDisabled) => {
       return (
         `<div class="event__offer-selector">
           <input class="event__offer-checkbox  visually-hidden" 
-          id="${id}" 
-          type="checkbox" 
-          name="event-offer-${title}"
-          ${isDisabled ? `disabled` : ``}
+            id="${id}" 
+            type="checkbox" 
+            name="event-offer-${title}"
+            ${isDisabled ? `disabled` : ``}
           >
           <label class="event__offer-label" for="${id}">
             <span class="event__offer-title">${title}</span>
@@ -119,7 +119,8 @@ const createNewPointTemplate = (data, offers, destinations) => {
               name="event-destination" 
               value="${city}" 
               list="destination-list-1"
-              ${isDisabled ? `disabled` : ``}>
+              ${isDisabled ? `disabled` : ``}
+            >
             <datalist id="destination-list-1">
               ${destinationCities}
             </datalist>
@@ -200,6 +201,8 @@ export default class NewPoint extends SmartView {
   }
 
   _setDatePickers() {
+    const {date: {start, finish}} = this._data;
+
     if (this._startDatepicker) {
       this._startDatepicker.destroy();
       this._startDatepicker = null;
@@ -215,7 +218,7 @@ export default class NewPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `y/m/d H:i`,
-          defaultDate: this._data.date.start.toDate(),
+          defaultDate: start.toDate(),
           onChange: this._onStartDateChange,
         }
     );
@@ -225,8 +228,8 @@ export default class NewPoint extends SmartView {
         {
           enableTime: true,
           dateFormat: `y/m/d H:i`,
-          defaultDate: this._data.date.finish.toDate(),
-          minDate: this._data.date.start.toDate(),
+          defaultDate: finish.toDate(),
+          minDate: start.toDate(),
           onChange: this._onEndDateChange,
         }
     );
