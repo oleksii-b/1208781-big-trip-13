@@ -1,6 +1,5 @@
 import {createCityTemplate, createEventTypeListTemplate, createPhotoTemplate, createDestinationTemplate} from './new-point';
 import SmartView from './smart';
-import flatpickr from 'flatpickr';
 import dayjs from 'dayjs';
 import '../../node_modules/flatpickr/dist/flatpickr.min.css';
 
@@ -183,41 +182,6 @@ export default class EditPoint extends SmartView {
     this.setFormSubmitHandler(this._callback.submitForm);
     this._setDatePickers();
     this.setDeleteClickHandler(this._callback.deleteForm);
-  }
-
-  _setDatePickers() {
-    const {date: {start, finish}} = this._data;
-
-    if (this._startDatepicker) {
-      this._startDatepicker.destroy();
-      this._startDatepicker = null;
-    }
-
-    if (this._endDatepicker) {
-      this._endDatepicker.destroy();
-      this._endDatepicker = null;
-    }
-
-    this._startDatepicker = flatpickr(
-        this.getElement().querySelector(`#event-start-time-1`),
-        {
-          enableTime: true,
-          dateFormat: `y/m/d H:i`,
-          defaultDate: start.toDate(),
-          onChange: this._onStartDateChange,
-        }
-    );
-
-    this._endDatepicker = flatpickr(
-        this.getElement().querySelector(`#event-end-time-1`),
-        {
-          enableTime: true,
-          dateFormat: `y/m/d H:i`,
-          defaultDate: finish.toDate(),
-          minDate: start.toDate(),
-          onChange: this._onEndDateChange,
-        }
-    );
   }
 
   _setInnerHandlers() {
