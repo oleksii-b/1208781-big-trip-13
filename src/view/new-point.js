@@ -11,15 +11,15 @@ export const createEventTypeListTemplate = (eventType, isDisabled) => {
 
   return (
     `<div class="event__type-item">
-      <input 
-        id="event-type-${eventTypeLowerCase}-1" 
-        class="event__type-input  visually-hidden" 
-        type="radio" 
-        name="event-type" 
+      <input
+        id="event-type-${eventTypeLowerCase}-1"
+        class="event__type-input  visually-hidden"
+        type="radio"
+        name="event-type"
         value="${eventTypeLowerCase}"
         ${isDisabled ? `disabled` : ``}
       >
-      <label class="event__type-label  event__type-label--${eventTypeLowerCase}" 
+      <label class="event__type-label  event__type-label--${eventTypeLowerCase}"
       for="event-type-${eventTypeLowerCase}-1">${eventType}
       </label>
     </div>`
@@ -37,10 +37,10 @@ const createOfferTemplate = (offers, isDisabled) => {
 
       return (
         `<div class="event__offer-selector">
-          <input 
-            class="event__offer-checkbox  visually-hidden" 
-            id="${id}" 
-            type="checkbox" 
+          <input
+            class="event__offer-checkbox  visually-hidden"
+            id="${id}"
+            type="checkbox"
             name="event-offer-${title}"
             ${isDisabled ? `disabled` : ``}
           >
@@ -112,12 +112,12 @@ const createNewPointTemplate = (data, offers, destinations) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${eventType}
             </label>
-            <input 
-              class="event__input  event__input--destination" 
-              id="event-destination-1" 
-              type="text" 
-              name="event-destination" 
-              value="${city}" 
+            <input
+              class="event__input  event__input--destination"
+              id="event-destination-1"
+              type="text"
+              name="event-destination"
+              value="${city}"
               list="destination-list-1"
               ${isDisabled ? `disabled` : ``}
             >
@@ -128,21 +128,21 @@ const createNewPointTemplate = (data, offers, destinations) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input 
-              class="event__input  event__input--time" 
-              id="event-start-time-1" 
-              type="text" 
-              name="event-start-time" 
+            <input
+              class="event__input  event__input--time"
+              id="event-start-time-1"
+              type="text"
+              name="event-start-time"
               value="${start.format(`DD/MM/YY HH:mm`)}"
               ${isDisabled ? `disabled` : ``}
             >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input 
-              class="event__input  event__input--time" 
-              id="event-end-time-1" 
-              type="text" 
-              name="event-end-time" 
+            <input
+              class="event__input  event__input--time"
+              id="event-end-time-1"
+              type="text"
+              name="event-end-time"
               value="${finish.format(`DD/MM/YY HH:mm`)}"
               ${isDisabled ? `disabled` : ``}
             >
@@ -153,22 +153,22 @@ const createNewPointTemplate = (data, offers, destinations) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input 
-              class="event__input  event__input--price" 
-              id="event-price-1" 
-              type="text" 
-              name="event-price" 
-              value="" 
+            <input
+              class="event__input  event__input--price"
+              id="event-price-1"
+              type="text"
+              name="event-price"
+              value=""
               ${isDisabled ? `disabled` : ``}
             >
           </div>
 
-          <button class="event__save-btn  btn  btn--blue" type="submit">${isSaving ? `Saving...` : `Save`}</button>
+          <button class="event__save-btn  btn  btn--blue" type="submit" ${isSaving ? `disabled` : ``}>${isSaving ? `Saving...` : `Save`}</button>
           <button class="event__reset-btn" type="reset">Cancel</button>
         </header>
         <section class="event__details">
           ${offersForThisType.length ? createOfferTemplate(offersForThisType, isDisabled) : ``}
-          ${createDestinationTemplate(description, photoTemplate)}      
+          ${createDestinationTemplate(description, photoTemplate)}
         </section>
       </form>
     </li>`
