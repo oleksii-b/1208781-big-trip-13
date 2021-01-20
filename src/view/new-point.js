@@ -37,7 +37,8 @@ const createOfferTemplate = (offers, isDisabled) => {
 
       return (
         `<div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" 
+          <input 
+            class="event__offer-checkbox  visually-hidden" 
             id="${id}" 
             type="checkbox" 
             name="event-offer-${title}"

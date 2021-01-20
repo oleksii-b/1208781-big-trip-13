@@ -34,7 +34,6 @@ export default class Points extends Observer {
     this._offers = offers;
   }
 
-
   getFilteredPoints(filterType) {
     return filter[filterType](this._points);
   }

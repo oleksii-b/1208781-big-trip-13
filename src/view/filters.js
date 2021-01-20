@@ -1,6 +1,5 @@
 import AbstractView from './abstract';
 
-
 const createFiltersTemplate = (filters, currentFilter, noFilteredPoints) => {
 
   return (
