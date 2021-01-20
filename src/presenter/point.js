@@ -2,6 +2,8 @@ import EditPointView from '../view/edit-point';
 import PointView from '../view/point';
 import {render, RenderPosition, replace, remove} from '../utils/render';
 import {UserAction, UpdateType} from '../utils/const';
+import {isOnline} from '../utils/common';
+import {toast} from '../utils/toast/toast';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
@@ -151,6 +153,10 @@ export default class Point {
   }
 
   _onFormSubmit(update) {
+    if (!isOnline()) {
+      toast(`You can't save task offline`);
+      return;
+    }
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,

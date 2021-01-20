@@ -15,10 +15,10 @@ const createOfferTemplate = (offersForThisType, offers, isDisabled) => {
 
       return (
         `<div class="event__offer-selector">
-          <input
-            class="event__offer-checkbox  visually-hidden"
-            id="${id}"
-            type="checkbox"
+          <input 
+            class="event__offer-checkbox  visually-hidden" 
+            id="${id}" 
+            type="checkbox" 
             name="event-offer-${title}"
             ${checked ? `checked` : ``}
             ${isDisabled ? `disabled` : ``}
@@ -57,7 +57,7 @@ const createEditPointTemplate = (data, types, destinations) => {
             <div class="event__type-list">
               <fieldset class="event__type-group">
                 <legend class="visually-hidden">Event type</legend>
-                ${types.map((elem) => createEventTypeListTemplate(elem.type, isDisabled)).join(``)}
+                ${types.map((elem) => createEventTypeListTemplate(elem.type, isDisabled)).join(``)}                
               </fieldset>
             </div>
           </div>
@@ -66,12 +66,12 @@ const createEditPointTemplate = (data, types, destinations) => {
             <label class="event__label  event__type-output" for="event-destination-1">
               ${eventType}
             </label>
-            <input
-              class="event__input  event__input--destination"
-              id="event-destination-1"
-              type="text"
-              name="event-destination"
-              value=${city}
+            <input 
+              class="event__input  event__input--destination" 
+              id="event-destination-1" 
+              type="text" 
+              name="event-destination" 
+              value=${city} 
               list="destination-list-1"
               ${isDisabled ? `disabled` : ``}
             >
@@ -82,21 +82,21 @@ const createEditPointTemplate = (data, types, destinations) => {
 
           <div class="event__field-group  event__field-group--time">
             <label class="visually-hidden" for="event-start-time-1">From</label>
-            <input
-              class="event__input  event__input--time"
-              id="event-start-time-1"
-              type="text"
-              name="event-start-time"
+            <input 
+              class="event__input  event__input--time" 
+              id="event-start-time-1" 
+              type="text" 
+              name="event-start-time" 
               value="${start.format(`DD/MM/YY HH:mm`)}"
               ${isDisabled ? `disabled` : ``}
             >
             &mdash;
             <label class="visually-hidden" for="event-end-time-1">To</label>
-            <input
-              class="event__input  event__input--time"
-              id="event-end-time-1"
-              type="text"
-              name="event-end-time"
+            <input 
+              class="event__input  event__input--time" 
+              id="event-end-time-1" 
+              type="text" 
+              name="event-end-time" 
               value="${finish.format(`DD/MM/YY HH:mm`)}"
               ${isDisabled ? `disabled` : ``}
             >
@@ -107,10 +107,10 @@ const createEditPointTemplate = (data, types, destinations) => {
               <span class="visually-hidden">Price</span>
               &euro;
             </label>
-            <input class="event__input  event__input--price"
-              id="event-price-1"
-              type="number"
-              name="event-price"
+            <input class="event__input  event__input--price" 
+              id="event-price-1" 
+              type="number" 
+              name="event-price" 
               value="${price}"
               ${isDisabled ? `disabled` : ``}
             >
@@ -123,7 +123,7 @@ const createEditPointTemplate = (data, types, destinations) => {
           </button>
         </header>
         <section class="event__details">
-          ${offersForThisType.length ? createOfferTemplate(offersForThisType, offers, isDisabled) : ``}
+          ${offersForThisType.length ? createOfferTemplate(offersForThisType, offers, isDisabled) : ``} 
           ${createDestinationTemplate(description, photoTemplate)}
         </section>
       </form>
