@@ -1,11 +1,17 @@
 import EditPointView from '../view/edit-point';
 import PointView from '../view/point';
 import {render, RenderPosition, replace, remove} from '../utils/render';
-import {UserAction, UpdateType} from '../const';
+import {UserAction, UpdateType} from '../utils/const';
 
 const Mode = {
   DEFAULT: `DEFAULT`,
   EDITING: `EDITING`,
+};
+
+export const State = {
+  SAVING: `SAVING`,
+  DELETING: `DELETING`,
+  ABORTING: `ABORTING`,
 };
 
 export default class Point {
@@ -51,17 +57,38 @@ export default class Point {
     this._updatePoint();
   }
 
-  _updatePoint() {
-    if (this._mode === Mode.DEFAULT) {
-      replace(this._pointComponent, this._prevPointComponent);
-    }
+  destroy() {
+    remove(this._pointComponent);
+    remove(this._editPointComponent);
+  }
 
-    if (this._mode === Mode.EDITING) {
-      replace(this._editPointComponent, this._prevEditPointComponent);
-    }
+  setViewState(state) {
+    const resetFormState = () => {
+      this._editPointComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
 
-    remove(this._prevPointComponent);
-    remove(this._prevEditPointComponent);
+    switch (state) {
+      case State.SAVING:
+        this._editPointComponent.updateData({
+          isDisabled: true,
+          isSaving: true,
+        });
+        break;
+      case State.DELETING:
+        this._editPointComponent.updateData({
+          isDisabled: true,
+          isDeleting: true,
+        });
+        break;
+      case State.ABORTING:
+        this._pointComponent.shake(resetFormState);
+        this._editPointComponent.shake(resetFormState);
+        break;
+    }
   }
 
   resetView() {
@@ -71,16 +98,18 @@ export default class Point {
     }
   }
 
-  destroy() {
-    remove(this._pointComponent);
-    remove(this._editPointComponent);
-  }
+  _updatePoint() {
+    if (this._mode === Mode.DEFAULT) {
+      replace(this._pointComponent, this._prevPointComponent);
+    }
 
-  _onFavoriteClick() {
-    this._changeData(
-        UserAction.UPDATE_POINT,
-        UpdateType.MINOR,
-        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite}));
+    if (this._mode === Mode.EDITING) {
+      replace(this._editPointComponent, this._prevEditPointComponent);
+      this._mode = Mode.DEFAULT;
+    }
+
+    remove(this._prevPointComponent);
+    remove(this._prevEditPointComponent);
   }
 
   _replacePointToForm() {
@@ -94,6 +123,14 @@ export default class Point {
     replace(this._pointComponent, this._editPointComponent);
     document.removeEventListener(`keydown`, this._onFormPressEsc);
     this._mode = Mode.DEFAULT;
+  }
+
+  _onFavoriteClick() {
+    this._changeData(
+        UserAction.UPDATE_POINT,
+        UpdateType.MINOR,
+        Object.assign({}, this._point, {isFavorite: !this._point.isFavorite})
+    );
   }
 
   _onFormPressEsc(evt) {
@@ -117,8 +154,8 @@ export default class Point {
     this._changeData(
         UserAction.UPDATE_POINT,
         UpdateType.MINOR,
-        update);
-    this._replaceFormToPoint();
+        update
+    );
   }
 
   _onDeleteClick(point) {

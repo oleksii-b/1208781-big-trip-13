@@ -7,12 +7,17 @@ export default class InfoPresenter {
     this._container = container;
     this._pointsModel = pointsModel;
     this._filterModel = filterModel;
-
     this._infoComponent = null;
 
     this._onModelEvent = this._onModelEvent.bind(this);
     this._pointsModel.addObserver(this._onModelEvent);
     this._filterModel.addObserver(this._onModelEvent);
+  }
+
+  get points() {
+    const points = this._pointsModel.points;
+
+    return points.sort(sortDefault);
   }
 
   init() {
@@ -28,12 +33,6 @@ export default class InfoPresenter {
 
     replace(this._infoComponent, prevInfoComponent);
     remove(prevInfoComponent);
-  }
-
-  get points() {
-    const points = this._pointsModel.points;
-
-    return points.sort(sortDefault);
   }
 
   _onModelEvent() {

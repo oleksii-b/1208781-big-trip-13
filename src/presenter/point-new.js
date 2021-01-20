@@ -1,6 +1,6 @@
 import NewPointView from '../view/new-point';
 import {remove, render, RenderPosition} from '../utils/render';
-import {UserAction, UpdateType, newPoint} from '../const';
+import {UserAction, UpdateType, newPoint} from '../utils/const';
 import {nanoid} from 'nanoid';
 
 export default class PointNew {
@@ -39,14 +39,31 @@ export default class PointNew {
     }
   }
 
+  setSaving() {
+    this._newPointComponent.updateData({
+      isDisabled: true,
+      isSaving: true,
+    });
+  }
+
+  setAborting() {
+    const resetFormState = () => {
+      this._newPointComponent.updateData({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this._newPointComponent.shake(resetFormState);
+  }
+
   _onFormSubmit(point) {
     this._changeData(
         UserAction.ADD_POINT,
         UpdateType.MINOR,
         Object.assign({id: nanoid()}, point)
     );
-
-    this.destroy();
   }
 
   _onFormPressEsc(evt) {

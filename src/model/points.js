@@ -1,10 +1,23 @@
 import Observer from '../utils/observer';
 import dayjs from 'dayjs';
+import {filter} from '../utils/filter';
 
 export default class Points extends Observer {
   constructor() {
     super();
     this._points = [];
+  }
+
+  get points() {
+    return this._points;
+  }
+
+  get offers() {
+    return this._offers;
+  }
+
+  get destinations() {
+    return this._destinations;
   }
 
   setPoints(updateType, points) {
@@ -21,16 +34,35 @@ export default class Points extends Observer {
     this._offers = offers;
   }
 
-  get points() {
-    return this._points;
+  getFilteredPoints(filterType) {
+    return filter[filterType](this._points);
   }
 
-  get offers() {
-    return this._offers;
+  updatePoint(updateType, update) {
+    const index = this._points.findIndex(({id}) => id === update.id);
+
+    if (index === -1) {
+      throw new Error(`Can't update unexisting point`);
+    }
+
+    this._points = this._points.map((point, i) => i === index ? update : point);
+    this._notify(updateType, update);
   }
 
-  get destinations() {
-    return this._destinations;
+  addPoint(updateType, update) {
+    this._points.unshift(update);
+    this._notify(updateType, update);
+  }
+
+  deletePoint(updateType, update) {
+    const index = this._points.findIndex(({id}) => id === update.id);
+
+    if (index === -1) {
+      throw new Error(`Can't delete unexisting point`);
+    }
+
+    this._points.splice(index, 1);
+    this._notify(updateType);
   }
 
   static adaptToClient(point) {
@@ -90,37 +122,5 @@ export default class Points extends Observer {
     delete adaptedPoint.destination.city;
 
     return adaptedPoint;
-  }
-
-  updatePoint(updateType, update) {
-    const index = this._points.findIndex((point) => point.id === update.id);
-
-    if (index === -1) {
-      throw new Error(`Can't update unexisting point`);
-    }
-
-    this._points = this._points.map((point, i) => i === index ? update : point);
-    this._notify(updateType, update);
-  }
-
-  addPoint(updateType, update) {
-    this._points.unshift(update);
-
-    this._notify(updateType, update);
-  }
-
-  deletePoint(updateType, update) {
-    const index = this._points.findIndex((point) => point.id === update.id);
-
-    if (index === -1) {
-      throw new Error(`Can't delete unexisting point`);
-    }
-
-    this._points = [
-      ...this._points.slice(0, index),
-      ...this._points.slice(index + 1)
-    ];
-
-    this._notify(updateType);
   }
 }

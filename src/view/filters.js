@@ -1,7 +1,7 @@
 import AbstractView from './abstract';
 
+const createFiltersTemplate = (filters, currentFilter, noFilteredPoints) => {
 
-const createFiltersTemplate = (filters, currentFilter) => {
   return (
     `<form class="trip-filters" action="#" method="get">
       ${filters.map(({type, name}) => {
@@ -14,6 +14,7 @@ const createFiltersTemplate = (filters, currentFilter) => {
             name="trip-filter" 
             value="${type}" 
             ${currentFilter === type ? `checked` : ``}
+            ${noFilteredPoints[type] ? `` : `disabled`}
           >
           <label class="trip-filters__filter-label" for="filter-${type}">${name}</label>
         </div>`
@@ -25,16 +26,17 @@ const createFiltersTemplate = (filters, currentFilter) => {
 };
 
 export default class Filters extends AbstractView {
-  constructor(filters, currentFilterType) {
+  constructor(filters, currentFilterType, noFilteredPoints) {
     super();
     this._currentFilterType = currentFilterType;
     this._filters = filters;
+    this._noFilteredPoints = noFilteredPoints;
 
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
 
   }
   getTemplate() {
-    return createFiltersTemplate(this._filters, this._currentFilterType);
+    return createFiltersTemplate(this._filters, this._currentFilterType, this._noFilteredPoints);
   }
 
   _onFilterTypeChange(evt) {
