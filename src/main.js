@@ -14,7 +14,7 @@ import {toast} from './utils/toast/toast';
 import Store from './api/store';
 import Provider from './api/provider';
 
-const AUTHORIZATION = `Basic 237sdf3sdf3244sdf`;
+const AUTHORIZATION = `Basic 237sdf3ssf23df3244sdf`;
 const END_POINT = `https://13.ecmascript.pages.academy/big-trip`;
 const STORE_PREFIX = `bigtrip-localstorage`;
 const STORE_VER = `v13`;
