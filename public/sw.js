@@ -54,7 +54,8 @@ self.addEventListener(`activate`, (evt) => {
                       }
 
                       return null;
-                    })
+                    }
+                )
                   .filter((key) => key !== null)
             )
         )
