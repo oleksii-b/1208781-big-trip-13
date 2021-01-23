@@ -12,18 +12,18 @@ export default class Filter {
     this._noFilteredPoints = null;
     this._filterComponent = null;
 
-    this._onModelEvent = this._onModelEvent.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
     this._onFilterTypeChange = this._onFilterTypeChange.bind(this);
 
-    this._filterModel.addObserver(this._onModelEvent);
-    this._pointsModel.addObserver(this._onModelEvent);
+    this._filterModel.addObserver(this._onDataChange);
+    this._pointsModel.addObserver(this._onDataChange);
   }
 
   init() {
-    this._currentFilter = this._filterModel.getFilter();
+    this._currentFilter = this._filterModel.filter;
     const filters = this.filters;
     const prevFilterComponent = this._filterComponent;
-    this._noFilteredPoints = this._getNoFilteredPoints();
+    this._noFilteredPoints = this.noFilteredPoints;
 
     this._filterComponent = new FilterView(filters, this._currentFilter, this._noFilteredPoints);
     this._filterComponent.setFilterTypeChangeHandler(this._onFilterTypeChange);
@@ -35,28 +35,6 @@ export default class Filter {
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
-  }
-
-  _getNoFilteredPoints() {
-    const noFilteredPoints = {};
-
-    Object.values(FilterType).forEach((type) => {
-      noFilteredPoints[type] = this._pointsModel.getFilteredPoints(type).length > 0;
-    });
-
-    return noFilteredPoints;
-  }
-
-  _onModelEvent() {
-    this.init();
-  }
-
-  _onFilterTypeChange(filterType) {
-    if (this._currentFilter === filterType) {
-      return;
-    }
-
-    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   get filters() {
@@ -74,5 +52,27 @@ export default class Filter {
         name: `Past`
       }
     ];
+  }
+
+  get noFilteredPoints() {
+    const noFilteredPoints = {};
+
+    Object.values(FilterType).forEach((type) => {
+      noFilteredPoints[type] = this._pointsModel.getFilteredPoints(type).length > 0;
+    });
+
+    return noFilteredPoints;
+  }
+
+  _onDataChange() {
+    this.init();
+  }
+
+  _onFilterTypeChange(filterType) {
+    if (this._currentFilter === filterType) {
+      return;
+    }
+
+    this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 }

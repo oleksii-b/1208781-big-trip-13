@@ -1,18 +1,17 @@
 import AbstractView from './abstract';
 
 const createFiltersTemplate = (filters, currentFilter, noFilteredPoints) => {
-
   return (
     `<form class="trip-filters" action="#" method="get">
       ${filters.map(({type, name}) => {
       return (
         `<div class="trip-filters__filter">
-          <input 
-            id="filter-${type}" 
-            class="trip-filters__filter-input  visually-hidden" 
-            type="radio" 
-            name="trip-filter" 
-            value="${type}" 
+          <input
+            id="filter-${type}"
+            class="trip-filters__filter-input  visually-hidden"
+            type="radio"
+            name="trip-filter"
+            value="${type}"
             ${currentFilter === type ? `checked` : ``}
             ${noFilteredPoints[type] ? `` : `disabled`}
           >

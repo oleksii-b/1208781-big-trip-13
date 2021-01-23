@@ -12,10 +12,11 @@ export const getEventDuration = (diffInMs) => {
   const hours = timeDuration.hours();
   const minutes = timeDuration.minutes();
 
-  return `
-    ${(days > 0 && addZeroToNumber(days) + `D`) || ``}
+  return (
+    `${(days > 0 && addZeroToNumber(days) + `D`) || ``}
     ${((days > 0 || hours > 0) && addZeroToNumber(hours) + `H`) || ``}
-    ${addZeroToNumber(minutes)}M`;
+    ${addZeroToNumber(minutes)}M`
+  );
 };
 
 export const getDurationDays = (diffInMs) => {

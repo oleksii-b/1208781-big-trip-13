@@ -6,8 +6,5 @@ export const sortDefault = (prevPoint, nextPoint) => {
   if (prevPoint.date.start.isAfter(nextPoint.date.start)) {
     return 1;
   }
-  if (!(prevPoint.date.start.isAfter(nextPoint.date.start))) {
-    return -1;
-  }
-  return 0;
+  return -1;
 };

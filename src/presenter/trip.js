@@ -27,13 +27,13 @@ export default class Trip {
     this._onModeChange = this._onModeChange.bind(this);
     this._onSortTypeChange = this._onSortTypeChange.bind(this);
     this._onViewAction = this._onViewAction.bind(this);
-    this._onModelEvent = this._onModelEvent.bind(this);
+    this._onDataChange = this._onDataChange.bind(this);
 
     this._pointNewPresenter = new PointNewPresenter(this._tripListComponent, this._onViewAction);
   }
 
   get points() {
-    const filterType = this._filterModel.getFilter();
+    const filterType = this._filterModel.filter;
     const points = this._pointsModel.points;
     const filteredPoints = filter[filterType](points);
 
@@ -58,15 +58,15 @@ export default class Trip {
   init() {
     this._renderTrip();
 
-    this._pointsModel.addObserver(this._onModelEvent);
-    this._filterModel.addObserver(this._onModelEvent);
+    this._pointsModel.addObserver(this._onDataChange);
+    this._filterModel.addObserver(this._onDataChange);
   }
 
   destroy() {
     this._clearTrip(true);
 
-    this._pointsModel.removeObserver(this._onModelEvent);
-    this._filterModel.removeObserver(this._onModelEvent);
+    this._pointsModel.removeObserver(this._onDataChange);
+    this._filterModel.removeObserver(this._onDataChange);
 
   }
 
@@ -110,7 +110,7 @@ export default class Trip {
     render(this._tripContentContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
-  _renderTripList(points, offers, destinations) {
+  _renderList(points, offers, destinations) {
     render(this._tripContentContainer, this._tripListComponent, RenderPosition.BEFOREEND);
     points.forEach((point) => this._renderPoint(point, offers, destinations));
   }
@@ -141,13 +141,13 @@ export default class Trip {
     if (points.length) {
       remove(this._noPointComponent);
       this._renderSort();
-      this._renderTripList(points, offers, destinations);
+      this._renderList(points, offers, destinations);
     } else {
       this._renderNoPoint();
     }
   }
 
-  _onModelEvent(updateType, data) {
+  _onDataChange(updateType, data) {
     const {PATCH, MINOR, MAJOR, INIT} = UpdateType;
 
     switch (updateType) {

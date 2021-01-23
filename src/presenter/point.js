@@ -31,7 +31,7 @@ export default class Point {
     this._onToggleButtonClick = this._onToggleButtonClick.bind(this);
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
-    this._onFormPressEsc = this._onFormPressEsc.bind(this);
+    this._onEscPress = this._onEscPress.bind(this);
     this._onFavoriteClick = this._onFavoriteClick.bind(this);
     this._onDeleteClick = this._onDeleteClick.bind(this);
   }
@@ -116,14 +116,14 @@ export default class Point {
 
   _replacePointToForm() {
     replace(this._editPointComponent, this._pointComponent);
-    document.addEventListener(`keydown`, this._onFormPressEsc);
+    document.addEventListener(`keydown`, this._onEscPress);
     this._changeMode();
     this._mode = Mode.EDITING;
   }
 
   _replaceFormToPoint() {
     replace(this._pointComponent, this._editPointComponent);
-    document.removeEventListener(`keydown`, this._onFormPressEsc);
+    document.removeEventListener(`keydown`, this._onEscPress);
     this._mode = Mode.DEFAULT;
   }
 
@@ -135,7 +135,7 @@ export default class Point {
     );
   }
 
-  _onFormPressEsc(evt) {
+  _onEscPress(evt) {
     if ([`Esc`, `Escape`].includes(evt.key)) {
       evt.preventDefault();
       this._editPointComponent.reset(this._point, this._offers);

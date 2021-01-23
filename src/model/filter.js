@@ -12,7 +12,7 @@ export default class Filter extends Observer {
     this._notify(updateType, filter);
   }
 
-  getFilter() {
+  get filter() {
     return this._activeFilter;
   }
 }

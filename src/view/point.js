@@ -11,7 +11,6 @@ const createOffersTemplate = (offers) => {
   )).join(``);
 };
 
-
 const createPointTemplate = (event) => {
   const {eventType, destination: {city}, offers, price, isFavorite, date: {start, finish}} = event;
   const offerTemplate = createOffersTemplate(offers);

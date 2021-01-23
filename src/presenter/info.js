@@ -9,9 +9,9 @@ export default class InfoPresenter {
     this._filterModel = filterModel;
     this._infoComponent = null;
 
-    this._onModelEvent = this._onModelEvent.bind(this);
-    this._pointsModel.addObserver(this._onModelEvent);
-    this._filterModel.addObserver(this._onModelEvent);
+    this._onDataChange = this._onDataChange.bind(this);
+    this._pointsModel.addObserver(this._onDataChange);
+    this._filterModel.addObserver(this._onDataChange);
   }
 
   get points() {
@@ -35,7 +35,7 @@ export default class InfoPresenter {
     remove(prevInfoComponent);
   }
 
-  _onModelEvent() {
+  _onDataChange() {
     this.init();
   }
 }

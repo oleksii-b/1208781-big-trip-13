@@ -13,7 +13,7 @@ export default class PointNew {
 
     this._onFormSubmit = this._onFormSubmit.bind(this);
     this._onFormClose = this._onFormClose.bind(this);
-    this._onFormPressEsc = this._onFormPressEsc.bind(this);
+    this._onEscPress = this._onEscPress.bind(this);
   }
 
   init(offers, destinations) {
@@ -27,15 +27,14 @@ export default class PointNew {
 
     render(this._tripListContainer, this._newPointComponent, RenderPosition.AFTERBEGIN);
 
-    document.addEventListener(`keydown`, this._onFormPressEsc);
+    document.addEventListener(`keydown`, this._onEscPress);
   }
 
   destroy() {
     if (this._newPointComponent !== null) {
       remove(this._newPointComponent);
       this._newPointComponent = null;
-      document.querySelector(`.trip-main__event-add-btn`).disabled = false;
-      document.removeEventListener(`keydown`, this._onFormPressEsc);
+      document.removeEventListener(`keydown`, this._onEscPress);
     }
   }
 
@@ -66,7 +65,7 @@ export default class PointNew {
     );
   }
 
-  _onFormPressEsc(evt) {
+  _onEscPress(evt) {
     if (evt.key === `Escape` || evt.key === `Esc`) {
       evt.preventDefault();
       this.destroy();
