@@ -32,6 +32,7 @@ export default class PointNew {
 
   destroy() {
     if (this._newPointComponent !== null) {
+      this._newPointComponent.activateAddEventButton();
       remove(this._newPointComponent);
       this._newPointComponent = null;
       document.removeEventListener(`keydown`, this._onEscPress);

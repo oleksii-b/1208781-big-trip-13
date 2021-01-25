@@ -113,6 +113,7 @@ const createEditPointTemplate = (data, types, destinations) => {
               name="event-price"
               value="${price}"
               ${isDisabled ? `disabled` : ``}
+              required
             >
           </div>
 
